@@ -9,3 +9,9 @@ Outline:
 8. Realizacja operatora-mechanika działania
 9. Realizacja operatora-przykładowe uruchomienie
 10. Wnioski
+
+Punkty szczególne:
+1. architektura operatora
+2. wolumeny Lustre
+3. AWS EKS
+4. Wiele kroków algorytmu

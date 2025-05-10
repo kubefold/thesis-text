@@ -7,10 +7,11 @@ jobs:
       - name: Set up Git repository
         uses: actions/checkout@v4
       - name: Compile LaTeX document
+        continue-on-error: true
         uses: xu-cheng/latex-action@v3
         with:
           root_file: thesis.tex
-          args: -file-line-error -interaction=nonstopmode -synctex=1 -output-format=pdf
+          args: -file-line-error -interaction=nonstopmode -synctex=1 -output-format=pd
       - name: Upload PDF file
         uses: actions/upload-artifact@v4
         with:

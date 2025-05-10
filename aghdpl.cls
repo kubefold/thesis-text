@@ -62,7 +62,7 @@
 
 % Lista wszystkich języków stanowiących języki pozycji bibliograficznych użytych w pracy.
 % (Zgodnie z zasadami tworzenia bibliografii każda pozycja powinna zostać utworzona zgodnie z zasadami języka, w którym dana publikacja została napisana.)
-\RequirePackage[english]{babel}
+\RequirePackage[english,polish]{babel}
 
 % Użyj polskiego łamania wyrazów (zamiast domyślnego angielskiego).
 \RequirePackage{polski}
@@ -157,7 +157,7 @@
 
     \vspace*{2mm}
     {
-        \scalebox{0.95}{\sffamily{\large{\bfseries{\scshape AGH University of Science and Technology}}}}
+        \scalebox{0.95}{\sffamily{\large{\bfseries{\scshape Akademia Górniczo-Hutnicza im. Stanisława Staszica w Krakowie}}}}
 
         \vspace*{1mm}
 

@@ -1,5 +1,9 @@
 name: Build LaTeX document
-on: [push]
+on:
+  push:
+    tags:
+      - 'v*'
+
 jobs:
   build_latex:
     runs-on: ubuntu-latest
@@ -12,8 +16,9 @@ jobs:
         with:
           root_file: thesis.tex
           args: -file-line-error -interaction=nonstopmode -synctex=1 -output-format=pdf
-      - name: Upload PDF file
-        uses: actions/upload-artifact@v4
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
         with:
-          name: thesis
-          path: thesis.pdf
+          files: thesis.pdf
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -4,8 +4,8 @@ Outline:
 3. Uruchamianie AlphaFold jest trudnym zadaniem
 4. Trudności przy uruchamianiu AlphaFold
 5. Uruchamianie AlphaFold na Kubernetes z użyciem operatora
-6. Realizacja operatora - opis docelowego rozwiązania
-7. Realizacja operatora - opis komponentów
-8. Realizacja operatora - mechanika działania
-9. Realizacja operatora - przykładowe uruchomienie
+6. Realizacja operatora-opis docelowego rozwiązania
+7. Realizacja operatora-opis komponentów
+8. Realizacja operatora-mechanika działania
+9. Realizacja operatora-przykładowe uruchomienie
 10. Wnioski

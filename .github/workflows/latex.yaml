@@ -11,7 +11,7 @@ jobs:
         uses: xu-cheng/latex-action@v3
         with:
           root_file: thesis.tex
-          args: -file-line-error -interaction=nonstopmode -synctex=1 -output-format=pd
+          args: -file-line-error -interaction=nonstopmode -synctex=1 -output-format=pdf
       - name: Upload PDF file
         uses: actions/upload-artifact@v4
         with:

@@ -47,7 +47,7 @@
 
 \RequirePackage{xstring}
 
-%\show\aghdpl@language
+\show\aghdpl@language
 
 \newcommand{\ThesisLanguage}{pl}
 \IfStrEqCase{\aghdpl@language}{%

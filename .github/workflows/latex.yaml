@@ -17,8 +17,7 @@ jobs:
           root_file: thesis.tex
           args: -file-line-error -interaction=nonstopmode -synctex=1 -output-format=pdf
       - name: Create Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
+        if: github.ref_type == 'tag'
         with:
           files: thesis.pdf
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

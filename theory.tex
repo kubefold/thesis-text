@@ -358,7 +358,7 @@ Lustre is a distributed file system, created by Cluster File Systems in 2003~\ci
 This system was designed for high-performance computing clusters.
 Currently, the development of Lustre is managed by the OpenSFS (Open Scalable File Systems) organization.
 
-The Lustre file system consists of several main components:
+The Lustre file system consists of several main components, as shown in Figure~\ref{fig:lustre-arch}:
 \begin{itemize}
     \item Metadata servers (MDS) - store information about the file system structure, directories, and permissions
     \item Object storage servers (OSS) - responsible for storing actual data and handling input/output operations
@@ -366,6 +366,13 @@ The Lustre file system consists of several main components:
     \item Metadata target devices (MDT) - store metadata on block devices
     \item Object storage targets (OST) - store file data on block devices
 \end{itemize}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/lustre.png}
+    \caption{Lustre distributed file system architecture showing the relationships between metadata servers, object storage servers, and clients.}
+    \label{fig:lustre-arch}
+\end{figure}
 
 The Lustre architecture is based on the separation of metadata from actual data.
 Metadata servers deal exclusively with operations on directory structure and permissions.
@@ -395,6 +402,36 @@ Lustre is widely used in computing centers around the world.
 It is used in supercomputers from the TOP500 list.
 The system works particularly well in scientific computing, where processing huge datasets is required.
 Examples of applications include physical simulations, climate modeling, and genomic calculations.
+
+\subsection{Amazon FSx for Lustre}
+
+Amazon FSx for Lustre is a fully managed service that provides high-performance Lustre file systems in the AWS cloud~\cite{amazon_fsx}.
+The service automatically handles all the complexity of setting up and managing Lustre infrastructure, including server provisioning, software configuration, and system maintenance.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/fsx.png}
+    \caption{Architecture diagram showing EKS cluster connection to FSx for Lustre volume}
+    \label{fig:fsx-architecture}
+\end{figure}
+
+Key features of FSx for Lustre include:
+\begin{itemize}
+    \item Automatic scaling of storage capacity and performance
+    \item Built-in data protection with automatic backups
+    \item Native integration with AWS services like EC2 and EKS
+    \item Support for multiple storage deployment options (scratch, persistent)
+    \item Throughput capacity up to hundreds of GB per second
+\end{itemize}
+
+The service offers two deployment types:
+\begin{itemize}
+    \item Scratch - optimized for temporary storage and shorter-term processing, with higher performance
+    \item Persistent - designed for longer-term storage with data replication and backup support
+\end{itemize}
+
+In the context of the KubeFold project, FSx for Lustre provides high-performance storage for AlphaFold databases and computation results, as shown in Figure \ref{fig:fsx-architecture}.
+The automatic management and scaling capabilities simplify operations while maintaining the performance required for protein structure predictions.
 
 \subsection{Amazon S3 object storage}
 

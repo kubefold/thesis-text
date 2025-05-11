@@ -1,0 +1,46 @@
+@startuml
+
+skinparam componentStyle rectangle
+skinparam defaultTextAlignment center
+
+package "Lustre Filesystem" {
+  rectangle "Client" as client
+
+  rectangle "Management Server (MGS)" as mgs
+
+  rectangle "Metadata Server (MDS)" as mds 
+
+  rectangle "Object Storage Server (OSS)" as oss
+
+  database "Storage" as storage
+}
+
+' Network connections
+client -[dashed]-> mds : "Metadata Operations"
+client -[dashed]-> oss : "Data I/O"
+client -[dashed]-> mgs : "Configuration"
+mds --> storage : "Metadata Storage"
+oss --> storage : "Data Storage"
+mgs --> storage : "Config Storage"
+
+note bottom of client
+  Clients mount the filesystem and access
+  data through MDS and OSS servers
+end note
+
+note bottom of mgs
+  Maintains configuration information
+  for all Lustre components
+end note
+
+note bottom of mds
+  Handles file metadata:
+  names, permissions, directory structure
+end note
+
+note bottom of oss
+  Manages actual file data storage
+  and retrieval operations
+end note
+
+@enduml

@@ -1,0 +1,57 @@
+@startuml
+
+skinparam rectangle {
+    BackgroundColor<<VPC>> #EDFBFF
+    BorderColor<<VPC>> #2196F3
+}
+
+skinparam rectangle {
+    BackgroundColor<<Subnet>> #F1FAEE
+    BorderColor<<Subnet>> #A8DADC
+}
+
+skinparam database {
+    BackgroundColor #FFF8E1
+    BorderColor #FFB74D
+}
+
+skinparam component {
+    BackgroundColor #E8F5E9
+    BorderColor #66BB6A
+}
+
+rectangle "AWS Cloud" {
+    rectangle "VPC" as vpc <<VPC>> {
+        rectangle "Private Subnet A" as subnetA <<Subnet>> {
+            component "Amazon EKS Cluster" as eks
+            rectangle "Worker Node" as workerA {
+                rectangle "Pod 1" as pod1
+                rectangle "Pod 2" as pod2
+            }
+        }
+        
+        rectangle "Private Subnet B" as subnetB <<Subnet>> {
+            database "Amazon FSx for Lustre\nHigh Performance File System" as fsx
+        }
+    }
+}
+
+pod1 --> fsx : "mounts FSx volume using\nPersistent Volume Claim"
+pod2 --> fsx : "mounts FSx volume using\nPersistent Volume Claim"
+workerA --> fsx : "access through CSI driver"
+eks --> workerA : "manages"
+
+note right of fsx
+  FSx for Lustre provides:
+  - High-performance file system
+  - Scalable storage
+  - Parallel access
+  - Integration with S3
+end note
+
+note bottom of vpc
+  Components must be in the same VPC
+  EKS security groups must allow traffic to FSx
+end note
+
+@enduml

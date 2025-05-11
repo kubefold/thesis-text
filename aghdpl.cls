@@ -125,9 +125,9 @@
 
         \def\thesistable{
             \begin{tabular}{p{45mm}l}
-                Autor: & {\itshape \@author}\\[-1mm]
+                Autor:            & {\itshape \@author}\\[-1mm]
                 Kierunek studiów: & {\itshape \@degreeprogramme}\\[-1mm]
-                Opiekun pracy: & {\itshape \@supervisor}\\
+                Opiekun pracy:    & {\itshape \@supervisor}      \\
             \end{tabular}
         }
     }
@@ -138,9 +138,9 @@
 
         \def\thesistable{
             \begin{tabular}{p{45mm}l}
-                Author: & {\itshape \@author}\\[-1mm]
+                Author:           & {\itshape \@author}\\[-1mm]
                 Degree programme: & {\itshape \@degreeprogramme}\\[-1mm]
-                Supervisor: & {\itshape \@supervisor}\\
+                Supervisor:       & {\itshape \@supervisor}      \\
             \end{tabular}
         }
     }%
@@ -157,7 +157,7 @@
 
     \vspace*{2mm}
     {
-        \scalebox{0.95}{\sffamily{\large{\bfseries{\scshape Akademia Górniczo-Hutnicza im. Stanisława Staszica w Krakowie}}}}
+        \scalebox{0.95}{\sffamily{\large{\bfseries{\scshape AGH University of Science and Technology}}}}
 
         \vspace*{1mm}
 
@@ -170,7 +170,7 @@
 
     {\sffamily\Large\itshape
     \IfStrEqCase{\ThesisLanguage}{%
-            {pl}{\@titlePL}
+%            {pl}{\@titlePL}
             {en}{\@titleEN}
     }
     }
@@ -179,7 +179,7 @@
     {\sffamily\Large\itshape
     \IfStrEqCase{\ThesisLanguage}{%
             {pl}{\@titleEN}
-            {en}{\@titlePL}
+%            {en}{\@titlePL}
     }
     }
     \vspace{\fill}

@@ -62,7 +62,7 @@
 
 % Lista wszystkich języków stanowiących języki pozycji bibliograficznych użytych w pracy.
 % (Zgodnie z zasadami tworzenia bibliografii każda pozycja powinna zostać utworzona zgodnie z zasadami języka, w którym dana publikacja została napisana.)
-\RequirePackage[english,polish]{babel}
+\RequirePackage[english]{babel}
 
 % Użyj polskiego łamania wyrazów (zamiast domyślnego angielskiego).
 \RequirePackage{polski}

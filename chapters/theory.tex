@@ -349,6 +349,24 @@ Przykłady zastosowań obejmują symulacje fizyczne, modelowanie klimatu oraz ob
 
 \subsection{Magazyn obiektów Amazon S3}
 
+Amazon Simple Storage Service (S3) to usługa magazynowania obiektów w chmurze.
+Zapewnia praktycznie nieograniczoną przestrzeń dyskową z gwarantowaną dostępnością na poziomie 99,999999999\%.
+Jest to standard branżowy w zakresie przechowywania danych w chmurze.
+
+Podstawową jednostką organizacyjną w S3 są wiadra (z ang. \textit{buckets}). Każde wiadro ma unikalną nazwę w skali globalnej i może przechowywać dowolną liczbę obiektów.
+Obiekty są identyfikowane przez klucze, które mogą zawierać znaki ukośnika do tworzenia struktury hierarchicznej.
+
+S3 stał się standardem \textit{de facto} dla przechowywania danych w aplikacjach chmurowych.
+Większość nowoczesnych rozwiązań chmurowych zapewnia integrację z tym systemem.
+Dostawcy narzędzi często implementują wsparcie dla S3 jako pierwszy wybór przy integracjach z magazynami danych.
+
+Usługa udostępnia interfejs REST API oraz biblioteki dla wielu języków programowania.
+Uwierzytelnianie wykorzystuje podpisy cyfrowe lub tymczasowe poświadczenia.
+Kontrola dostępu opiera się na politykach IAM oraz listach ACL. Te standardowe mechanizmy są szeroko wykorzystywane w ekosystemie chmurowym.
+
+S3 zapewnia pełną integrację z innymi usługami AWS. Jest powszechnie używany jako magazyn dla kopii zapasowych, miejsce przechowywania artefaktów czy docelowa lokalizacja dla wyników obliczeń.
+Jego niezawodność i skalowalność sprawiają, że jest podstawowym wyborem dla aplikacji wymagających trwałego przechowywania danych.
+
 \subsection{Usługa AWS End User Messaging}
 
 

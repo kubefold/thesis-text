@@ -1,0 +1,217 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css"
+     data-diagram-type="SEQUENCE" height="809px" preserveAspectRatio="none"
+     style="width:841px;height:809px;background:#FFFFFF;" version="1.1" viewBox="0 0 841 809" width="841px"
+     zoomAndPan="magnify">
+    <title>Kubernetes Operator Flow</title>
+    <defs/>
+    <g>
+        <text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing"
+              textLength="208.8652" x="312.3818" y="27.9951">Kubernetes Operator Flow
+        </text>
+        <g>
+            <title>Cluster Administrator</title>
+            <rect fill="#000000" fill-opacity="0.00000" height="610.2578" width="8" x="78.9116" y="118.5938"/>
+            <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="82" x2="82" y1="118.5938"
+                  y2="728.8516"/>
+        </g>
+        <g>
+            <title>API Server</title>
+            <rect fill="#000000" fill-opacity="0.00000" height="610.2578" width="8" x="370.0781" y="118.5938"/>
+            <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="373.8237" x2="373.8237"
+                  y1="118.5938" y2="728.8516"/>
+        </g>
+        <g>
+            <title>Operator</title>
+            <rect fill="#000000" fill-opacity="0.00000" height="610.2578" width="8" x="615.897" y="118.5938"/>
+            <line style="stroke:#181818;stroke-width:0.5;stroke-dasharray:5.0,5.0;" x1="619.5645" x2="619.5645"
+                  y1="118.5938" y2="728.8516"/>
+        </g>
+        <g class="participant participant-head" data-participant="admin">
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="149.8232"
+                  x="5" y="115.292">Cluster Administrator
+            </text>
+            <ellipse cx="82.9116" cy="50.7969" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+            <path d="M82.9116,58.7969 L82.9116,85.7969 M69.9116,66.7969 L95.9116,66.7969 M82.9116,85.7969 L69.9116,100.7969 M82.9116,85.7969 L95.9116,100.7969"
+                  fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+        </g>
+        <g class="participant participant-tail" data-participant="admin">
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="149.8232"
+                  x="5" y="740.8467">Cluster Administrator
+            </text>
+            <ellipse cx="82.9116" cy="752.6484" fill="#E2E2F0" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/>
+            <path d="M82.9116,760.6484 L82.9116,787.6484 M69.9116,768.6484 L95.9116,768.6484 M82.9116,787.6484 L69.9116,802.6484 M82.9116,787.6484 L95.9116,802.6484"
+                  fill="none" style="stroke:#181818;stroke-width:0.5;"/>
+        </g>
+        <g class="participant participant-head" data-participant="api">
+            <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="86.5088" x="330.8237" y="87.2969"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72.5088"
+                  x="337.8237" y="107.292">API Server
+            </text>
+        </g>
+        <g class="participant participant-tail" data-participant="api">
+            <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="86.5088" x="330.8237" y="727.8516"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="72.5088"
+                  x="337.8237" y="747.8467">API Server
+            </text>
+        </g>
+        <g class="participant participant-head" data-participant="operator">
+            <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="76.665" x="581.5645" y="87.2969"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62.665"
+                  x="588.5645" y="107.292">Operator
+            </text>
+        </g>
+        <g class="participant participant-tail" data-participant="operator">
+            <rect fill="#E2E2F0" height="30.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;"
+                  width="76.665" x="581.5645" y="727.8516"/>
+            <text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="62.665"
+                  x="588.5645" y="747.8467">Operator
+            </text>
+        </g>
+        <rect fill="#EEEEEE" height="3" style="stroke:#EEEEEE;stroke-width:1;" width="834.6289" x="0" y="149.1602"/>
+        <line style="stroke:#000000;stroke-width:1;" x1="0" x2="834.6289" y1="149.1602" y2="149.1602"/>
+        <line style="stroke:#000000;stroke-width:1;" x1="0" x2="834.6289" y1="152.1602" y2="152.1602"/>
+        <rect fill="#EEEEEE" height="23.1328" style="stroke:#000000;stroke-width:2;" width="101.8833" x="366.3728"
+              y="138.5938"/>
+        <text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing"
+              textLength="83.3574" x="372.3728" y="154.6606">Installation
+        </text>
+        <g class="message" data-participant-1="admin" data-participant-2="api">
+            <polygon fill="#181818" points="362.0781,188.8594,372.0781,192.8594,362.0781,196.8594,366.0781,192.8594"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="82.9116" x2="368.0781" y1="192.8594" y2="192.8594"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="267.1665"
+                  x="89.9116" y="187.7935">Install Custom Resource Definition (CRD)
+            </text>
+        </g>
+        <g class="message" data-participant-1="admin" data-participant-2="api">
+            <polygon fill="#181818" points="362.0781,217.9922,372.0781,221.9922,362.0781,225.9922,366.0781,221.9922"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="82.9116" x2="368.0781" y1="221.9922" y2="221.9922"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="105.5615"
+                  x="89.9116" y="216.9263">Deploy operator
+            </text>
+        </g>
+        <rect fill="#EEEEEE" height="3" style="stroke:#EEEEEE;stroke-width:1;" width="834.6289" x="0" y="250.5586"/>
+        <line style="stroke:#000000;stroke-width:1;" x1="0" x2="834.6289" y1="250.5586" y2="250.5586"/>
+        <line style="stroke:#000000;stroke-width:1;" x1="0" x2="834.6289" y1="253.5586" y2="253.5586"/>
+        <rect fill="#EEEEEE" height="23.1328" style="stroke:#000000;stroke-width:2;" width="118.9648" x="357.832"
+              y="239.9922"/>
+        <text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing"
+              textLength="100.439" x="363.832" y="256.0591">Configuration
+        </text>
+        <g class="message" data-participant-1="admin" data-participant-2="api">
+            <polygon fill="#181818" points="362.0781,290.2578,372.0781,294.2578,362.0781,298.2578,366.0781,294.2578"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="82.9116" x2="368.0781" y1="294.2578" y2="294.2578"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="221.2412"
+                  x="89.9116" y="289.1919">Create Custom Resource instance
+            </text>
+        </g>
+        <g class="message" data-participant-1="api" data-participant-2="operator">
+            <polygon fill="#181818" points="607.897,319.3906,617.897,323.3906,607.897,327.3906,611.897,323.3906"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="374.0781" x2="613.897" y1="323.3906" y2="323.3906"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="172.231"
+                  x="381.0781" y="318.3247">Notify about new resource
+            </text>
+        </g>
+        <g class="message" data-participant-1="operator" data-participant-2="api">
+            <polygon fill="#181818" points="385.0781,348.5234,375.0781,352.5234,385.0781,356.5234,381.0781,352.5234"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="379.0781" x2="618.897" y1="352.5234" y2="352.5234"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="182.9902"
+                  x="391.0781" y="347.4575">Watch for resource changes
+            </text>
+        </g>
+        <rect fill="#EEEEEE" height="3" style="stroke:#EEEEEE;stroke-width:1;" width="834.6289" x="0" y="381.0898"/>
+        <line style="stroke:#000000;stroke-width:1;" x1="0" x2="834.6289" y1="381.0898" y2="381.0898"/>
+        <line style="stroke:#000000;stroke-width:1;" x1="0" x2="834.6289" y1="384.0898" y2="384.0898"/>
+        <rect fill="#EEEEEE" height="23.1328" style="stroke:#000000;stroke-width:2;" width="91.7397" x="371.4446"
+              y="370.5234"/>
+        <text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing"
+              textLength="73.2139" x="377.4446" y="386.5903">Operation
+        </text>
+        <g class="message" data-participant-1="operator" data-participant-2="operator">
+            <line style="stroke:#181818;stroke-width:1;" x1="619.897" x2="661.897" y1="424.7891" y2="424.7891"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="661.897" x2="661.897" y1="424.7891" y2="437.7891"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="620.897" x2="661.897" y1="437.7891" y2="437.7891"/>
+            <polygon fill="#181818" points="630.897,433.7891,620.897,437.7891,630.897,441.7891,626.897,437.7891"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="200.7319"
+                  x="626.897" y="419.7231">Detect change in desired state
+            </text>
+        </g>
+        <g class="message" data-participant-1="operator" data-participant-2="api">
+            <polygon fill="#181818" points="385.0781,462.9219,375.0781,466.9219,385.0781,470.9219,381.0781,466.9219"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="379.0781" x2="618.897" y1="466.9219" y2="466.9219"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="121.856"
+                  x="391.0781" y="461.856">Read current state
+            </text>
+        </g>
+        <g class="message" data-participant-1="operator" data-participant-2="operator">
+            <line style="stroke:#181818;stroke-width:1;" x1="619.897" x2="661.897" y1="496.0547" y2="496.0547"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="661.897" x2="661.897" y1="496.0547" y2="509.0547"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="620.897" x2="661.897" y1="509.0547" y2="509.0547"/>
+            <polygon fill="#181818" points="630.897,505.0547,620.897,509.0547,630.897,513.0547,626.897,509.0547"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="178.6357"
+                  x="626.897" y="490.9888">Calculate required changes
+            </text>
+        </g>
+        <g class="message" data-participant-1="operator" data-participant-2="api">
+            <polygon fill="#181818" points="385.0781,534.1875,375.0781,538.1875,385.0781,542.1875,381.0781,538.1875"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="379.0781" x2="618.897" y1="538.1875" y2="538.1875"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="221.8188"
+                  x="391.0781" y="533.1216">Create/Update required resources
+            </text>
+        </g>
+        <g class="message" data-participant-1="api" data-participant-2="operator">
+            <polygon fill="#181818" points="607.897,563.3203,617.897,567.3203,607.897,571.3203,611.897,567.3203"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;stroke-dasharray:2.0,2.0;" x1="374.0781" x2="613.897"
+                  y1="567.3203" y2="567.3203"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="110.2144"
+                  x="381.0781" y="562.2544">Confirm changes
+            </text>
+        </g>
+        <rect fill="#EEEEEE" height="3" style="stroke:#EEEEEE;stroke-width:1;" width="834.6289" x="0" y="595.8867"/>
+        <line style="stroke:#000000;stroke-width:1;" x1="0" x2="834.6289" y1="595.8867" y2="595.8867"/>
+        <line style="stroke:#000000;stroke-width:1;" x1="0" x2="834.6289" y1="598.8867" y2="598.8867"/>
+        <rect fill="#EEEEEE" height="23.1328" style="stroke:#000000;stroke-width:2;" width="183.1143" x="325.7573"
+              y="585.3203"/>
+        <text fill="#000000" font-family="sans-serif" font-size="13" font-weight="bold" lengthAdjust="spacing"
+              textLength="164.5884" x="331.7573" y="601.3872">Lifecycle Management
+        </text>
+        <g class="message" data-participant-1="operator" data-participant-2="api">
+            <polygon fill="#181818" points="385.0781,635.5859,375.0781,639.5859,385.0781,643.5859,381.0781,639.5859"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="379.0781" x2="618.897" y1="639.5859" y2="639.5859"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="182.5903"
+                  x="391.0781" y="634.52">Monitor managed resources
+            </text>
+        </g>
+        <g class="message" data-participant-1="operator" data-participant-2="operator">
+            <line style="stroke:#181818;stroke-width:1;" x1="619.897" x2="661.897" y1="668.7188" y2="668.7188"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="661.897" x2="661.897" y1="668.7188" y2="681.7188"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="620.897" x2="661.897" y1="681.7188" y2="681.7188"/>
+            <polygon fill="#181818" points="630.897,677.7188,620.897,681.7188,630.897,685.7188,626.897,681.7188"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="155.0542"
+                  x="626.897" y="663.6528">Handle failures/updates
+            </text>
+        </g>
+        <g class="message" data-participant-1="operator" data-participant-2="api">
+            <polygon fill="#181818" points="385.0781,706.8516,375.0781,710.8516,385.0781,714.8516,381.0781,710.8516"
+                     style="stroke:#181818;stroke-width:1;"/>
+            <line style="stroke:#181818;stroke-width:1;" x1="379.0781" x2="618.897" y1="710.8516" y2="710.8516"/>
+            <text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="152.0898"
+                  x="391.0781" y="705.7856">Update resource status
+            </text>
+        </g><!--SRC=[TLBFJy8m5BxthtZXf0V3dMGcP8kHA6emnlEZUuCcNJlRLmd_lMtPW07UrhxlVRywLgm9NiAQd24c3-yTEMJhu4dRdH0eq_UarC4pEPZNhJBASuPC03rWkX4TEbPITMWO9lEF1NoI-wKUqQdnV938KziVX2WAM1ZFg3MoiWQAGcHoU7XC7BDX2cNqObjOaRV1IOAAccWgxzoLg-h-OgsYJjlzMAYqfb6RuFvHAXqXqvMGIWQC91512JjGpk3DichsW6iR60pjmFKxOi0SkR-HvHQQU3DWG6xHRCXdPuToUbVdooUnAZwKv7uhceAQl79KGtJ7DnHNX3N8u1p5zgyn9-8IjGmw9NVq4pBbOEsAz53HzAkhH_WXapzqDAPFfRjs5FTLDIJtClw3IpIueJPvl4YUzPOsFd4yjnbsBdGxopEQEh8sg7I8s6d8Hcy4EIRe7oCL5FmV]-->
+    </g>
+</svg>

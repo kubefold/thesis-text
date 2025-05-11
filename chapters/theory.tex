@@ -1,3 +1,6 @@
+%! suppress = MissingImport
+\usepackage{listings}
+\usepackage{svg}
 \chapter{Theoretical background}
 
 
@@ -423,6 +426,14 @@ In such cases, the operator automatically performs complex operations that typic
 
 An operator consists of two main parts: custom resource definitions and a management program.
 The management program continuously compares the current system state with the desired state and implements necessary changes.
+
+\begin{figure}[h]
+
+\includesvg{../images/kubernetes_operator_flow.svg}
+
+\caption{Kubernetes operator workflow diagram}
+\label{fig:kubernetes-operator-flow}
+\end{figure}
 
 \subsection{Cluster operator architecture}
 

@@ -1,168 +1,168 @@
-\chapter{Zagadnienie teoretyczne}
+\chapter{Theoretical background}
 
 
-\section{Problem przewidywania konformacji białek}
-Przewidywanie konformacji białek to kluczowy problem biologii obliczeniowej~\cite{alphafold3}, który polega na określeniu trójwymiarowej struktury białka na podstawie sekwencji aminokwasów.
-Struktura przestrzenna białka bezpośrednio wpływa na jego funkcję biologiczną, a dokładne przewidywanie konformacji pozwala zrozumieć mechanizmy działania białek oraz projektować nowe leki.
-Jest to zadanie trudne ze względu na ogromną liczbę możliwych konformacji oraz złożone oddziaływania między atomami.
-Problem ten staje się szczególnie istotny dla białek, których struktury nie udało się wyznaczyć metodami eksperymentalnymi ze względu na trudności techniczne.
-Zastosowanie przewidywanych struktur w medycynie spersonalizowanej oraz farmacji stanowi jeden z najbardziej obiecujących kierunków rozwoju współczesnej biotechnologii.
+\section{Protein structure prediction problem}
+Protein structure prediction is a key problem in computational biology~\cite{alphafold3}, which involves determining the three-dimensional structure of a protein based on its amino acid sequence.
+The spatial structure of a protein directly affects its biological function, and accurate conformation prediction allows understanding protein mechanisms and designing new drugs.
+This is a difficult task due to the enormous number of possible conformations and complex interactions between atoms.
+This problem becomes particularly important for proteins whose structures could not be determined by experimental methods due to technical difficulties.
+The application of predicted structures in personalized medicine and pharmacy represents one of the most promising directions in modern biotechnology.
 
-\subsection{Kodowanie trójwymiarowej struktury białka}
-Aminokwasy w łańcuchu polipeptydowym kodują strukturę przestrzenną białka poprzez swoją sekwencję i właściwości fizykochemiczne.
-Każdy aminokwas ma specyficzne cechy, takie jak hydrofobowość, ładunek elektryczny czy wielkość, które determinują możliwe oddziaływania i ułożenie w przestrzeni~\cite{protein_folding}.
-Sposób ułożenia aminokwasów w przestrzeni jest zapisany w tak zwanym kodzie konformacyjnym, który opisuje różne poziomy organizacji struktury białka.
+\subsection{Encoding three-dimensional protein structure}
+Amino acids in the polypeptide chain encode the spatial structure of the protein through their sequence and physicochemical properties.
+Each amino acid has specific features, such as hydrophobicity, electrical charge, or size, which determine possible interactions and arrangement in space~\cite{protein_folding}.
+The arrangement of amino acids in space is encoded in the so-called conformational code, which describes different levels of protein structure organization.
 
-Strukturę przestrzenną białka opisuje się na kilku hierarchicznych poziomach organizacji:
+The spatial structure of a protein is described at several hierarchical levels of organization:
 
 \begin{itemize}
-    \item Struktura pierwszorzędowa-liniowa sekwencja aminokwasów połączonych wiązaniami peptydowymi, która zawiera pełną informację niezbędną do uformowania struktury natywnej
-    \item Struktura drugorzędowa-lokalne motywy strukturalne powstające dzięki wiązaniom wodorowym między grupami peptydowymi, takie jak helisy alfa i harmonijki beta
-    \item Struktura trzeciorzędowa-globalne ułożenie całego łańcucha polipeptydowego stabilizowane różnymi oddziaływaniami między aminokwasami
-    \item Struktura czwartorzędowa-sposób asocjacji kilku łańcuchów polipeptydowych w funkcjonalny kompleks białkowy
+    \item Primary structure-linear sequence of amino acids connected by peptide bonds, which contains all information necessary to form the native structure
+    \item Secondary structure-local structural motifs formed by hydrogen bonds between peptide groups, such as alpha helices and beta sheets
+    \item Tertiary structure-global arrangement of the entire polypeptide chain stabilized by various interactions between amino acids
+    \item Quaternary structure-the way multiple polypeptide chains associate into a functional protein complex
 \end{itemize}
 
-\subsection{Krystalografia rentgenowska}
-Krystalografia rentgenowska to podstawowa metoda doświadczalna określania struktury białek~\cite{xray_crystallography}, która polega na analizie dyfrakcji promieni rentgenowskich na krysztale białka.
-Promienie rentgenowskie rozpraszają się na elektronach atomów tworzących białko, a wzór dyfrakcyjny jest rejestrowany i analizowany matematycznie.
-Na tej podstawie tworzy się mapa gęstości elektronowej, której analiza wymaga zastosowania złożonych algorytmów matematycznych i wiedzy z zakresu krystalografii.
-Interpretacja map gęstości elektronowej stanowi wyzwanie wymagające często ręcznego dopasowania modelu białka przez doświadczonych badaczy.
+\subsection{X-ray crystallography}
+X-ray crystallography is the fundamental experimental method for determining protein structures~\cite{xray_crystallography}, which involves analyzing the diffraction of X-rays on a protein crystal.
+X-rays scatter on the electrons of atoms forming the protein, and the diffraction pattern is recorded and mathematically analyzed.
+Based on this, an electron density map is created, the analysis of which requires complex mathematical algorithms and knowledge of crystallography.
+Interpretation of electron density maps is a challenge often requiring manual fitting of the protein model by experienced researchers.
 
-Proces krystalizacji białka jest często najtrudniejszym etapem, wymagającym znacznych nakładów finansowych i zaawansowanej infrastruktury laboratoryjnej.
+The process of protein crystallization is often the most difficult stage, requiring significant financial investments and advanced laboratory infrastructure.
 
-\subsection{Komputerowe metody obliczania konformacji białka}
-Metody komputerowe przewidywania struktury białek dzielą się na kilka głównych kategorii, wśród których metody oparte na homologii wykorzystują podobieństwo sekwencji do białek o znanej strukturze.
-Metody ab initio próbują przewidywać strukturę wyłącznie na podstawie sekwencji i praw fizyki~\cite{ab_initio_protein_folding}, podczas gdy metody fold recognition dopasowują sekwencję do znanych motywów strukturalnych.
-Każda z tych metod ma swoje ograniczenia i najlepiej sprawdza się w określonych warunkach, zależnie od dostępności danych referencyjnych.
-Hybrydy tych metod często dają lepsze wyniki niż pojedyncze podejścia, łącząc zalety różnych technik przewidywania.
+\subsection{Computational methods for protein structure prediction}
+Computational methods for protein structure prediction are divided into several main categories, among which homology-based methods use sequence similarity to proteins with known structures.
+Ab initio methods attempt to predict structure solely based on sequence and laws of physics~\cite{ab_initio_protein_folding}, while fold recognition methods match the sequence to known structural motifs.
+Each of these methods has its limitations and works best under specific conditions, depending on the availability of reference data.
+Hybrids of these methods often give better results than single approaches, combining advantages of different prediction techniques.
 
-Tradycyjne podejścia obliczeniowe obejmują symulacje dynamiki molekularnej i metody Monte Carlo, które wykorzystują pola siłowe opisujące oddziaływania między atomami.
-Obliczenia te są bardzo kosztowne obliczeniowo i często ograniczone do małych białek, jednak w ostatnich latach metody uczenia maszynowego i głębokiego odniosły znaczący sukces w tym obszarze.
-Postęp w sprzęcie obliczeniowym, szczególnie w obszarze akceleratorów GPU i specjalizowanych procesorów tensorowych, znacząco przyspieszył obliczenia struktur białkowych.
-Rozwój infrastruktury chmurowej umożliwił demokratyzację dostępu do zaawansowanych narzędzi bioinformatycznych.
+Traditional computational approaches include molecular dynamics simulations and Monte Carlo methods, which use force fields to describe interactions between atoms.
+These calculations are very computationally expensive and often limited to small proteins, but in recent years, machine learning and deep learning methods have achieved significant success in this area.
+Advances in computational hardware, particularly in the area of GPU accelerators and specialized tensor processors, have significantly accelerated protein structure calculations.
+The development of cloud infrastructure has enabled democratization of access to advanced bioinformatics tools.
 
-Przełomem w dziedzinie było opracowanie algorytmu AlphaFold przez firmę Google DeepMind, który wykorzystuje sieci neuronowe do przewidywania struktury białek z dokładnością porównywalną do metod eksperymentalnych.
-AlphaFold2 zrewolucjonizował dziedzinę, wygrywając konkurs CASP14~\cite{casp} (Critical Assessment of protein Structure Prediction) w 2020 roku~\cite{alphafold2}.
-Metody oparte na uczeniu głębokim znacząco przyspieszyły tempo odkryć naukowych w biologii strukturalnej, a publiczne udostępnienie modelu AlphaFold umożliwiło badaczom na całym świecie wykorzystanie tej technologii w projektach badawczych i medycznych.
-Integracja wyników AlphaFold z innymi technikami bioinformatycznymi otworzyła nowe możliwości w analizie interakcji białko-białko i projektowaniu leków.
-Najnowsza wersja algorytmu-AlphaFold 3 - osiąga dokładność przewidywania struktury białek na poziomie 90--95\% w przypadku pojedynczych łańcuchów polipeptydowych, a dla kompleksów białkowych dokładność sięga 80--85\%, co stanowi znaczący postęp w porównaniu do poprzednich wersji~\cite{alphafold3}.
+A breakthrough in the field was the development of the AlphaFold algorithm by Google DeepMind, which uses neural networks to predict protein structures with accuracy comparable to experimental methods.
+AlphaFold2 revolutionized the field by winning the CASP14~\cite{casp} (Critical Assessment of protein Structure Prediction) competition in 2020~\cite{alphafold2}.
+Deep learning methods have significantly accelerated the pace of scientific discoveries in structural biology, and the public release of the AlphaFold model has enabled researchers worldwide to use this technology in research and medical projects.
+Integration of AlphaFold results with other bioinformatics techniques has opened new possibilities in protein-protein interaction analysis and drug design.
+The latest version of the algorithm-AlphaFold 3-achieves protein structure prediction accuracy at the level of 90-95\% for single polypeptide chains, and for protein complexes, the accuracy reaches 80-85\%, which represents significant progress compared to previous versions~\cite{alphafold3}.
 
-\section{Algorytm AlphaFold firmy Google Deepmind}
+\section{AlphaFold algorithm by Google Deepmind}
 
-\subsection{Informacje wstępne}
+\subsection{Preliminary information}
 
-\subsection{Implementacja algorytmu}
+\subsection{Algorithm implementation}
 
-\subsection{Omówienie działania programu}
+\subsection{Program operation overview}
 
-\subsection{Wymagane zasoby obliczeniowe}
+\subsection{Required computational resources}
 
 
-\section{Obliczenia w klastrze obliczeniowym}
+\section{Computing in a computational cluster}
 
-\subsection{Platforma Kubernetes}
+\subsection{Kubernetes Platform}
 
-Kubernetes to otwarte oprogramowanie do orkiestracji kontenerów, które automatyzuje wdrażanie, skalowanie i zarządzanie aplikacjami~\cite{kubernetes}.
-Jest obecnie głównym rozwiązaniem w obszarze zarządzania klastrami obliczeniowymi.
-Kubernetes wywodzi się z wewnętrznego projektu Google o nazwie Borg, który został udostępniony jako projekt open-source w 2014 roku.
+Kubernetes is an open-source container orchestration software that automates the deployment, scaling, and management of applications~\cite{kubernetes}.
+It is currently the main solution in the area of computational cluster management.
+Kubernetes originates from Google's internal project called Borg, which was released as an open-source project in 2014.
 
-Głównym celem Kubernetes jest zapewnienie platformy do uruchamiania aplikacji w środowisku rozproszonym.
-System umożliwia automatyczne zarządzanie zasobami obliczeniowymi w heterogenicznym środowisku sprzętowym, obejmującym różne architektury procesorów oraz dedykowane akceleratory obliczeniowe.
-Kubernetes eliminuje wiele ręcznych procesów związanych z wdrażaniem i skalowaniem aplikacji kontenerowych.
-Wszystkie komponenty klastra są kontrolowane deklaratywnie.
+The main goal of Kubernetes is to provide a platform for running applications in a distributed environment.
+The system enables automatic management of computational resources in a heterogeneous hardware environment, encompassing different processor architectures and dedicated computational accelerators.
+Kubernetes eliminates many manual processes related to deploying and scaling containerized applications.
+All cluster components are controlled declaratively.
 
-Architektura Kubernetes opiera się na modelu węzeł główny-węzeł roboczy (z ang. \textit{master-worker}).
-Główny komponent kontrolny (z ang. \textit{control plane}) zarządza węzłami roboczymi, na których uruchamiane są faktyczne aplikacje w kontenerach.
-Każdy klaster Kubernetes składa się z co najmniej jednego węzła głównego i wielu węzłów roboczych.
-Ta architektura zapewnia wysoką dostępność i odporność na awarie.
+The Kubernetes architecture is based on a master-worker node model.
+The main control component (control plane) manages worker nodes, on which actual applications are run in containers.
+Each Kubernetes cluster consists of at least one master node and many worker nodes.
+This architecture provides high availability and fault tolerance.
 
-Model zasobów w Kubernetes jest deklaratywny.
-Pod (z ang. \textit{Pod}) jest podstawową jednostką wdrożeniową w Kubernetes, reprezentującą jeden lub więcej kontenerów, które współdzielą zasoby i są zawsze uruchamiane na tym samym węźle klastra.
-Po załadowaniu pliku konfiguracyjnego w formacie YAML, Kubernetes będzie dążył do doprowadzenia stanu faktycznego klastra do stanu zadeklarowanego w konfiguracji.
-Przykład deklaracji zasobu Wdrożenie (z ang. \textit{Deployment}) przedstawiony w listingu~\ref{lst:kube-deployment} zawiera komentarze objaśniające kluczowe elementy:
+The resource model in Kubernetes is declarative.
+Pod is the basic deployment unit in Kubernetes, representing one or more containers that share resources and are always run on the same cluster node.
+After loading a configuration file in YAML format, Kubernetes will strive to bring the actual state of the cluster to the state declared in the configuration.
+An example of a Deployment resource declaration shown in listing~\ref{lst:kube-deployment} contains comments explaining key elements:
 
-\begin{lstlisting}[language=yaml,caption={Przykładowa deklaracja wdrożenia w Kubernetes},label={lst:kube-deployment}]
+\begin{lstlisting}[language=yaml,caption={Example Deployment declaration in Kubernetes},label={lst:kube-deployment}]
 apiVersion: apps/v1
-# Typ zasobu Kubernetes
+# Kubernetes resource type
 kind: Deployment 
 metadata:
   name: nginx-deployment
   labels:
     app: nginx
 spec:
-  # Liczba replik (kopii) podu do uruchomienia
+  # Number of replicas (copies) of the pod to run
   replicas: 3
-  # Selektor określający które pody należą do wdrożenia
+  # Selector specifying which pods belong to the deployment
   selector:
     matchLabels:
       app: nginx
-  # Szablon definiujący specyfikację podów
+  # Template defining pod specification
   template:
     metadata:
       labels:
         app: nginx
     spec:
       containers:
-      # Definicja kontenera do uruchomienia
+      # Container definition to run
       - name: nginx
         image: nginx:1.14.2
         ports:
-        - containerPort: 80  # Port nasłuchiwania w kontenerze
+        - containerPort: 80  # Port to listen on in the container
 \end{lstlisting}
 
-Kubernetes wprowadza abstrakcję warstwy infrastruktury.
-Dzięki temu aplikacje mogą być przenoszone między różnymi dostawcami chmury bez konieczności modyfikacji kodu.
-Platforma wspiera różne środowiska uruchomieniowe, od lokalnych klastrów, przez chmury prywatne, aż po głównych dostawców chmury publicznej.
+Kubernetes introduces an abstraction of the infrastructure layer.
+This allows applications to be moved between different cloud providers without modifying code.
+The platform supports various runtime environments, from local clusters, through private clouds, to major public cloud providers.
 
-Kluczowe możliwości Kubernetes obejmują:
+Key capabilities of Kubernetes include:
 \begin{itemize}
-    \item Automatyczne przywracanie aplikacji w przypadku awarii
-    \item Równoważenie obciążenia i dystrybucję ruchu sieciowego
-    \item Automatyczne skalowanie poziome aplikacji w zależności od obciążenia
-    \item Zarządzanie konfiguracją i sekretami
-    \item Zarządzanie trwałym magazynem danych
-    \item Batch execution dla zadań wsadowych i harmonogramowanie obliczeń
+    \item Automatic application recovery in case of failure
+    \item Load balancing and network traffic distribution
+    \item Automatic horizontal scaling of applications based on load
+    \item Configuration and secrets management
+    \item Persistent storage management
+    \item Batch execution for batch jobs and computation scheduling
 \end{itemize}
 
-Kubernetes został zaprojektowany jako platforma rozszerzalna.
-Pozwala na tworzenie własnych kontrolerów i operatorów dostosowanych do specyficznych potrzeb.
-Ta możliwość rozszerzania jest kluczowa dla projektu KubeFold, który wykorzystuje te mechanizmy do orkiestracji złożonych zadań przewidywania konformacji białek.
+Kubernetes was designed as an extensible platform.
+It allows creating custom controllers and operators tailored to specific needs.
+This extensibility is key for the KubeFold project, which uses these mechanisms to orchestrate complex protein conformation prediction tasks.
 
-\subsection{Architektura i komponenty klastra Kubernetes}
+\subsection{Architecture and components of a Kubernetes cluster}
 
-Klaster Kubernetes składa się z dwóch głównych części: węzła kontrolnego (\textit{Control Plane}) oraz węzłów roboczych.
-Węzeł kontrolny zawiera komponenty zarządzające całym klastrem oraz przechowujące jego stan.
+A Kubernetes cluster consists of two main parts: the control node (Control Plane) and worker nodes.
+The control node contains components that manage the entire cluster and store its state.
 
-Na węźle kontrolnym działają kluczowe komponenty: \textit{API Server}, będący punktem dostępowym do klastra, \textit{Scheduler} odpowiedzialny za przydzielanie zadań węzłom oraz \textit{Controller Manager} nadzorujący stan klastra.
-Za przechowywanie stanu klastra odpowiada baza \textit{etcd}.
+Key components run on the control node: the API Server, which is the access point to the cluster, the Scheduler responsible for assigning tasks to nodes, and the Controller Manager supervising the cluster state.
+The etcd database is responsible for storing the cluster state.
 
-Węzły robocze uruchamiają właściwe obciążenia w postaci kontenerów.
-Na każdym węźle działa \textit{kubelet} zarządzający kontenerami oraz \textit{kube-proxy} obsługujący ruch sieciowy.
-Kontenery grupowane są w \textit{Pod}y stanowiące podstawową jednostkę wdrożeniową.
+Worker nodes run actual workloads in the form of containers.
+Each node runs kubelet, which manages containers, and kube-proxy, which handles network traffic.
+Containers are grouped into Pods, which are the basic deployment unit.
 
-Kubernetes definiuje abstrakcje wyższego poziomu jak \textit{Deployment} czy \textit{StatefulSet}.
-Umożliwiają one deklaratywne zarządzanie aplikacjami. \textit{Service} zapewnia stały punkt dostępowy do grupy \textit{Pod}ów.
+Kubernetes defines higher-level abstractions such as Deployment or StatefulSet.
+They enable declarative application management. Service provides a stable access point to a group of Pods.
 
-Klaster wykorzystuje system pluginów do rozszerzania funkcjonalności.
-Obejmuje to sterowniki magazynu, sieci czy monitorowania.
-Szczególnie istotne są \textit{Custom Resource Definition} pozwalające na dodawanie własnych typów zasobów.
+The cluster uses a plugin system to extend functionality.
+This includes storage, network, or monitoring drivers.
+Particularly important are Custom Resource Definitions, which allow adding custom resource types.
 
-Architektura Kubernetes zapewnia wysoką dostępność, skalowalność oraz odporność na awarie.
-Komponenty mogą być duplikowane między węzłami.
-System automatycznie reaguje na awarie poprzez restart i przenoszenie aplikacji.
+The Kubernetes architecture ensures high availability, scalability, and fault tolerance.
+Components can be duplicated across nodes.
+The system automatically responds to failures by restarting and relocating applications.
 
 
-\subsection{Dostępne zasoby w klastrze obliczeniowym}
-Platforma Kubernetes definiuje podstawowe typy zasobów służące do zarządzania aplikacjami w klastrze obliczeniowym.
-Każdy typ zasobu pełni określoną rolę i może być konfigurowany przez administratorów oraz aplikacje.
+\subsection{Available resources in the computational cluster}
+Kubernetes platform defines basic resource types used to manage applications in a computational cluster.
+Each resource type serves a specific role and can be configured by administrators and applications.
 
 \subsubsection{Pod}
-Pod jest podstawową jednostką wdrożeniową w klastrze Kubernetes. 
-Reprezentuje on proces wykonujący aplikację wraz z jej kontekstem wykonawczym.
-Pod zawiera jeden lub więcej kontenerów współdzielących przestrzeń sieciową oraz zasoby pamięci masowej.
-Listing~\ref{lst:pod-example} przedstawia przykładową definicję \textit{Pod}a z serwerem aplikacji i podpiętym wolumenem danych.
+Pod is the basic deployment unit in a Kubernetes cluster. 
+It represents a process executing an application along with its execution context.
+A Pod contains one or more containers sharing network space and storage resources.
+Listing~\ref{lst:pod-example} shows an example definition of a Pod with an application server and an attached data volume.
 
-\begin{lstlisting}[language=yaml,caption={Przykładowa definicja Pod},label={lst:pod-example}]
+\begin{lstlisting}[language=yaml,caption={Example Pod definition},label={lst:pod-example}]
 apiVersion: v1
 kind: Pod
 metadata:
@@ -187,12 +187,12 @@ spec:
 \end{lstlisting}
 
 \subsubsection{Job}
-\textit{Job} reprezentuje zadanie obliczeniowe o skończonym czasie wykonania. 
-Zasób ten gwarantuje pomyślne wykonanie zadanej liczby \textit{Pod}ów.
-W przypadku awarii węzła obliczeniowego, \textit{Job} automatycznie tworzy nową instancję \textit{Pod}a.
-Listing~\ref{lst:job-example} pokazuje przykład \textit{Job}a wykonującego masową konwersję plików.
+Job represents a computational task with a finite execution time. 
+This resource guarantees successful execution of a specified number of Pods.
+In case of a computational node failure, the Job automatically creates a new Pod instance.
+Listing~\ref{lst:job-example} shows an example of a Job performing batch file conversion.
 
-\begin{lstlisting}[language=yaml,caption={Przykładowa definicja Job},label={lst:job-example}]
+\begin{lstlisting}[language=yaml,caption={Example Job definition},label={lst:job-example}]
 apiVersion: batch/v1
 kind: Job
 metadata:
@@ -210,11 +210,11 @@ spec:
 \end{lstlisting}
 
 \subsubsection{PersistentVolume}
-\textit{PersistentVolume} definiuje trwały wolumen pamięci masowej w klastrze.
-Jest on niezależny od cyklu życia \textit{Pod}ów i przechowuje dane, które muszą przetrwać restart klastra.
-Listing~\ref{lst:pv-example} pokazuje definicję wolumenu wykorzystującego system plików NFS.
+PersistentVolume defines a persistent storage volume in the cluster.
+It is independent of the Pod lifecycle and stores data that must survive cluster restarts.
+Listing~\ref{lst:pv-example} shows the definition of a volume using the NFS file system.
 
-\begin{lstlisting}[language=yaml,caption={Przykładowa definicja PersistentVolume},label={lst:pv-example}]
+\begin{lstlisting}[language=yaml,caption={Example PersistentVolume definition},label={lst:pv-example}]
 apiVersion: v1
 kind: PersistentVolume
 metadata:
@@ -231,11 +231,11 @@ spec:
 \end{lstlisting}
 
 \subsubsection{PersistentVolumeClaim}
-\textit{PersistentVolumeClaim} jest żądaniem przydzielenia zasobu pamięci masowej.
-Definiuje wymagania dotyczące rozmiaru i trybu dostępu do wolumenu.
-Listing~\ref{lst:pvc-example} przedstawia przykładowe żądanie utworzenia wolumenu o pojemności 10GB.
+PersistentVolumeClaim is a request for allocation of storage resources.
+It defines requirements regarding the size and access mode for the volume.
+Listing~\ref{lst:pvc-example} shows an example request for creating a 10GB volume.
 
-\begin{lstlisting}[language=yaml,caption={Przykładowa definicja PersistentVolumeClaim},label={lst:pvc-example}]
+\begin{lstlisting}[language=yaml,caption={Example PersistentVolumeClaim definition},label={lst:pvc-example}]
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
@@ -250,11 +250,11 @@ spec:
 \end{lstlisting}
 
 \subsubsection{StorageClass}
-\textit{StorageClass} opisuje klasę pamięci masowej dostępną w klastrze.
-Definiuje ona dostawcę oraz parametry konfiguracyjne dla wolumenów.
-Listing~\ref{lst:sc-example} pokazuje definicję standardowej klasy pamięci masowej dla dysków SSD.
+StorageClass describes a storage class available in the cluster.
+It defines the provider and configuration parameters for volumes.
+Listing~\ref{lst:sc-example} shows the definition of a standard storage class for SSD disks.
 
-\begin{lstlisting}[language=yaml,caption={Przykładowa definicja StorageClass},label={lst:sc-example}]
+\begin{lstlisting}[language=yaml,caption={Example StorageClass definition},label={lst:sc-example}]
 apiVersion: storage.k8s.io/v1
 kind: StorageClass
 metadata:
@@ -268,163 +268,184 @@ reclaimPolicy: Delete
 allowVolumeExpansion: true
 \end{lstlisting}
 
-\subsection{Mechanizm przydzielania wolumenów}
-Kubernetes wykorzystuje złożony mechanizm do dynamicznego przydzielania zasobów pamięci masowej.
-Gdy aplikacja tworzy \textit{PersistentVolumeClaim}, system sprawdza zadeklarowaną w nim klasę pamięci masowej (\textit{StorageClass}).
-Na tej podstawie aktywuje odpowiedni sterownik, który tworzy fizyczny wolumen w infrastrukturze.
-Nowo utworzony \textit{PersistentVolume} jest następnie automatycznie powiązany z żądaniem.
-Dzięki temu mechanizmowi administrator klastra może zdefiniować różne klasy pamięci masowej, a użytkownicy mogą z nich korzystać bez znajomości szczegółów technicznych infrastruktury.
-System gwarantuje, że wolumen będzie istniał tak długo, jak istnieje powiązane z nim żądanie.
-Po usunięciu \textit{PersistentVolumeClaim}, los wolumenu zależy od zdefiniowanej polityki odzyskiwania - może zostać automatycznie usunięty lub zachowany do ponownego użycia.
+\subsection{Volume allocation mechanism}
+Kubernetes uses a complex mechanism for dynamic allocation of storage resources.
+When an application creates a PersistentVolumeClaim, the system checks the storage class (StorageClass) declared in it.
+Based on this, it activates the appropriate driver that creates a physical volume in the infrastructure.
+The newly created PersistentVolume is then automatically linked to the claim.
+Thanks to this mechanism, a cluster administrator can define different storage classes, and users can use them without knowing the technical details of the infrastructure.
+The system guarantees that the volume will exist as long as the claim associated with it exists.
+After deleting a PersistentVolumeClaim, the fate of the volume depends on the defined reclaim policy - it can be automatically deleted or preserved for reuse.
 
-\subsection{Klastry Kubernetes w chmurze}
+\subsection{Kubernetes clusters in the cloud}
 
-Klastry Kubernetes w środowisku chmurowym stanowią naturalną ewolucję platform obliczeniowych.
-Chmura oferuje dynamiczną alokację zasobów oraz integrację z usługami takimi jak magazyny danych czy systemy monitoringu.
-Rozproszenie geograficzne zapewnia wysoką dostępność, a mechanizmy automatycznych kopii zapasowych chronią przed utratą danych.
-Zaawansowane systemy kontroli dostępu gwarantują bezpieczeństwo danych i aplikacji.
+Kubernetes clusters in a cloud environment represent a natural evolution of computational platforms.
+The cloud offers dynamic resource allocation and integration with services such as data stores or monitoring systems.
+Geographic distribution ensures high availability, and automatic backup mechanisms protect against data loss.
+Advanced access control systems guarantee the security of data and applications.
 
-Dostawcy chmury publicznej oferują zarządzane usługi Kubernetes, które automatyzują większość zadań administracyjnych.
-Obejmuje to tworzenie i konfigurację klastra, aktualizacje komponentów oraz monitorowanie stanu infrastruktury.
-Dzięki temu zespoły mogą skupić się na rozwoju aplikacji zamiast na utrzymaniu infrastruktury.
+Public cloud providers offer managed Kubernetes services that automate most administrative tasks.
+This includes cluster creation and configuration, component updates, and infrastructure state monitoring.
+Thanks to this, teams can focus on application development instead of infrastructure maintenance.
 
-\subsection{Zarządzana usługa Kubernetes w Amazon Web Services}
+\subsection{Managed Kubernetes service in Amazon Web Services}
 
-Amazon Elastic Kubernetes Service (EKS) stanowi kompleksowe rozwiązanie do uruchamiania klastrów Kubernetes w chmurze AWS.
-Usługa automatycznie zarządza aktualizacjami węzłów sterujących, certyfikatami oraz konfiguracją sieci.
-Integracja z usługami AWS upraszcza tworzenie rozwiązań wykorzystujących magazyny danych czy systemy powiadomień.
+Amazon Elastic Kubernetes Service (EKS) is a comprehensive solution for running Kubernetes clusters in the AWS cloud.
+The service automatically manages control node updates, certificates, and network configuration.
+Integration with AWS services simplifies creating solutions using data stores or notification systems.
 
-W kontekście projektu KubeFold kluczowe znaczenie ma dostęp do instancji wyposażonych w karty graficzne oraz integracja z systemem plików FSx for Lustre.
-EKS umożliwia automatyczne skalowanie grupy węzłów w zależności od zapotrzebowania, co przekłada się na optymalizację kosztów.
+In the context of the KubeFold project, access to instances equipped with graphics cards and integration with the FSx for Lustre file system are of key importance.
+EKS enables automatic scaling of the node group depending on demand, which translates into cost optimization.
 
-Wykorzystanie klastrów Kubernetes w chmurze niesie znaczące korzyści dla projektów obliczeniowych.
-Eliminacja kosztów utrzymania własnej infrastruktury oraz dostęp do specjalistycznego sprzętu bez konieczności zakupu pozwalają na elastyczne gospodarowanie budżetem.
-Model rozliczania według faktycznego zużycia zasobów sprawdza się szczególnie w przypadku obliczeń o zmiennej intensywności, takich jak przewidywanie konformacji białek.
-Automatyczne mechanizmy odtwarzania po awarii oraz globalna dostępność zapewniają niezawodność i wysoką jakość usług.
-Ta kombinacja cech sprawia, że chmurowe klastry Kubernetes stanowią optymalne środowisko dla nowoczesnych aplikacji naukowych.
+Using Kubernetes clusters in the cloud brings significant benefits for computational projects.
+Elimination of costs for maintaining own infrastructure and access to specialized hardware without the need to purchase allow for flexible budget management.
+The billing model based on actual resource consumption works particularly well in the case of computations with varying intensity, such as protein conformation prediction.
+Automatic recovery mechanisms after failure and global availability ensure reliability and high-quality services.
+This combination of features makes cloud Kubernetes clusters an optimal environment for modern scientific applications.
 
-\subsection{Wolumeny Lustre}
+\subsection{Lustre volumes}
 
-Lustre jest rozproszonym systemem plików, stworzonym przez firmę Cluster File Systems w 2003 roku.
-System ten został zaprojektowany z myślą o klastrach obliczeniowych wysokiej wydajności.
-Obecnie rozwojem Lustre zajmuje się organizacja OpenSFS (Open Scalable File Systems).
+Lustre is a distributed file system, created by Cluster File Systems in 2003.
+This system was designed for high-performance computing clusters.
+Currently, the development of Lustre is managed by the OpenSFS (Open Scalable File Systems) organization.
 
-System plików Lustre składa się z kilku głównych komponentów:
+The Lustre file system consists of several main components:
 \begin{itemize}
-    \item Serwery metadanych (MDS) - przechowują informacje o strukturze systemu plików, katalogach i uprawnieniach
-    \item Serwery obiektów (OSS) - odpowiadają za przechowywanie faktycznych danych i obsługę operacji wejścia/wyjścia
-    \item Klienci - węzły, które montują system plików i korzystają z niego
-    \item Docelowe urządzenia metadanych (MDT) - przechowują metadane na urządzeniach blokowych
-    \item Docelowe urządzenia obiektów (OST) - przechowują dane plików na urządzeniach blokowych
+    \item Metadata servers (MDS) - store information about the file system structure, directories, and permissions
+    \item Object storage servers (OSS) - responsible for storing actual data and handling input/output operations
+    \item Clients - nodes that mount the file system and use it
+    \item Metadata target devices (MDT) - store metadata on block devices
+    \item Object storage targets (OST) - store file data on block devices
 \end{itemize}
 
-Architektura Lustre opiera się na rozdzieleniu metadanych od danych właściwych.
-Serwery metadanych zajmują się wyłącznie obsługą operacji na strukturze katalogów i uprawnieniach.
-Serwery obiektów obsługują operacje na samych danych plików.
-Takie rozdzielenie pozwala na optymalizację obu typów operacji niezależnie.
+The Lustre architecture is based on the separation of metadata from actual data.
+Metadata servers deal exclusively with operations on directory structure and permissions.
+Object servers handle operations on the file data itself.
+Such separation allows for optimization of both types of operations independently.
 
-Lustre zapewnia bardzo wysoką wydajność poprzez równoległe operacje wejścia/wyjścia.
-System umożliwia jednoczesny dostęp do tych samych plików z wielu węzłów klastra.
-Pojedynczy system plików Lustre może obsługiwać dziesiątki tysięcy klientów jednocześnie.
-Przepustowość systemu skaluje się liniowo wraz z dodawaniem kolejnych serwerów obiektów.
+Lustre ensures very high performance through parallel input/output operations.
+The system enables simultaneous access to the same files from multiple cluster nodes.
+A single Lustre file system can serve tens of thousands of clients simultaneously.
+The system's throughput scales linearly with the addition of more object servers.
 
-Główne cechy systemu plików Lustre:
+Main features of the Lustre file system:
 \begin{itemize}
-    \item Wysoka skalowalność - możliwość obsługi petabajtów danych i tysięcy węzłów
-    \item Duża przepustowość - możliwość osiągnięcia przepustowości rzędu terabitów na sekundę
-    \item Spójność pamięci podręcznej - gwarancja spójności danych między wszystkimi klientami
-    \item Odporność na awarie - możliwość pracy mimo awarii pojedynczych komponentów
-    \item Wsparcie dla wielu protokołów dostępu - POSIX, MPI-IO, HDFS
+    \item High scalability - ability to handle petabytes of data and thousands of nodes
+    \item High throughput - ability to achieve throughput in the terabit per second range
+    \item Cache coherence - guarantee of data consistency between all clients
+    \item Fault tolerance - ability to work despite failure of individual components
+    \item Support for multiple access protocols - POSIX, MPI-IO, HDFS
 \end{itemize}
 
-W projekcie KubeFold Lustre jest kluczowym komponentem do przechowywania baz danych białkowych.
-Jego architektura zapewnia wysoką przepustowość i małe opóźnienia przy dostępie do danych.
-System pozwala na jednoczesny dostęp do plików z wielu węzłów klastra wykonujących obliczenia.
-Dzięki temu możliwe jest równoległe przetwarzanie danych przez wiele instancji algorytmu AlphaFold.
+In the KubeFold project, Lustre is a key component for storing protein databases.
+Its architecture ensures high throughput and low latency when accessing data.
+The system allows simultaneous access to files from multiple cluster nodes performing calculations.
+This makes it possible to parallel process data by multiple instances of the AlphaFold algorithm.
 
-Lustre znajduje szerokie zastosowanie w centrach obliczeniowych na całym świecie.
-Jest wykorzystywany między innymi w superkomputerach z listy TOP500.
-System sprawdza się szczególnie w obliczeniach naukowych, gdzie wymagane jest przetwarzanie ogromnych zbiorów danych.
-Przykłady zastosowań obejmują symulacje fizyczne, modelowanie klimatu oraz obliczenia genomiczne.
+Lustre is widely used in computing centers around the world.
+It is used in supercomputers from the TOP500 list.
+The system works particularly well in scientific computing, where processing huge datasets is required.
+Examples of applications include physical simulations, climate modeling, and genomic calculations.
 
-\subsection{Magazyn obiektów Amazon S3}
+\subsection{Amazon S3 object storage}
 
-Amazon Simple Storage Service (S3) to usługa magazynowania obiektów w chmurze.
-Zapewnia praktycznie nieograniczoną przestrzeń dyskową z gwarantowaną dostępnością na poziomie 99,999999999\%.
-Jest to standard branżowy w zakresie przechowywania danych w chmurze.
+Amazon Simple Storage Service (S3) is a cloud object storage service.
+It provides virtually unlimited disk space with guaranteed availability of 99.999999999\%.
+It is an industry standard for cloud data storage.
 
-Podstawową jednostką organizacyjną w S3 są wiadra (z ang. \textit{buckets}). Każde wiadro ma unikalną nazwę w skali globalnej i może przechowywać dowolną liczbę obiektów.
-Obiekty są identyfikowane przez klucze, które mogą zawierać znaki ukośnika do tworzenia struktury hierarchicznej.
+The basic organizational unit in S3 are buckets. Each bucket has a globally unique name and can store any number of objects.
+Objects are identified by keys, which can contain slash characters to create a hierarchical structure.
 
-S3 stał się standardem dla przechowywania danych w aplikacjach chmurowych.
-Większość nowoczesnych rozwiązań chmurowych zapewnia integrację z tym systemem.
-Dostawcy narzędzi często implementują wsparcie dla S3 jako pierwszy wybór przy integracjach z magazynami danych.
+S3 has become the standard for data storage in cloud applications.
+Most modern cloud solutions provide integration with this system.
+Tool providers often implement S3 support as the first choice for integrations with data stores.
 
-Usługa udostępnia interfejs REST API oraz biblioteki dla wielu języków programowania.
-Uwierzytelnianie wykorzystuje podpisy cyfrowe lub tymczasowe poświadczenia.
-Kontrola dostępu opiera się na politykach IAM oraz listach ACL. Te standardowe mechanizmy są szeroko wykorzystywane w ekosystemie chmurowym.
+The service provides a REST API interface and libraries for many programming languages.
+Authentication uses digital signatures or temporary credentials.
+Access control is based on IAM policies and ACL lists. These standard mechanisms are widely used in the cloud ecosystem.
 
-S3 zapewnia pełną integrację z innymi usługami AWS. Jest powszechnie używany jako magazyn dla kopii zapasowych, miejsce przechowywania artefaktów czy docelowa lokalizacja dla wyników obliczeń.
-Jego niezawodność i skalowalność sprawiają, że jest podstawowym wyborem dla aplikacji wymagających trwałego przechowywania danych.
+S3 provides full integration with other AWS services. It is commonly used as storage for backups, a place to store artifacts, or the target location for computation results.
+Its reliability and scalability make it the primary choice for applications requiring persistent data storage.
 
-\subsection{Usługa AWS End User Messaging}
+\subsection{AWS End User Messaging Service}
 
-AWS End User Messaging to usługa umożliwiająca wysyłanie wiadomości SMS do użytkowników końcowych.
-Wykorzystuje ona infrastrukturę Amazon Simple Notification Service (SNS) do dostarczania wiadomości.
+AWS End User Messaging is a service that enables sending SMS messages to end users.
+It uses the Amazon Simple Notification Service (SNS) infrastructure to deliver messages.
 
-Usługa oferuje następujące możliwości:
+The service offers the following capabilities:
 \begin{itemize}
-    \item wysyłanie pojedynczych wiadomości SMS
-    \item wysyłanie wiadomości grupowych
-    \item monitorowanie stanu dostarczenia
-    \item zarządzanie limitami wysyłki
-    \item automatyczne skracanie długich wiadomości
+    \item sending individual SMS messages
+    \item sending group messages
+    \item monitoring delivery status
+    \item managing sending limits
+    \item automatic shortening of long messages
 \end{itemize}
 
-System obsługuje dwa typy wiadomości SMS:
+The system handles two types of SMS messages:
 \begin{itemize}
-    \item Promocyjne - optymalizowane pod kątem kosztów
-    \item Transakcyjne - optymalizowane pod kątem niezawodności dostarczenia
+    \item Promotional - optimized for cost
+    \item Transactional - optimized for delivery reliability
 \end{itemize}
 
-Usługa zapewnia globalny zasięg poprzez współpracę z wieloma operatorami telefonii komórkowej.
-Wiadomości mogą być wysyłane do ponad 200 krajów i terytoriów.
-SNS automatycznie wybiera najlepszą trasę dostarczenia wiadomości.
+The service provides global reach through cooperation with multiple mobile operators.
+Messages can be sent to over 200 countries and territories.
+SNS automatically selects the best route for message delivery.
 
-Rozliczanie usługi odbywa się według liczby wysłanych wiadomości.
-Cena zależy od kraju docelowego oraz wybranego typu wiadomości.
-System oferuje mechanizmy kontroli kosztów poprzez ustawianie miesięcznych limitów wydatków.
+The service billing is based on the number of messages sent.
+The price depends on the target country and the chosen message type.
+The system offers cost control mechanisms through setting monthly spending limits.
 
-Integracja z usługą odbywa się poprzez interfejs API REST lub zestawy SDK dostępne dla popularnych języków programowania.
-Usługa zapewnia także szczegółowe dzienniki zdarzeń oraz metryki dostępne w Amazon CloudWatch.
+Integration with the service is done through the REST API interface or SDK sets available for popular programming languages.
+The service also provides detailed event logs and metrics available in Amazon CloudWatch.
 
-Platforma KubeFold wykorzystuje AWS End User Messaging do powiadamiania badaczy o zakończeniu obliczeń struktury białka przez algorytm AlphaFold.
-System wysyła wiadomości SMS zawierające informacje o statusie zadania oraz odnośniki do wyników w magazynie S3.
+The KubeFold platform uses AWS End User Messaging to notify researchers about the completion of protein structure calculations by the AlphaFold algorithm.
+The system sends SMS messages containing information about task status and links to results in S3 storage.
 
-\section{Koncepcja operatora klastra}
+\section{Cluster operator concept}
 
-\subsection{Architektura operatora klastra}
+A Kubernetes operator is a program that extends cluster capabilities with automatic management of complex applications.
+An operator automates tasks that would normally require manual intervention from a system administrator.
 
-\subsection{Język programowania Go}
+Custom Resource Definitions (CRDs) are the fundamental building blocks of an operator.
+These resources define new types of objects that can be managed within a Kubernetes cluster.
+The operator continuously monitors the state of these resources and performs necessary actions to keep the system running as expected.
 
-Go został stworzony w 2007 roku przez zespół Google składający się z Roberta Griesemera, Roba Pike'a oraz Kena Thompsona.
-Google potrzebował języka, który usprawni tworzenie systemów serwerowych o dużej skali oraz uprości proces rozwoju oprogramowania w dużych zespołach programistycznych.
+The operator automates typical administrative tasks such as:
+\begin{itemize}
+    \item Installing and updating applications
+    \item Creating and restoring backups
+    \item Detecting and fixing failures
+    \item Modifying application settings
+\end{itemize}
 
-Pierwsza publiczna wersja języka została wydana w 2009 roku.
-Język powstał z myślą o tworzeniu skalowalnych systemów serwerowych, które mogłyby obsłużyć rosnącą infrastrukturę Google.
-Twórcy chcieli połączyć prostotę języka Python z wydajnością języka C.
+Operators are particularly effective at managing stateful applications like databases and messaging systems.
+In such cases, the operator automatically performs complex operations that typically require specialized knowledge.
 
-Główne cechy języka Go to prosta składnia, wbudowana obsługa współbieżności oraz wydajna kompilacja.
-Język oferuje statyczne typowanie oraz automatyczne zarządzanie pamięcią.
-Standardowa biblioteka Go zapewnia bogate wsparcie dla operacji sieciowych oraz współbieżnego przetwarzania.
+An operator consists of two main parts: custom resource definitions and a management program.
+The management program continuously compares the current system state with the desired state and implements necessary changes.
 
-Go wprowadza kanały komunikacyjne (channels) oraz korutyny (goroutines) jako podstawowe mechanizmy do obsługi współbieżności.
-Dzięki nim tworzenie równoległych programów jest znacznie prostsze niż w innych językach.
-Jest to szczególnie przydatne w systemach rozproszonych.
+\subsection{Cluster operator architecture}
 
-Ekosystem Go zapewnia narzędzia do automatycznego formatowania kodu, generowania dokumentacji oraz zarządzania zależnościami.
-Moduły Go umożliwiają wersjonowanie i łatwe współdzielenie kodu.
-Narzędzie \textit{go mod} automatycznie zarządza zależnościami projektu.
+\subsection{Go programming language}
 
-Go jest popularnym wyborem do tworzenia narzędzi \textit{DevOps} oraz systemów chmurowych.
-Kubernetes oraz Docker zostały napisane w Go. Język ten sprawdza się w projektach wymagających wysokiej wydajności oraz niezawodności.
+Go was created in 2007 by a Google team consisting of Robert Griesemer, Rob Pike, and Ken Thompson.
+Google needed a language that would streamline the creation of large-scale server systems and simplify the software development process in large programming teams.
+
+The first public version of the language was released in 2009.
+The language was created with the intention of building scalable server systems that could handle Google's growing infrastructure.
+The creators wanted to combine the simplicity of Python with the efficiency of C.
+
+The main features of Go are simple syntax, built-in concurrency support, and efficient compilation.
+The language offers static typing and automatic memory management.
+The Go standard library provides rich support for network operations and concurrent processing.
+
+Go introduces communication channels and goroutines as basic mechanisms for handling concurrency.
+Thanks to them, creating parallel programs is much simpler than in other languages.
+This is particularly useful in distributed systems.
+
+The Go ecosystem provides tools for automatic code formatting, documentation generation, and dependency management.
+Go modules enable versioning and easy code sharing.
+The \textit{go mod} tool automatically manages project dependencies.
+
+Go is a popular choice for creating DevOps tools and cloud systems.
+Kubernetes and Docker were written in Go. This language works well in projects requiring high performance and reliability.

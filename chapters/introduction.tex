@@ -1,40 +1,40 @@
-\chapter{Wstęp}
+\chapter{Introduction}
 
 
-\section{Wprowadzenie}
+\section{Preface}
 
 
-\section{Motywacja}
+\section{Motivation}
 
-Przewidywanie struktury konformacyjnej białek stanowi fundamentalne wyzwanie w naukach biologicznych, mające kluczowe znaczenie między innymi w przemyśle farmaceutycznym.
-Zrozumienie trójwymiarowej struktury białek jest niezbędne do projektowania nowych leków.
-Znajomość struktury przestrzennej białka pozwala zrozumieć jego funkcję biologiczną, mechanizm działania oraz potencjalne interakcje z innymi cząsteczkami.
-Jest to szczególnie istotne w procesie odkrywania nowych substancji terapeutycznych.
+Predicting the conformational structure of proteins represents a fundamental challenge in biological sciences, with crucial significance in areas such as the pharmaceutical industry.
+Understanding the three-dimensional structure of proteins is essential for designing new drugs.
+Knowledge of the spatial structure of a protein allows us to understand its biological function, mechanism of action, and potential interactions with other molecules.
+This is particularly important in the process of discovering new therapeutic substances.
 
-Główną motywacją do stworzenia projektu KubeFold było dostrzeżenie istotnej luki technologicznej w obszarze infrastruktury dla przewidywania struktur białkowych.
-Choć algorytmy takie jak AlphaFold ~\cite{alphafold3} osiągnęły bezprecedensowy sukces w modelowaniu konformacji białek, ich praktyczne zastosowanie często wymaga specjalistycznej wiedzy z zakresu infrastruktury IT, co stanowi barierę dla wielu badaczy z dziedziny biologii molekularnej czy bioinformatyki.
+The main motivation for creating the KubeFold project was recognizing a significant technological gap in the infrastructure for protein structure prediction.
+Although algorithms such as AlphaFold ~\cite{alphafold3} have achieved unprecedented success in modeling protein conformations, their practical application often requires specialized knowledge in IT infrastructure, which creates a barrier for many researchers in the fields of molecular biology or bioinformatics.
 
-Dotychczasowe podejścia do uruchamiania AlphaFold często opierały się na ręcznej konfiguracji środowiska obliczeniowego, co wiązało się z wieloma wyzwaniami: począwszy od pobierania i zarządzania gigantycznymi bazami danych białkowych (rzędu terabajtów), przez konfigurację zasobów sprzętowych (w tym wyspecjalizowanych akceleratorów GPU), aż po optymalizację przepływu pracy i zarządzanie artefaktami obliczeń.
-Proces ten był czasochłonny, podatny na błędy i wymagał kompetencji z wielu dziedzin jednocześnie.
+Previous approaches to running AlphaFold were often based on manual configuration of the computational environment, which involved many challenges: from downloading and managing gigantic protein databases (on the order of terabytes), through configuring hardware resources (including specialized GPU accelerators), to optimizing workflow and managing computational artifacts.
+This process was time-consuming, error-prone, and required competencies across multiple disciplines simultaneously.
 
-KubeFold ma na celu przezwyciężenie tych wyzwań poprzez dostarczenie zautomatyzowanej, skalowalnej i łatwej w użyciu platformy, która ukrywa warstwę infrastruktury przed użytkownikiem końcowym.
-Dzięki wykorzystaniu technologii konteneryzacji i orkiestracji Kubernetes ~\cite{kubernetes, container_orchestration} system zapewnia zautomatyzowane zarządzanie zasobami i elastyczne skalowanie, umożliwiający naukowcom skupienie się na badaniach biologicznych, a nie na aspektach technicznych.
+KubeFold aims to overcome these challenges by providing an automated, scalable, and easy-to-use platform that hides the infrastructure layer from the end user.
+By leveraging containerization technology and Kubernetes orchestration ~\cite{kubernetes, container_orchestration}, the system provides automated resource management and flexible scaling, allowing scientists to focus on biological research rather than technical aspects.
 
 
-\section{Cele i zakres pracy}
+\section{Goals and Scope of Work}
 
-Głównym celem pracy jest zaprojektowanie i implementacja operatora KubeFold dla platformy Kubernetes ~\cite{kubernetes}, który automatyzuje proces uruchamiania obliczeń przewidywania struktury konformacyjnej białek z wykorzystaniem algorytmu AlphaFold ~\cite{alphafold3}.
-Realizacja tego celu obejmuje następujące zadania:
+The main goal of this work is to design and implement the KubeFold operator for the Kubernetes platform ~\cite{kubernetes}, which automates the process of running protein conformational structure prediction calculations using the AlphaFold algorithm ~\cite{alphafold3}.
+The implementation of this goal includes the following tasks:
 
 \begin{itemize}
-    \item Opracowanie architektury operatora Kubernetes ~\cite{k8s_operators}, który przede wszystkim:
-    \subitem wprowadza zasób \textit{ProteinDatabase} abstrahujący zarządzanie bazami danych białkowych
-    \subitem wprowadza zasób \textit{ProteinConformationPrediction} zarządzający faktycznym obliczeniem konformacji białka
-    \item Zaprojektowanie i implementacja komponentu do zarządzania bazami danych białkowych, umożliwiającego automatyczne pobieranie i dekompresję plików z danymi
-    \item Przygotowanie przykładowego kodu infrastruktury (z ang. \textit{infrastructure as code}), który umożliwia uruchomienie operatora w chmurze Amazon Web Services (AWS) wraz z podpięciem wolumenów \textit{FSx for Lustre}
-    \item Wykonanie dokumentacji i instrukcji instalacji operatora w klastrze.
+    \item Developing the architecture of a Kubernetes operator ~\cite{k8s_operators}, which primarily:
+    \subitem introduces the \textit{ProteinDatabase} resource abstracting the management of protein databases
+    \subitem introduces the \textit{ProteinConformationPrediction} resource managing the actual protein conformation calculation
+    \item Designing and implementing a component for managing protein databases, enabling automatic downloading and decompression of data files
+    \item Preparing example infrastructure code (infrastructure as code), which enables running the operator in the Amazon Web Services (AWS) cloud with the connection of \textit{FSx for Lustre} volumes
+    \item Creating documentation and installation instructions for the operator in a cluster.
 \end{itemize}
 
-Zakres pracy obejmuje pełny cykl wytwarzania oprogramowania: od analizy problemów w istniejących rozwiązaniach, przez projekt architektury, implementację komponentów, aż po weryfikację działania systemu w środowisku Kubernetes.
+The scope of work encompasses the full software development lifecycle: from analyzing problems in existing solutions, through architecture design, component implementation, to verification of system operation in a Kubernetes environment.
 
-Projekt nie obejmuje modyfikacji algorytmu AlphaFold, a skupia się na automatyzacji jego uruchamiania w środowisku chmurowym z wykorzystaniem technologii konteneryzacji.
+The project does not include modifications to the AlphaFold algorithm, but focuses on automating its execution in a cloud environment using containerization technology.

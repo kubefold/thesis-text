@@ -62,6 +62,72 @@ Najnowsza wersja algorytmu-AlphaFold 3 - osiąga dokładność przewidywania str
 
 \subsection{Platforma Kubernetes}
 
+Kubernetes to otwarte oprogramowanie do orkiestracji kontenerów, które automatyzuje wdrażanie, skalowanie i zarządzanie aplikacjami~\cite{kubernetes}.
+Jest obecnie głównym rozwiązaniem w obszarze zarządzania klastrami obliczeniowymi.
+Kubernetes wywodzi się z wewnętrznego projektu Google o nazwie Borg, który został udostępniony jako projekt open-source w 2014 roku.
+
+Głównym celem Kubernetes jest zapewnienie platformy do uruchamiania aplikacji w środowisku rozproszonym.
+System umożliwia automatyczne zarządzanie zasobami obliczeniowymi w heterogenicznym środowisku sprzętowym, obejmującym różne architektury procesorów oraz dedykowane akceleratory obliczeniowe.
+Kubernetes eliminuje wiele ręcznych procesów związanych z wdrażaniem i skalowaniem aplikacji kontenerowych.
+Wszystkie komponenty klastra są kontrolowane deklaratywnie.
+
+Architektura Kubernetes opiera się na modelu węzeł główny-węzeł roboczy (z ang. \textit{master-worker}).
+Główny komponent kontrolny (z ang. \textit{control plane}) zarządza węzłami roboczymi, na których uruchamiane są faktyczne aplikacje w kontenerach.
+Każdy klaster Kubernetes składa się z co najmniej jednego węzła głównego i wielu węzłów roboczych.
+Ta architektura zapewnia wysoką dostępność i odporność na awarie.
+
+Model zasobów w Kubernetes jest deklaratywny.
+Pod (z ang. \textit{Pod}) jest podstawową jednostką wdrożeniową w Kubernetes, reprezentującą jeden lub więcej kontenerów, które współdzielą zasoby i są zawsze uruchamiane na tym samym węźle klastra.
+Po załadowaniu pliku konfiguracyjnego w formacie YAML, Kubernetes będzie dążył do doprowadzenia stanu faktycznego klastra do stanu zadeklarowanego w konfiguracji.
+Przykład deklaracji zasobu Wdrożenie (z ang. \textit{Deployment}) przedstawiony w listingu~\ref{lst:kube-deployment} zawiera komentarze objaśniające kluczowe elementy:
+
+\begin{lstlisting}[language=yaml,caption={Przykładowa deklaracja wdrożenia w Kubernetes},label={lst:kube-deployment}]
+apiVersion: apps/v1
+# Typ zasobu Kubernetes
+kind: Deployment 
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  # Liczba replik (kopii) podu do uruchomienia
+  replicas: 3
+  # Selektor określający które pody należą do wdrożenia
+  selector:
+    matchLabels:
+      app: nginx
+  # Szablon definiujący specyfikację podów
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      # Definicja kontenera do uruchomienia
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80  # Port nasłuchiwania w kontenerze
+\end{lstlisting}
+
+Kubernetes wprowadza abstrakcję warstwy infrastruktury.
+Dzięki temu aplikacje mogą być przenoszone między różnymi dostawcami chmury bez konieczności modyfikacji kodu.
+Platforma wspiera różne środowiska uruchomieniowe, od lokalnych klastrów, przez chmury prywatne, aż po głównych dostawców chmury publicznej.
+
+Kluczowe możliwości Kubernetes obejmują:
+\begin{itemize}
+    \item Automatyczne przywracanie aplikacji w przypadku awarii
+    \item Równoważenie obciążenia i dystrybucję ruchu sieciowego
+    \item Automatyczne skalowanie poziome aplikacji w zależności od obciążenia
+    \item Zarządzanie konfiguracją i sekretami
+    \item Zarządzanie trwałym magazynem danych
+    \item Batch execution dla zadań wsadowych i harmonogramowanie obliczeń
+\end{itemize}
+
+Kubernetes został zaprojektowany jako platforma rozszerzalna.
+Pozwala na tworzenie własnych kontrolerów i operatorów dostosowanych do specyficznych potrzeb.
+Ta możliwość rozszerzania jest kluczowa dla projektu KubeFold, który wykorzystuje te mechanizmy do orkiestracji złożonych zadań przewidywania konformacji białek.
+
 \subsection{Architektura i komponenty klastra Kubernetes}
 
 \subsection{Dostępne zasoby w klastrze obliczeniowym}

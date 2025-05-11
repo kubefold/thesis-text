@@ -170,27 +170,36 @@ This extensibility is key for the KubeFold project, which uses these mechanisms 
 
 \subsection{Architecture and components of a Kubernetes cluster}
 
-A Kubernetes cluster consists of two main parts: the control node (Control Plane) and worker nodes.
-The control node contains components that manage the entire cluster and store its state.
+A Kubernetes cluster consists of two main parts: the Control Plane and Worker Nodes, as shown in Figure \ref{fig:kubernetes-architecture}. This architecture provides the foundation for running containerized applications like AlphaFold in a distributed environment~\cite{kubernetes}.
 
-Key components run on the control node: the API Server, which is the access point to the cluster, the Scheduler responsible for assigning tasks to nodes, and the Controller Manager supervising the cluster state.
-The etcd database is responsible for storing the cluster state.
+The Control Plane contains components that manage the entire cluster and store its state:
+\begin{itemize}
+    \item \textbf{kube-api-server} - the access point to the cluster, handling all API requests and providing the interface for communication
+    \item \textbf{etcd} - a key-value database storing the entire cluster state, serving as the persistent storage for all cluster configuration
+    \item \textbf{kube-scheduler} - responsible for assigning workloads to nodes based on resource requirements and constraints
+    \item \textbf{kube-controller-manager} - supervises the cluster state, ensuring it matches the declared configuration by running controller processes
+    \item \textbf{cloud-controller-manager} - integrates the cluster with cloud provider infrastructure, managing cloud-specific resources
+\end{itemize}
 
-Worker nodes run actual workloads in the form of containers.
-Each node runs kubelet, which manages containers, and kube-proxy, which handles network traffic.
-Containers are grouped into Pods, which are the basic deployment unit.
+Worker Nodes run actual workloads in the form of containers. Each worker node contains:
+\begin{itemize}
+    \item \textbf{kubelet} - an agent managing containers on the node, ensuring they are running and healthy
+    \item \textbf{kube-proxy} - handling network traffic and ensuring routing between services across the cluster
+    \item \textbf{Pods} - the basic deployment units containing one or more containers that share networking and storage resources
+\end{itemize}
 
-Kubernetes defines higher-level abstractions such as Deployment or StatefulSet.
-They enable declarative application management.
-Service provides a stable access point to a group of Pods.
+As described earlier in the Kubernetes Platform section, the system defines higher-level abstractions such as Deployment or StatefulSet. These enable declarative application management through configuration files in YAML format. The Service resource provides a stable access point to a group of Pods, abstracting the underlying infrastructure changes.
 
-The cluster uses a plugin system to extend functionality.
-This includes storage, network, or monitoring drivers.
-Particularly important are Custom Resource Definitions, which allow adding custom resource types.
+The cluster uses a plugin system to extend functionality. This includes storage, network, or monitoring drivers. Particularly important for the KubeFold project are Custom Resource Definitions, which allow adding custom resource types as discussed in the Cluster Operator section.
 
-The Kubernetes architecture ensures high availability, scalability, and fault tolerance.
-Components can be duplicated across nodes.
-The system automatically responds to failures by restarting and relocating applications.
+The Kubernetes architecture ensures high availability, scalability, and fault tolerance required for computational tasks like protein structure prediction. Components can be duplicated across nodes to prevent single points of failure. The system automatically responds to failures by restarting and relocating applications, maintaining the desired state of the cluster.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/kubernetes.png}
+    \caption{Kubernetes cluster architecture showing Control Plane components (kube-api-server, etcd, scheduler, controller manager, cloud-controller-manager) and Worker Nodes containing kubelet, kube-proxy, and pods. The diagram illustrates the communication between the control plane and worker nodes, with the cloud provider API interface for external resource management.}
+    \label{fig:kubernetes-architecture}
+\end{figure}
 
 \subsection{Available resources in the computational cluster}
 Kubernetes platform defines basic resource types used to manage applications in a computational cluster.

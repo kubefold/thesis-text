@@ -1,0 +1,29 @@
+@startuml
+title Kubernetes Operator Flow
+
+actor "Cluster Administrator" as admin
+participant "API Server" as api
+participant "Operator" as operator
+
+== Installation ==
+admin -> api: Install Custom Resource Definition (CRD)
+admin -> api: Deploy operator
+
+== Configuration ==
+admin -> api: Create Custom Resource instance
+api -> operator: Notify about new resource
+operator -> api: Watch for resource changes
+
+== Operation ==
+operator -> operator: Detect change in desired state
+operator -> api: Read current state
+operator -> operator: Calculate required changes
+operator -> api: Create/Update required resources
+api --> operator: Confirm changes
+
+== Lifecycle Management ==
+operator -> api: Monitor managed resources
+operator -> operator: Handle failures/updates
+operator -> api: Update resource status
+
+@enduml

@@ -305,6 +305,48 @@ Ta kombinacja cech sprawia, że chmurowe klastry Kubernetes stanowią optymalne 
 
 \subsection{Wolumeny Lustre}
 
+Lustre jest rozproszonym systemem plików, stworzonym przez firmę Cluster File Systems w 2003 roku.
+System ten został zaprojektowany z myślą o klastrach obliczeniowych wysokiej wydajności.
+Obecnie rozwojem Lustre zajmuje się organizacja OpenSFS (Open Scalable File Systems).
+
+System plików Lustre składa się z kilku głównych komponentów:
+\begin{itemize}
+    \item Serwery metadanych (MDS) - przechowują informacje o strukturze systemu plików, katalogach i uprawnieniach
+    \item Serwery obiektów (OSS) - odpowiadają za przechowywanie faktycznych danych i obsługę operacji wejścia/wyjścia
+    \item Klienci - węzły, które montują system plików i korzystają z niego
+    \item Docelowe urządzenia metadanych (MDT) - przechowują metadane na urządzeniach blokowych
+    \item Docelowe urządzenia obiektów (OST) - przechowują dane plików na urządzeniach blokowych
+\end{itemize}
+
+Architektura Lustre opiera się na rozdzieleniu metadanych od danych właściwych.
+Serwery metadanych zajmują się wyłącznie obsługą operacji na strukturze katalogów i uprawnieniach.
+Serwery obiektów obsługują operacje na samych danych plików.
+Takie rozdzielenie pozwala na optymalizację obu typów operacji niezależnie.
+
+Lustre zapewnia bardzo wysoką wydajność poprzez równoległe operacje wejścia/wyjścia.
+System umożliwia jednoczesny dostęp do tych samych plików z wielu węzłów klastra.
+Pojedynczy system plików Lustre może obsługiwać dziesiątki tysięcy klientów jednocześnie.
+Przepustowość systemu skaluje się liniowo wraz z dodawaniem kolejnych serwerów obiektów.
+
+Główne cechy systemu plików Lustre:
+\begin{itemize}
+    \item Wysoka skalowalność - możliwość obsługi petabajtów danych i tysięcy węzłów
+    \item Duża przepustowość - możliwość osiągnięcia przepustowości rzędu terabitów na sekundę
+    \item Spójność pamięci podręcznej - gwarancja spójności danych między wszystkimi klientami
+    \item Odporność na awarie - możliwość pracy mimo awarii pojedynczych komponentów
+    \item Wsparcie dla wielu protokołów dostępu - POSIX, MPI-IO, HDFS
+\end{itemize}
+
+W projekcie KubeFold Lustre jest kluczowym komponentem do przechowywania baz danych białkowych.
+Jego architektura zapewnia wysoką przepustowość i małe opóźnienia przy dostępie do danych.
+System pozwala na jednoczesny dostęp do plików z wielu węzłów klastra wykonujących obliczenia.
+Dzięki temu możliwe jest równoległe przetwarzanie danych przez wiele instancji algorytmu AlphaFold.
+
+Lustre znajduje szerokie zastosowanie w centrach obliczeniowych na całym świecie.
+Jest wykorzystywany między innymi w superkomputerach z listy TOP500.
+System sprawdza się szczególnie w obliczeniach naukowych, gdzie wymagane jest przetwarzanie ogromnych zbiorów danych.
+Przykłady zastosowań obejmują symulacje fizyczne, modelowanie klimatu oraz obliczenia genomiczne.
+
 \subsection{Magazyn obiektów Amazon S3}
 
 \subsection{Usługa AWS End User Messaging}

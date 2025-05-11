@@ -1,4 +1,4 @@
-%! suppress = MissingImport
+\documentclass{article}
 \usepackage{listings}
 \usepackage{svg}
 
@@ -53,15 +53,47 @@ Integration of AlphaFold results with other bioinformatics techniques has opened
 The latest version of the algorithm-AlphaFold 3-achieves protein structure prediction accuracy at the level of 90-95\% for single polypeptide chains, and for protein complexes, the accuracy reaches 80-85\%, which represents significant progress compared to previous versions~\cite{alphafold3}.
 
 
-\section{AlphaFold algorithm by Google Deepmind}
+\section{AlphaFold by Google Deepmind}
+
+AlphaFold represents a breakthrough in computational biology, developed by Google DeepMind to predict three-dimensional protein structures with unprecedented accuracy.
+This AI system revolutionized the field by achieving near-experimental accuracy in protein structure prediction.
 
 \subsection{Preliminary information}
 
+AlphaFold emerged as the winner of the CASP14 competition in 2020, demonstrating remarkable accuracy in protein structure prediction.
+The system leverages deep learning techniques to predict protein structures from amino acid sequences.
+AlphaFold 2 represents a significant improvement over previous methods, with a median GDT score exceeding 90 for many targets.
+Later, AlphaFold 3 extended capabilities to predict protein-protein, protein-nucleic acid, and protein-ligand interactions.
+The scientific impact includes accelerating drug discovery, understanding disease mechanisms, and designing novel proteins with specific functions.
+
 \subsection{Algorithm implementation}
+
+AlphaFold implements a novel neural network architecture combining attention mechanisms with structure-based learning.
+The algorithm processes protein sequences through multiple specialized neural network blocks.
+First, an evolutionary MSA transformer analyzes multiple sequence alignments to capture evolutionary patterns.
+Then, a structure module with invariant point attention integrates geometric constraints.
+The system iteratively refines predictions through a recycling mechanism that feeds intermediate results back into the network.
+Final outputs include 3D atomic coordinates with confidence metrics for each residue.
+The implementation balances computational efficiency with prediction accuracy through careful optimization.
 
 \subsection{Program operation overview}
 
+AlphaFold operates in several distinct stages during protein structure prediction.
+Initially, it searches sequence databases to build multiple sequence alignments for the target protein.
+This first stage requires only CPU resources and involves sequence similarity searches against large databases.
+Next, the system processes this data through its neural network architecture to generate initial structure predictions, a stage that exclusively requires GPU resources for efficient tensor operations.
+The prediction undergoes multiple refinement cycles, where each iteration improves model quality.
+AlphaFold produces five candidate models with associated confidence scores (pLDDT). The \textit{Deployment} involves containerized environments for reproducibility across computing platforms.
+Output formats include PDB files for 3D coordinates and additional files containing confidence metrics and model parameters.
+
 \subsection{Required computational resources}
+
+AlphaFold demands substantial computational resources for effective operation.
+The system requires high-performance GPUs, preferably NVIDIA A100 or similar, with at least 16GB VRAM. Memory requirements range from 16GB for small proteins to 64GB+ for large complexes.
+Storage needs include approximately 2TB for reference databases and additional space for output models.
+Prediction time varies significantly with protein size and complexity, ranging from 30 minutes for small proteins to several hours for complex structures.
+Cloud-based \textit{Deployment} typically costs between $10-$100 per prediction depending on computational requirements.
+The high resource demands make AlphaFold particularly suitable for execution in specialized computing environments with access to dedicated hardware accelerators.
 
 
 \section{Computing in a computational cluster}

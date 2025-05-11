@@ -1,6 +1,9 @@
 Tworzę projekt o nazwie KubeFold. KubeFold to projekt operatora Kubernetes, który ma za zadanie automatyzować proces uruchamiania algorytmu AlphaFold na klastrach Kubernetes.
 Tworzę pracę magisterską na uczelni AGH w Krakowie na temat tego projektu.
 
+Pisząc teksty do pracy magisterskiej, pisz tekst konkretny, bez zbędnych sformułowań takich jak "Wartym jest zauważenia" itp. Nie używaj angielskich zapożyczeń takich jak "walidacja". Nie pisz przesadnie długich zdań.
+Zawsze wypluwaj kod latex.
+
 # Operator
 
 # 🧬 Kubefold

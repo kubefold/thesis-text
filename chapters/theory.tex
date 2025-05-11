@@ -130,17 +130,152 @@ Ta możliwość rozszerzania jest kluczowa dla projektu KubeFold, który wykorzy
 
 \subsection{Architektura i komponenty klastra Kubernetes}
 
+Klaster Kubernetes składa się z dwóch głównych części: węzła kontrolnego (\textit{Control Plane}) oraz węzłów roboczych.
+Węzeł kontrolny zawiera komponenty zarządzające całym klastrem oraz przechowujące jego stan.
+
+Na węźle kontrolnym działają kluczowe komponenty: \textit{API Server}, będący punktem dostępowym do klastra, \textit{Scheduler} odpowiedzialny za przydzielanie zadań węzłom oraz \textit{Controller Manager} nadzorujący stan klastra.
+Za przechowywanie stanu klastra odpowiada baza \textit{etcd}.
+
+Węzły robocze uruchamiają właściwe obciążenia w postaci kontenerów.
+Na każdym węźle działa \textit{kubelet} zarządzający kontenerami oraz \textit{kube-proxy} obsługujący ruch sieciowy.
+Kontenery grupowane są w \textit{Pod}y stanowiące podstawową jednostkę wdrożeniową.
+
+Kubernetes definiuje abstrakcje wyższego poziomu jak \textit{Deployment} czy \textit{StatefulSet}.
+Umożliwiają one deklaratywne zarządzanie aplikacjami. \textit{Service} zapewnia stały punkt dostępowy do grupy \textit{Pod}ów.
+
+Klaster wykorzystuje system pluginów do rozszerzania funkcjonalności.
+Obejmuje to sterowniki magazynu, sieci czy monitorowania.
+Szczególnie istotne są \textit{Custom Resource Definition} pozwalające na dodawanie własnych typów zasobów.
+
+Architektura Kubernetes zapewnia wysoką dostępność, skalowalność oraz odporność na awarie.
+Komponenty mogą być duplikowane między węzłami.
+System automatycznie reaguje na awarie poprzez restart i przenoszenie aplikacji.
+
+
 \subsection{Dostępne zasoby w klastrze obliczeniowym}
+Platforma Kubernetes definiuje podstawowe typy zasobów służące do zarządzania aplikacjami w klastrze obliczeniowym.
+Każdy typ zasobu pełni określoną rolę i może być konfigurowany przez administratorów oraz aplikacje.
 
 \subsubsection{Pod}
+Pod jest podstawową jednostką wdrożeniową w klastrze Kubernetes. 
+Reprezentuje on proces wykonujący aplikację wraz z jej kontekstem wykonawczym.
+Pod zawiera jeden lub więcej kontenerów współdzielących przestrzeń sieciową oraz zasoby pamięci masowej.
+Listing~\ref{lst:pod-example} przedstawia przykładową definicję \textit{Pod}a z serwerem aplikacji i podpiętym wolumenem danych.
+
+\begin{lstlisting}[language=yaml,caption={Przykładowa definicja Pod},label={lst:pod-example}]
+apiVersion: v1
+kind: Pod
+metadata:
+  name: web-server
+  labels:
+    app: web
+spec:
+  containers:
+  - name: nginx
+    image: nginx:latest
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    volumeMounts:
+    - name: www-data
+      mountPath: /usr/share/nginx/html
+  volumes:
+  - name: www-data
+    persistentVolumeClaim:
+      claimName: web-content
+\end{lstlisting}
 
 \subsubsection{Job}
+\textit{Job} reprezentuje zadanie obliczeniowe o skończonym czasie wykonania. 
+Zasób ten gwarantuje pomyślne wykonanie zadanej liczby \textit{Pod}ów.
+W przypadku awarii węzła obliczeniowego, \textit{Job} automatycznie tworzy nową instancję \textit{Pod}a.
+Listing~\ref{lst:job-example} pokazuje przykład \textit{Job}a wykonującego masową konwersję plików.
+
+\begin{lstlisting}[language=yaml,caption={Przykładowa definicja Job},label={lst:job-example}]
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: batch-convert
+spec:
+  template:
+    spec:
+      containers:
+      - name: converter
+        image: imagemagick:latest
+        command: ["convert"]
+        args: ["*.jpg", "-resize", "800x600", "output/"]
+      restartPolicy: Never
+  backoffLimit: 4
+\end{lstlisting}
 
 \subsubsection{PersistentVolume}
+\textit{PersistentVolume} definiuje trwały wolumen pamięci masowej w klastrze.
+Jest on niezależny od cyklu życia \textit{Pod}ów i przechowuje dane, które muszą przetrwać restart klastra.
+Listing~\ref{lst:pv-example} pokazuje definicję wolumenu wykorzystującego system plików NFS.
+
+\begin{lstlisting}[language=yaml,caption={Przykładowa definicja PersistentVolume},label={lst:pv-example}]
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-volume
+spec:
+  capacity:
+    storage: 100Gi
+  accessModes:
+    - ReadWriteMany
+  persistentVolumeReclaimPolicy: Retain
+  nfs:
+    server: nfs-server.example.com
+    path: "/shared"
+\end{lstlisting}
 
 \subsubsection{PersistentVolumeClaim}
+\textit{PersistentVolumeClaim} jest żądaniem przydzielenia zasobu pamięci masowej.
+Definiuje wymagania dotyczące rozmiaru i trybu dostępu do wolumenu.
+Listing~\ref{lst:pvc-example} przedstawia przykładowe żądanie utworzenia wolumenu o pojemności 10GB.
+
+\begin{lstlisting}[language=yaml,caption={Przykładowa definicja PersistentVolumeClaim},label={lst:pvc-example}]
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: web-content
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: standard
+\end{lstlisting}
 
 \subsubsection{StorageClass}
+\textit{StorageClass} opisuje klasę pamięci masowej dostępną w klastrze.
+Definiuje ona dostawcę oraz parametry konfiguracyjne dla wolumenów.
+Listing~\ref{lst:sc-example} pokazuje definicję standardowej klasy pamięci masowej dla dysków SSD.
+
+\begin{lstlisting}[language=yaml,caption={Przykładowa definicja StorageClass},label={lst:sc-example}]
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: fast-storage
+provisioner: kubernetes.io/aws-ebs
+parameters:
+  type: gp3
+  iopsPerGB: "5000"
+  encrypted: "true"
+reclaimPolicy: Delete
+allowVolumeExpansion: true
+\end{lstlisting}
+
+\subsection{Mechanizm przydzielania wolumenów}
+Kubernetes wykorzystuje złożony mechanizm do dynamicznego przydzielania zasobów pamięci masowej.
+Gdy aplikacja tworzy \textit{PersistentVolumeClaim}, system sprawdza zadeklarowaną w nim klasę pamięci masowej (\textit{StorageClass}).
+Na tej podstawie aktywuje odpowiedni sterownik, który tworzy fizyczny wolumen w infrastrukturze.
+Nowo utworzony \textit{PersistentVolume} jest następnie automatycznie powiązany z żądaniem.
+Dzięki temu mechanizmowi administrator klastra może zdefiniować różne klasy pamięci masowej, a użytkownicy mogą z nich korzystać bez znajomości szczegółów technicznych infrastruktury.
+System gwarantuje, że wolumen będzie istniał tak długo, jak istnieje powiązane z nim żądanie.
+Po usunięciu \textit{PersistentVolumeClaim}, los wolumenu zależy od zdefiniowanej polityki odzyskiwania - może zostać automatycznie usunięty lub zachowany do ponownego użycia.
 
 \subsection{Klastry Kubernetes w chmurze}
 

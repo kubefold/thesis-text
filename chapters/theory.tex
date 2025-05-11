@@ -279,7 +279,29 @@ Po usunięciu \textit{PersistentVolumeClaim}, los wolumenu zależy od zdefiniowa
 
 \subsection{Klastry Kubernetes w chmurze}
 
+Klastry Kubernetes w środowisku chmurowym stanowią naturalną ewolucję platform obliczeniowych.
+Chmura oferuje dynamiczną alokację zasobów oraz integrację z usługami takimi jak magazyny danych czy systemy monitoringu.
+Rozproszenie geograficzne zapewnia wysoką dostępność, a mechanizmy automatycznych kopii zapasowych chronią przed utratą danych.
+Zaawansowane systemy kontroli dostępu gwarantują bezpieczeństwo danych i aplikacji.
+
+Dostawcy chmury publicznej oferują zarządzane usługi Kubernetes, które automatyzują większość zadań administracyjnych.
+Obejmuje to tworzenie i konfigurację klastra, aktualizacje komponentów oraz monitorowanie stanu infrastruktury.
+Dzięki temu zespoły mogą skupić się na rozwoju aplikacji zamiast na utrzymaniu infrastruktury.
+
 \subsection{Zarządzana usługa Kubernetes w Amazon Web Services}
+
+Amazon Elastic Kubernetes Service (EKS) stanowi kompleksowe rozwiązanie do uruchamiania klastrów Kubernetes w chmurze AWS.
+Usługa automatycznie zarządza aktualizacjami węzłów sterujących, certyfikatami oraz konfiguracją sieci.
+Integracja z usługami AWS upraszcza tworzenie rozwiązań wykorzystujących magazyny danych czy systemy powiadomień.
+
+W kontekście projektu KubeFold kluczowe znaczenie ma dostęp do instancji wyposażonych w karty graficzne oraz integracja z systemem plików FSx for Lustre.
+EKS umożliwia automatyczne skalowanie grupy węzłów w zależności od zapotrzebowania, co przekłada się na optymalizację kosztów.
+
+Wykorzystanie klastrów Kubernetes w chmurze niesie znaczące korzyści dla projektów obliczeniowych.
+Eliminacja kosztów utrzymania własnej infrastruktury oraz dostęp do specjalistycznego sprzętu bez konieczności zakupu pozwalają na elastyczne gospodarowanie budżetem.
+Model rozliczania według faktycznego zużycia zasobów sprawdza się szczególnie w przypadku obliczeń o zmiennej intensywności, takich jak przewidywanie konformacji białek.
+Automatyczne mechanizmy odtwarzania po awarii oraz globalna dostępność zapewniają niezawodność i wysoką jakość usług.
+Ta kombinacja cech sprawia, że chmurowe klastry Kubernetes stanowią optymalne środowisko dla nowoczesnych aplikacji naukowych.
 
 \subsection{Wolumeny Lustre}
 

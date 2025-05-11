@@ -1,6 +1,8 @@
 %! suppress = MissingImport
 \usepackage{listings}
 \usepackage{svg}
+
+
 \chapter{Theoretical background}
 
 
@@ -49,6 +51,7 @@ AlphaFold2 revolutionized the field by winning the CASP14~\cite{casp} (Critical 
 Deep learning methods have significantly accelerated the pace of scientific discoveries in structural biology, and the public release of the AlphaFold model has enabled researchers worldwide to use this technology in research and medical projects.
 Integration of AlphaFold results with other bioinformatics techniques has opened new possibilities in protein-protein interaction analysis and drug design.
 The latest version of the algorithm-AlphaFold 3-achieves protein structure prediction accuracy at the level of 90-95\% for single polypeptide chains, and for protein complexes, the accuracy reaches 80-85\%, which represents significant progress compared to previous versions~\cite{alphafold3}.
+
 
 \section{AlphaFold algorithm by Google Deepmind}
 
@@ -154,13 +157,12 @@ The Kubernetes architecture ensures high availability, scalability, and fault to
 Components can be duplicated across nodes.
 The system automatically responds to failures by restarting and relocating applications.
 
-
 \subsection{Available resources in the computational cluster}
 Kubernetes platform defines basic resource types used to manage applications in a computational cluster.
 Each resource type serves a specific role and can be configured by administrators and applications.
 
 \subsubsection{Pod}
-Pod is the basic deployment unit in a Kubernetes cluster. 
+Pod is the basic deployment unit in a Kubernetes cluster.
 It represents a process executing an application along with its execution context.
 A Pod contains one or more containers sharing network space and storage resources.
 Listing~\ref{lst:pod-example} shows an example definition of a Pod with an application server and an attached data volume.
@@ -190,7 +192,7 @@ spec:
 \end{lstlisting}
 
 \subsubsection{Job}
-Job represents a computational task with a finite execution time. 
+Job represents a computational task with a finite execution time.
 This resource guarantees successful execution of a specified number of Pods.
 In case of a computational node failure, the Job automatically creates a new Pod instance.
 Listing~\ref{lst:job-example} shows an example of a Job performing batch file conversion.
@@ -404,6 +406,7 @@ The service also provides detailed event logs and metrics available in Amazon Cl
 The KubeFold platform uses AWS End User Messaging to notify researchers about the completion of protein structure calculations by the AlphaFold algorithm.
 The system sends SMS messages containing information about task status and links to results in S3 storage.
 
+
 \section{Cluster operator concept}
 
 A Kubernetes operator is a program that extends cluster capabilities with automatic management of complex applications.
@@ -427,12 +430,10 @@ In such cases, the operator automatically performs complex operations that typic
 An operator consists of two main parts: custom resource definitions and a management program.
 The management program continuously compares the current system state with the desired state and implements necessary changes.
 
-\begin{figure}[h]
-
-\includesvg{../images/kubernetes_operator_flow.svg}
-
-\caption{Kubernetes operator workflow diagram}
-\label{fig:kubernetes-operator-flow}
+\begin{figure}[htbp]
+    \centering
+\includesvg[width=\textwidth]{../images/kubernetes_operator_flow.svg}
+    \caption{svg image}
 \end{figure}
 
 \subsection{Cluster operator architecture}

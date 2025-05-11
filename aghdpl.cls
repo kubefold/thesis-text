@@ -3,6 +3,7 @@
 \usepackage[cache=false]{minted}
 \usepackage[thinc]{esdiff}
 \usepackage{svg}
+\usepackage{amsmath}
 
 %\usepackage{xcolor}
 %\definecolor{commentgreen}{RGB}{2,112,10}

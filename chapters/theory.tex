@@ -2,10 +2,8 @@
 
 
 \section{Problem przewidywania konformacji białek}
-Przewidywanie konformacji białek to kluczowy problem biologii obliczeniowej~\cite{alphafold3}.
-Polega na określeniu trójwymiarowej struktury białka na podstawie sekwencji aminokwasów.
-Struktura przestrzenna białka bezpośrednio wpływa na jego funkcję biologiczną.
-Dokładne przewidywanie konformacji pozwala zrozumieć mechanizmy działania białek oraz projektować nowe leki.
+Przewidywanie konformacji białek to kluczowy problem biologii obliczeniowej~\cite{alphafold3}, który polega na określeniu trójwymiarowej struktury białka na podstawie sekwencji aminokwasów.
+Struktura przestrzenna białka bezpośrednio wpływa na jego funkcję biologiczną, a dokładne przewidywanie konformacji pozwala zrozumieć mechanizmy działania białek oraz projektować nowe leki.
 Jest to zadanie trudne ze względu na ogromną liczbę możliwych konformacji oraz złożone oddziaływania między atomami.
 Problem ten staje się szczególnie istotny dla białek, których struktury nie udało się wyznaczyć metodami eksperymentalnymi ze względu na trudności techniczne.
 Zastosowanie przewidywanych struktur w medycynie spersonalizowanej oraz farmacji stanowi jeden z najbardziej obiecujących kierunków rozwoju współczesnej biotechnologii.
@@ -25,39 +23,29 @@ Strukturę przestrzenną białka opisuje się na kilku hierarchicznych poziomach
 \end{itemize}
 
 \subsection{Krystalografia rentgenowska}
-Krystalografia rentgenowska to podstawowa metoda doświadczalna określania struktury białek~\cite{xray_crystallography}.
-Polega na analizie dyfrakcji promieni rentgenowskich na krysztale białka.
-Promienie rentgenowskie rozpraszają się na elektronach atomów tworzących białko.
-Wzór dyfrakcyjny jest rejestrowany i analizowany matematycznie.
-Na tej podstawie tworzy się mapa gęstości elektronowej.
-Analiza danych dyfrakcyjnych wymaga zastosowania złożonych algorytmów matematycznych i wiedzy z zakresu krystalografii.
+Krystalografia rentgenowska to podstawowa metoda doświadczalna określania struktury białek~\cite{xray_crystallography}, która polega na analizie dyfrakcji promieni rentgenowskich na krysztale białka.
+Promienie rentgenowskie rozpraszają się na elektronach atomów tworzących białko, a wzór dyfrakcyjny jest rejestrowany i analizowany matematycznie.
+Na tej podstawie tworzy się mapa gęstości elektronowej, której analiza wymaga zastosowania złożonych algorytmów matematycznych i wiedzy z zakresu krystalografii.
 Interpretacja map gęstości elektronowej stanowi wyzwanie wymagające często ręcznego dopasowania modelu białka przez doświadczonych badaczy.
 
 Proces krystalizacji białka jest często najtrudniejszym etapem, wymagającym znacznych nakładów finansowych i zaawansowanej infrastruktury laboratoryjnej.
 
 \subsection{Komputerowe metody obliczania konformacji białka}
-Metody komputerowe przewidywania struktury białek dzielą się na kilka głównych kategorii.
-Metody oparte na homologii wykorzystują podobieństwo sekwencji do białek o znanej strukturze.
-Metody ab initio próbują przewidywać strukturę wyłącznie na podstawie sekwencji i praw fizyki~\cite{ab_initio_protein_folding}.
-Metody fold recognition (rozpoznawania fałdowania) dopasowują sekwencję do znanych motywów strukturalnych.
+Metody komputerowe przewidywania struktury białek dzielą się na kilka głównych kategorii, wśród których metody oparte na homologii wykorzystują podobieństwo sekwencji do białek o znanej strukturze.
+Metody ab initio próbują przewidywać strukturę wyłącznie na podstawie sekwencji i praw fizyki~\cite{ab_initio_protein_folding}, podczas gdy metody fold recognition dopasowują sekwencję do znanych motywów strukturalnych.
 Każda z tych metod ma swoje ograniczenia i najlepiej sprawdza się w określonych warunkach, zależnie od dostępności danych referencyjnych.
 Hybrydy tych metod często dają lepsze wyniki niż pojedyncze podejścia, łącząc zalety różnych technik przewidywania.
 
-Tradycyjne podejścia obliczeniowe obejmują symulacje dynamiki molekularnej i metody Monte Carlo.
-Wykorzystują one pola siłowe opisujące oddziaływania między atomami.
-Obliczenia te są bardzo kosztowne obliczeniowo i często ograniczone do małych białek.
-W ostatnich latach metody uczenia maszynowego i głębokiego odniosły znaczący sukces w tym obszarze.
+Tradycyjne podejścia obliczeniowe obejmują symulacje dynamiki molekularnej i metody Monte Carlo, które wykorzystują pola siłowe opisujące oddziaływania między atomami.
+Obliczenia te są bardzo kosztowne obliczeniowo i często ograniczone do małych białek, jednak w ostatnich latach metody uczenia maszynowego i głębokiego odniosły znaczący sukces w tym obszarze.
 Postęp w sprzęcie obliczeniowym, szczególnie w obszarze akceleratorów GPU i specjalizowanych procesorów tensorowych, znacząco przyspieszył obliczenia struktur białkowych.
 Rozwój infrastruktury chmurowej umożliwił demokratyzację dostępu do zaawansowanych narzędzi bioinformatycznych.
 
-Przełomem w dziedzinie było opracowanie algorytmu AlphaFold przez firmę Google DeepMind.
-Algorytm ten wykorzystuje sieci neuronowe do przewidywania struktury białek z dokładnością porównywalną do metod eksperymentalnych.
+Przełomem w dziedzinie było opracowanie algorytmu AlphaFold przez firmę Google DeepMind, który wykorzystuje sieci neuronowe do przewidywania struktury białek z dokładnością porównywalną do metod eksperymentalnych.
 AlphaFold2 zrewolucjonizował dziedzinę, wygrywając konkurs CASP14~\cite{casp} (Critical Assessment of protein Structure Prediction) w 2020 roku~\cite{alphafold2}.
-Metody oparte na uczeniu głębokim znacząco przyspieszyły tempo odkryć naukowych w biologii strukturalnej.
-Publiczne udostępnienie modelu AlphaFold umożliwiło badaczom na całym świecie wykorzystanie tej technologii w projektach badawczych i medycznych.
+Metody oparte na uczeniu głębokim znacząco przyspieszyły tempo odkryć naukowych w biologii strukturalnej, a publiczne udostępnienie modelu AlphaFold umożliwiło badaczom na całym świecie wykorzystanie tej technologii w projektach badawczych i medycznych.
 Integracja wyników AlphaFold z innymi technikami bioinformatycznymi otworzyła nowe możliwości w analizie interakcji białko-białko i projektowaniu leków.
 Najnowsza wersja algorytmu-AlphaFold 3 - osiąga dokładność przewidywania struktury białek na poziomie 90--95\% w przypadku pojedynczych łańcuchów polipeptydowych, a dla kompleksów białkowych dokładność sięga 80--85\%, co stanowi znaczący postęp w porównaniu do poprzednich wersji~\cite{alphafold3}.
-
 
 \section{Algorytm AlphaFold firmy Google Deepmind}
 

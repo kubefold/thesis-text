@@ -12,22 +12,22 @@ Znajomość struktury przestrzennej białka pozwala zrozumieć jego funkcję bio
 Jest to szczególnie istotne w procesie odkrywania nowych substancji terapeutycznych.
 
 Główną motywacją do stworzenia projektu KubeFold było dostrzeżenie istotnej luki technologicznej w obszarze infrastruktury dla przewidywania struktur białkowych.
-Choć algorytmy takie jak AlphaFold osiągnęły bezprecedensowy sukces w modelowaniu konformacji białek, ich praktyczne zastosowanie często wymaga specjalistycznej wiedzy z zakresu infrastruktury IT, co stanowi barierę dla wielu badaczy z dziedziny biologii molekularnej czy bioinformatyki.
+Choć algorytmy takie jak AlphaFold \cite{alphafold3} osiągnęły bezprecedensowy sukces w modelowaniu konformacji białek, ich praktyczne zastosowanie często wymaga specjalistycznej wiedzy z zakresu infrastruktury IT, co stanowi barierę dla wielu badaczy z dziedziny biologii molekularnej czy bioinformatyki.
 
 Dotychczasowe podejścia do uruchamiania AlphaFold często opierały się na ręcznej konfiguracji środowiska obliczeniowego, co wiązało się z wieloma wyzwaniami: począwszy od pobierania i zarządzania gigantycznymi bazami danych białkowych (rzędu terabajtów), przez konfigurację zasobów sprzętowych (w tym wyspecjalizowanych akceleratorów GPU), aż po optymalizację przepływu pracy i zarządzanie artefaktami obliczeń.
 Proces ten był czasochłonny, podatny na błędy i wymagał kompetencji z wielu dziedzin jednocześnie.
 
 KubeFold ma na celu przezwyciężenie tych wyzwań poprzez dostarczenie zautomatyzowanej, skalowalnej i łatwej w użyciu platformy, która ukrywa warstwę infrastruktury przed użytkownikiem końcowym.
-Dzięki wykorzystaniu technologii konteneryzacji i orkiestracji Kubernetes system zapewnia zautomatyzowane zarządzanie zasobami i elastyczne skalowanie, umożliwiający naukowcom skupienie się na badaniach biologicznych, a nie na aspektach technicznych.
+Dzięki wykorzystaniu technologii konteneryzacji i orkiestracji Kubernetes \cite{kubernetes, container_orchestration} system zapewnia zautomatyzowane zarządzanie zasobami i elastyczne skalowanie, umożliwiający naukowcom skupienie się na badaniach biologicznych, a nie na aspektach technicznych.
 
 
 \section{Cele i zakres pracy}
 
-Głównym celem pracy jest zaprojektowanie i implementacja operatora KubeFold dla platformy Kubernetes, który automatyzuje proces uruchamiania obliczeń przewidywania struktury konformacyjnej białek z wykorzystaniem algorytmu AlphaFold.
+Głównym celem pracy jest zaprojektowanie i implementacja operatora KubeFold dla platformy Kubernetes \cite{kubernetes}, który automatyzuje proces uruchamiania obliczeń przewidywania struktury konformacyjnej białek z wykorzystaniem algorytmu AlphaFold \cite{alphafold3}.
 Realizacja tego celu obejmuje następujące zadania:
 
 \begin{itemize}
-    \item Opracowanie architektury operatora Kubernetes, który przede wszystkim:
+    \item Opracowanie architektury operatora Kubernetes \cite{k8s_operators}, który przede wszystkim:
     \subitem wprowadza zasób \textit{ProteinDatabase} abstrahujący zarządzanie bazami danych białkowych
     \subitem wprowadza zasób \textit{ProteinConformationPrediction} zarządzający faktycznym obliczeniem konformacji białka
     \item Zaprojektowanie i implementacja komponentu do zarządzania bazami danych białkowych, umożliwiającego automatyczne pobieranie i dekompresję plików z danymi
@@ -38,4 +38,3 @@ Realizacja tego celu obejmuje następujące zadania:
 Zakres pracy obejmuje pełny cykl wytwarzania oprogramowania: od analizy problemów w istniejących rozwiązaniach, przez projekt architektury, implementację komponentów, aż po weryfikację działania systemu w środowisku Kubernetes.
 
 Projekt nie obejmuje modyfikacji algorytmu AlphaFold, a skupia się na automatyzacji jego uruchamiania w środowisku chmurowym z wykorzystaniem technologii konteneryzacji.
-

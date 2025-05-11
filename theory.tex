@@ -147,7 +147,8 @@ Each node runs kubelet, which manages containers, and kube-proxy, which handles 
 Containers are grouped into Pods, which are the basic deployment unit.
 
 Kubernetes defines higher-level abstractions such as Deployment or StatefulSet.
-They enable declarative application management. Service provides a stable access point to a group of Pods.
+They enable declarative application management.
+Service provides a stable access point to a group of Pods.
 
 The cluster uses a plugin system to extend functionality.
 This includes storage, network, or monitoring drivers.
@@ -358,7 +359,8 @@ Amazon Simple Storage Service (S3) is a cloud object storage service.
 It provides virtually unlimited disk space with guaranteed availability of 99.999999999\%.
 It is an industry standard for cloud data storage.
 
-The basic organizational unit in S3 are buckets. Each bucket has a globally unique name and can store any number of objects.
+The basic organizational unit in S3 are buckets.
+Each bucket has a globally unique name and can store any number of objects.
 Objects are identified by keys, which can contain slash characters to create a hierarchical structure.
 
 S3 has become the standard for data storage in cloud applications.
@@ -367,9 +369,11 @@ Tool providers often implement S3 support as the first choice for integrations w
 
 The service provides a REST API interface and libraries for many programming languages.
 Authentication uses digital signatures or temporary credentials.
-Access control is based on IAM policies and ACL lists. These standard mechanisms are widely used in the cloud ecosystem.
+Access control is based on IAM policies and ACL lists.
+These standard mechanisms are widely used in the cloud ecosystem.
 
-S3 provides full integration with other AWS services. It is commonly used as storage for backups, a place to store artifacts, or the target location for computation results.
+S3 provides full integration with other AWS services.
+It is commonly used as storage for backups, a place to store artifacts, or the target location for computation results.
 Its reliability and scalability make it the primary choice for applications requiring persistent data storage.
 
 \subsection{AWS End User Messaging Service}
@@ -430,14 +434,42 @@ In such cases, the operator automatically performs complex operations that typic
 An operator consists of two main parts: custom resource definitions and a management program.
 The management program continuously compares the current system state with the desired state and implements necessary changes.
 
+\subsection{Cluster operator architecture}
+
+A Kubernetes operator follows a control loop pattern called the reconciliation loop.
+This pattern continuously monitors the cluster state and makes adjustments to maintain the desired configuration.
+The operator consists of several key components working together to manage custom resources.
+
+The core components of an operator architecture include:
+
+\begin{itemize}
+    \item Custom Resource Definition (CRD) - Defines the schema and validation rules for custom resources
+    \item Controller - Implements the business logic and reconciliation loop
+    \item Client - Interfaces with the Kubernetes API to read and modify resources
+    \item Cache - Maintains an in-memory copy of watched resources for efficiency
+    \item Work Queue - Buffers reconciliation requests to handle them sequentially
+\end{itemize}
+
+The reconciliation loop follows these main steps:
+\begin{enumerate}
+    \item Watch for changes to custom resources and related Kubernetes objects
+    \item Compare current state with desired state specified in the custom resource
+    \item Calculate what changes are needed to reach desired state
+    \item Apply the necessary changes through the Kubernetes API
+    \item Update status of the custom resource
+\end{enumerate}
+
+Figure \ref{fig:kubernetes-operator-flow} illustrates the typical interaction flow between components in a Kubernetes operator:
+
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{../images/kubernetes_operator_flow.png}
-    \caption{Kubernetes Operator Sequence Diagram}
+    \includegraphics[width=\textwidth]{images/kubernetes_operator_flow.png}
+    \caption{Kubernetes Operator Sequence Diagram demonstrating a reconciliation loop}
     \label{fig:kubernetes-operator-flow}
 \end{figure}
 
-\subsection{Cluster operator architecture}
+The operator pattern enables domain-specific knowledge to be encoded into software that can automatically manage complex applications.
+This automation reduces operational overhead and helps maintain consistency across deployments.
 
 \subsection{Go programming language}
 

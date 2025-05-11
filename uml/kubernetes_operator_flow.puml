@@ -1,5 +1,6 @@
 @startuml
 title Kubernetes Operator Flow
+skinparam dpi 300
 
 actor "Cluster Administrator" as admin
 participant "API Server" as api

@@ -1,0 +1,66 @@
+@startuml
+
+skinparam dpi 300
+skinparam componentStyle rectangle
+skinparam backgroundColor white
+skinparam ArrowColor #333333
+
+<style>
+componentDiagram {
+  BackGroundColor white
+  LineThickness 1
+  LineColor #333333
+}
+component {
+  BackgroundColor #C5E1A5
+  LineColor #33691E
+  FontColor #33691E
+}
+</style>
+
+title AlphaFold Two-Stage Processing Pipeline
+
+rectangle "Stage 1: Multiple Sequence Alignment (CPU)" as stage1 {
+  component "Sequence\nInput" as input
+  component "Database\nSearch" as search
+  component "MSA\nConstruction" as msaConstruction
+  component "Template\nSearch" as templateSearch
+
+  input -right-> search
+  search -right-> msaConstruction
+  msaConstruction -right-> templateSearch
+}
+
+rectangle "Stage 2: Structure Prediction (GPU)" as stage2 {
+  component "Evoformer\nBlock" as evoformer
+  component "Structure\nModule" as structModule
+  component "3D Coordinates\nGeneration" as coordGen
+  component "Model\nRefinement" as modelRefine
+  component "Final Structure\nOutput" as output
+
+  evoformer -right-> structModule
+  structModule -right-> coordGen
+  coordGen -right-> modelRefine
+  modelRefine -right-> output
+}
+
+stage1 -right[hidden]-> stage2
+templateSearch -d-> evoformer : MSA and Template Data Transfer
+
+note bottom of stage1
+  CPU-intensive operations:
+  - Sequence database searches
+  - Multiple sequence alignment generation
+  - Evolutionary coupling analysis
+  - Uses HHBlits, MMseqs2, or JackHMMER
+end note
+
+note bottom of stage2
+  GPU-intensive operations:
+  - Neural network inference
+  - 3D structure prediction
+  - Iterative structure refinement
+  - Confidence score calculation
+end note
+
+@enduml

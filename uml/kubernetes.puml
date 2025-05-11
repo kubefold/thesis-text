@@ -1,0 +1,52 @@
+@startuml
+skinparam rectangle {
+  BackgroundColor #ffffff
+  BorderColor black
+}
+skinparam shadowing false
+skinparam dpi 300
+
+rectangle "CLUSTER" {
+  rectangle "CONTROL PLANE" {
+    rectangle "cloud-controller-manager" as CCM #00BFFF
+    rectangle "kube-api-server" as API #1E90FF
+    rectangle "etcd" as ETCD #1E90FF
+    rectangle "scheduler\n(kube-scheduler)" as SCHED #1E90FF
+    rectangle "controller manager\n(kube-controller-manager)" as CTRL #1E90FF
+
+    CCM --> API
+    API --> ETCD
+    ETCD --> API
+    SCHED --> API
+    CTRL --> API
+  }
+
+  rectangle "Node 1" {
+    rectangle "kubelet" as KLET1 #1E90FF
+    rectangle "kube-proxy" as KPROXY1 #00BFFF
+    rectangle "pods" {
+      rectangle "pod" as POD1_1 #1E90FF
+      rectangle "pod" as POD1_2 #1E90FF
+      rectangle "pod" as POD1_3 #1E90FF
+    }
+    KLET1 --> POD1_1
+    KLET1 --> POD1_2
+    KLET1 --> POD1_3
+  }
+
+  rectangle "Node 2" {
+    rectangle "kubelet" as KLET2 #1E90FF
+    rectangle "kube-proxy" as KPROXY2 #00BFFF
+    rectangle "pods" {
+      rectangle "pod" as POD2_1 #1E90FF
+    }
+    KLET2 --> POD2_1
+  }
+
+  API --> KLET1
+  API --> KLET2
+}
+
+cloud "CLOUD PROVIDER API" as CLOUD #00BFFF
+CCM ..> CLOUD
+@enduml

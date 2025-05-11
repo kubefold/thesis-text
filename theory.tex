@@ -73,13 +73,20 @@ The implementation balances computational efficiency with prediction accuracy th
 
 \subsection{Program operation overview}
 
-AlphaFold operates in several distinct stages during protein structure prediction.
+AlphaFold operates in several distinct stages during protein structure prediction, as shown in Figure \ref{fig:alphafold}.
 Initially, it searches sequence databases to build multiple sequence alignments for the target protein.
 This first stage requires only CPU resources and involves sequence similarity searches against large databases.
 Next, the system processes this data through its neural network architecture to generate initial structure predictions, a stage that exclusively requires GPU resources for efficient tensor operations.
 The prediction undergoes multiple refinement cycles, where each iteration improves model quality.
 AlphaFold produces five candidate models with associated confidence scores (pLDDT). The \textit{Deployment} involves containerized environments for reproducibility across computing platforms.
 Output formats include PDB files for 3D coordinates and additional files containing confidence metrics and model parameters.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/alphafold.png}
+    \caption{AlphaFold 3 computation stages}
+    \label{fig:alphafold}
+\end{figure}
 
 \subsection{Required computational resources}
 

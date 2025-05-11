@@ -351,7 +351,7 @@
 
 \RequirePackage{csquotes}
 % Ponieważ `csquotes` nie posiada polskiego stylu, można skorzystać z mocno zbliżonego stylu chorwackiego.
-\DeclareQuoteAlias{croatian}{polish}
+%\DeclareQuoteAlias{croatian}{polish}
 
 \addbibresource{bibliografia.bib}
 

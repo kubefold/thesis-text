@@ -483,46 +483,6 @@ The creators wanted to combine the simplicity of Python with the efficiency of C
 The main features of Go are simple syntax, built-in concurrency support, and efficient compilation.
 The language offers static typing and automatic memory management.
 The Go standard library provides rich support for network operations and concurrent processing.
-An example of Go's clean syntax is shown in listing~\ref{lst:go-example}.
-
-\begin{lstlisting}[language=go,caption={Example Go code showing concurrency features},label={lst:go-example}]
-package main
-
-import (
-    "fmt"
-    "time"
-)
-
-func worker(id int, jobs <-chan int, results chan<- int) {
-    for j := range jobs {
-        fmt.Printf("worker %d started job %d\n", id, j)
-        time.Sleep(time.Second)
-        fmt.Printf("worker %d finished job %d\n", id, j)
-        results <- j * 2
-    }
-}
-
-func main() {
-    jobs := make(chan int, 100)
-    results := make(chan int, 100)
-
-    // Start 3 workers
-    for w := 1; w <= 3; w++ {
-        go worker(w, jobs, results)
-    }
-
-    // Send 5 jobs
-    for j := 1; j <= 5; j++ {
-        jobs <- j
-    }
-    close(jobs)
-
-    // Collect results
-    for i := 1; i <= 5; i++ {
-        <-results
-    }
-}
-\end{lstlisting}
 
 Go introduces communication channels and goroutines as basic mechanisms for handling concurrency.
 Thanks to them, creating parallel programs is much simpler than in other languages.

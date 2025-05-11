@@ -6,17 +6,19 @@
 
 \section{Motywacja}
 
-Przewidywanie struktury konformacyjnej białek stanowi fundamentalne wyzwanie w naukach biologicznych, mające kluczowe znaczenie między innymi w przemyśle farmaceutycznym, gdzie zrozumienie trójwymiarowej struktury białek jest niezbędne do projektowania nowych leków.
-Znajomość struktury przestrzennej białek pozwala zrozumieć ich funkcję biologiczną, mechanizm działania oraz potencjalne interakcje z innymi cząsteczkami, co jest szczególnie istotne w procesie odkrywania nowych substancji terapeutycznych.
+Przewidywanie struktury konformacyjnej białek stanowi fundamentalne wyzwanie w naukach biologicznych, mające kluczowe znaczenie między innymi w przemyśle farmaceutycznym.
+Zrozumienie trójwymiarowej struktury białek jest niezbędne do projektowania nowych leków.
+Znajomość struktury przestrzennej białka pozwala zrozumieć jego funkcję biologiczną, mechanizm działania oraz potencjalne interakcje z innymi cząsteczkami.
+Jest to szczególnie istotne w procesie odkrywania nowych substancji terapeutycznych.
 
 Główną motywacją do stworzenia projektu KubeFold było dostrzeżenie istotnej luki technologicznej w obszarze infrastruktury dla przewidywania struktur białkowych.
-Choć algorytmy takie jak AlphaFold osiągnęły bezprecedensową dokładność w modelowaniu konformacji białek, ich praktyczne zastosowanie często wymaga specjalistycznej wiedzy z zakresu infrastruktury IT, co stanowi barierę dla wielu badaczy z dziedziny biologii molekularnej czy bioinformatyki.
+Choć algorytmy takie jak AlphaFold osiągnęły bezprecedensowy sukces w modelowaniu konformacji białek, ich praktyczne zastosowanie często wymaga specjalistycznej wiedzy z zakresu infrastruktury IT, co stanowi barierę dla wielu badaczy z dziedziny biologii molekularnej czy bioinformatyki.
 
 Dotychczasowe podejścia do uruchamiania AlphaFold często opierały się na ręcznej konfiguracji środowiska obliczeniowego, co wiązało się z wieloma wyzwaniami: począwszy od pobierania i zarządzania gigantycznymi bazami danych białkowych (rzędu terabajtów), przez konfigurację zasobów sprzętowych (w tym wyspecjalizowanych akceleratorów GPU), aż po optymalizację przepływu pracy i zarządzanie artefaktami obliczeń.
 Proces ten był czasochłonny, podatny na błędy i wymagał kompetencji z wielu dziedzin jednocześnie.
 
-KubeFold ma na celu przezwyciężenie tych wyzwań poprzez dostarczenie zautomatyzowanej, skalowalnej i łatwej w użyciu platformy, która abstrahuje złożoność infrastrukturalną od użytkownika końcowego.
-Dzięki wykorzystaniu technologii konteneryzacji i orkiestracji Kubernetes system zapewnia zautomatyzowane zarządzanie zasobami, elastyczne skalowanie oraz intuicyjny interfejs użytkownika, umożliwiający naukowcom skupienie się na badaniach biologicznych, a nie na aspektach technicznych.
+KubeFold ma na celu przezwyciężenie tych wyzwań poprzez dostarczenie zautomatyzowanej, skalowalnej i łatwej w użyciu platformy, która ukrywa warstwę infrastruktury przed użytkownikiem końcowym.
+Dzięki wykorzystaniu technologii konteneryzacji i orkiestracji Kubernetes system zapewnia zautomatyzowane zarządzanie zasobami i elastyczne skalowanie, umożliwiający naukowcom skupienie się na badaniach biologicznych, a nie na aspektach technicznych.
 
 
 \section{Cele i zakres pracy}

@@ -356,7 +356,7 @@ Jest to standard branżowy w zakresie przechowywania danych w chmurze.
 Podstawową jednostką organizacyjną w S3 są wiadra (z ang. \textit{buckets}). Każde wiadro ma unikalną nazwę w skali globalnej i może przechowywać dowolną liczbę obiektów.
 Obiekty są identyfikowane przez klucze, które mogą zawierać znaki ukośnika do tworzenia struktury hierarchicznej.
 
-S3 stał się standardem \textit{de facto} dla przechowywania danych w aplikacjach chmurowych.
+S3 stał się standardem dla przechowywania danych w aplikacjach chmurowych.
 Większość nowoczesnych rozwiązań chmurowych zapewnia integrację z tym systemem.
 Dostawcy narzędzi często implementują wsparcie dla S3 jako pierwszy wybór przy integracjach z magazynami danych.
 
@@ -369,6 +369,37 @@ Jego niezawodność i skalowalność sprawiają, że jest podstawowym wyborem dl
 
 \subsection{Usługa AWS End User Messaging}
 
+AWS End User Messaging to usługa umożliwiająca wysyłanie wiadomości SMS do użytkowników końcowych.
+Wykorzystuje ona infrastrukturę Amazon Simple Notification Service (SNS) do dostarczania wiadomości.
+
+Usługa oferuje następujące możliwości:
+\begin{itemize}
+    \item wysyłanie pojedynczych wiadomości SMS
+    \item wysyłanie wiadomości grupowych
+    \item monitorowanie stanu dostarczenia
+    \item zarządzanie limitami wysyłki
+    \item automatyczne skracanie długich wiadomości
+\end{itemize}
+
+System obsługuje dwa typy wiadomości SMS:
+\begin{itemize}
+    \item Promocyjne - optymalizowane pod kątem kosztów
+    \item Transakcyjne - optymalizowane pod kątem niezawodności dostarczenia
+\end{itemize}
+
+Usługa zapewnia globalny zasięg poprzez współpracę z wieloma operatorami telefonii komórkowej.
+Wiadomości mogą być wysyłane do ponad 200 krajów i terytoriów.
+SNS automatycznie wybiera najlepszą trasę dostarczenia wiadomości.
+
+Rozliczanie usługi odbywa się według liczby wysłanych wiadomości.
+Cena zależy od kraju docelowego oraz wybranego typu wiadomości.
+System oferuje mechanizmy kontroli kosztów poprzez ustawianie miesięcznych limitów wydatków.
+
+Integracja z usługą odbywa się poprzez interfejs API REST lub zestawy SDK dostępne dla popularnych języków programowania.
+Usługa zapewnia także szczegółowe dzienniki zdarzeń oraz metryki dostępne w Amazon CloudWatch.
+
+Platforma KubeFold wykorzystuje AWS End User Messaging do powiadamiania badaczy o zakończeniu obliczeń struktury białka przez algorytm AlphaFold.
+System wysyła wiadomości SMS zawierające informacje o statusie zadania oraz odnośniki do wyników w magazynie S3.
 
 \section{Koncepcja operatora klastra}
 

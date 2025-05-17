@@ -7,16 +7,16 @@ participant Operator as operator
 participant "Download pod" as pod
 database "Volume" as volume
 
-user -> api : Creates ProteinDatabase resource
+user -> api : Creates\n//Protein//\n//Database//\nresource
 api -> operator : Resource is being fetched
 operator -> volume : Set up volume
 operator -> pod : Launches download jobs
 loop Downloading
 pod -> volume : Writes data
-pod -> pod : Prints progress as //stdout// log
+pod -> pod : Prints progress\nas //stdout// log
 operator -> pod : Watches logs
-operator -> api : Progress is being written to resource status
+operator -> api : Progress is\nbeing written\nto resource status
 end
-user -> api : Reads download status
+user -> api : Reads\ndownload\nstatus
 
 @enduml

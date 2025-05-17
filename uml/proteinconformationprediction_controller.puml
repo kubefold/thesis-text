@@ -13,32 +13,32 @@ database "Ephemeral Volume" as tmpVolume
 database "AWS S3" as s3
 queue "AWS SNS" as sns
 
-user -> api : Creates ProteinConformationPrediction resource
-api -> operator : Resource is being fetched
+user -> api : Creates\n//Protein//\n//Conformation//\n//Prediction//\nresource
+api -> operator : Resource is\nbeing\nfetched
 operator -> tmpVolume : Set up volume
 group "Alignment Phase"
 operator -> alignmentPod : Schedule job
 alignmentPod -> dbVolume : Scan protein databases
-alignmentPod -> alignmentPod : Perform MSA search and alignment
-alignmentPod -> tmpVolume : Write alignment temporal state
-operator -> alignmentPod : Detect job finish
-operator -> api : Update phase status
+alignmentPod -> alignmentPod : Perform\nMSA search\nand alignment
+alignmentPod -> tmpVolume : Write alignment\ntemporal state
+operator -> alignmentPod : Detect\njob finish
+operator -> api : Update\nphase\nstatus
 end
 group "Prediction Phase"
 operator -> predictionPod : Schedule prediction job
-predictionPod -> tmpVolume : Load alignment artifacts
-predictionPod -> predictionPod : Compute protein structure
+predictionPod -> tmpVolume : Load alignment\nartifacts
+predictionPod -> predictionPod : Compute\nprotein structure
 predictionPod -> tmpVolume : Write Machine Learning processing output
-operator -> predictionPod : Detect job finish
-operator -> api : Update phase status
+operator -> predictionPod : Detect\njob finish
+operator -> api : Update\nphase\nstatus
 end
 group "Post Processing Phase"
 operator -> postProcessingPod : Schedule post processing job
 postProcessingPod -> tmpVolume : Read prediction artifacts
 postProcessingPod -> s3 : Upload prediction artifacts
 postProcessingPod -> sns : Send notifications
-operator -> postProcessingPod : Detect job finish
-operator -> api : Update phase status
+operator -> postProcessingPod : Detect\njob finish
+operator -> api : Update\nphase\nstatus
 end
 user -> api : Monitor task status
 

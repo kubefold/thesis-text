@@ -1,16 +1,50 @@
-\chapter{System design and implementation}
+\chapter{Realizacja projektu}
+Niniejszy rozdział omówi architekturę i sposób implementacji projektu KubeFold.
 
 
-\section{The KubeFold platform concept}
+\section{Koncepcja platformy KubeFold}
+KubeFold to oprogramowanie, które działa na platformie Kubernetes w trybie Operatora.
+Projekt składa się z następujących komponentów:
+\begin{itemize}
+    \item Operator Kubernetes (z ang. \textit{operator}) - komponent, który zarządzania logiką biznesową.
+    Dba o poprawne uruchamianie i zarządzanie podami służącymi do pobierania baz danych białek oraz obliczeń.
+    Komponent został dokładnie opisany w sekcji~\ref{subsec:component-operator}.
+    \item Komponent pobierania (z ang. \textit{downloader}) - służy do kontroli procesu pobierania i dekompresji baz danych białek.
+    Dokładny opis znajduje się w sekcji~\ref{subsec:component-downloader}.
+    \item Komponent zarządzający obliczeniami (z ang. \textit{manager}) - obsługuje dodatkowe działania wokół obliczeń takie jak wysyłka artefaktów bądź wysyłanie powiadomienia.
+    Opisany został w sekcji~\ref{subsec:component-manager}.
+\end{itemize}
 
 
-\section{Solution architecture}
+\section{Użyte technologie}
+Wszystkie trzy komponenty zostały napisane w języku Go w wersji 1.24 (więcej o nim w sekcji~\ref{subsec:go-programming-language}).
+Był to naturalny wybór, ponieważ Go jest de facto standardem w przypadku tworzenia oprogramowania chmurowego.
+Kod źródłowy komponentów był archiwizowany w repozytorium Git~\cite{git} w serwisie GitHub~\cite{github}.
+
+W celu kompilacji aplikacji i spakowania plików wykonywalnych do obrazu kontenera użyto standardowego buildera od Dockera.
+
+Dystrybucja obrazów odbywa się za pomocą rejestru Github Container Registry (\textit{ghcr.io})~\cite{ghcr}.
+Obrazy są automatycznie budowane przy każdym wypchnięciu tagu Git przez narzędzie GitHub Actions~\cite{github_actions}.
+
+Komponent Operatora (szerzej opisany w~\ref{subsec:component-operator}) został utworzony na podstawie framework KubeBuilder~\cite{kubebuilder}.
+KubeBuilder to framework, który służy do pisania natywnych operatorów Kubernetes.
+Tworzy on strukturę katalogów projektu oraz od razu zapewnia zarządzanie elementami takimi jak:
+\begin{itemize}
+    \item Elekcja lidera operatora-niektóre instancje operatorów mogą być uruchomione na wielu węzłach klastra jednocześnie, aczkolwiek jeżeli istnieje potrzeba wybrania jednej wyróżnionej instancji, to elekcja lidera wybiera go.
+    \item Generowanie skryptów instalacyjnych-KubeBuilder ma możliwość wygenerowania gotowych skryptów instalacyjnych, które mogą później posłużyć do automatycznej instalacji operatora i wszystkich jego zależności w klastrze jednym wykonaniem polecenia \textit{kubectl apply}.
+    \item Definicje ról i permisji.
+    Kubernetes korzysta z modelu autoryzacji o nazwie \textit{RBAC} (Role-Based Access Control)~\cite{k8s_rbac}.
+    KubeBuilder wykrywa jakie permisje powinna mieć instancjadd a operatora i upewnia się, że odpowiednie permisje zostały mu przyznane.
+\end{itemize}
 
 
-\section{Components overview}
+\section{Architektura rozwiązania}
 
-\subsection{Computation operator component}
 
-\subsection{Protein folding task manager component}
+\section{Opis komponentów}
 
-\subsection{Protein database management component}
+\subsection{Komponent operatora}\label{subsec:component-operator}
+
+\subsection{Komponent pobierania}\label{subsec:component-downloader}
+
+\subsection{Komponent zarządzający obliczeniami}\label{subsec:component-manager}

@@ -87,7 +87,7 @@ Initially, it searches sequence databases to build multiple sequence alignments 
 This first stage requires only CPU resources and involves sequence similarity searches against large databases.
 Next, the system processes this data through its neural network architecture to generate initial structure predictions, a stage that exclusively requires GPU resources for efficient tensor operations.
 The prediction undergoes multiple refinement cycles, where each iteration improves model quality.
-AlphaFold produces five candidate models with associated confidence scores (pLDDT). The \textit{Deployment} involves containerized environments for reproducibility across computing platforms.
+AlphaFold produces five candidate models with associated confidence scores (pLDDT). The deployment involves containerized environments for reproducibility across computing platforms.
 Output formats include PDB files for 3D coordinates and additional files containing confidence metrics and model parameters.
 
 \begin{figure}[htbp]
@@ -103,7 +103,7 @@ AlphaFold demands substantial computational resources for effective operation.
 The system requires high-performance GPUs, preferably NVIDIA A100 or similar, with at least 16GB VRAM. Memory requirements range from 16GB for small proteins to 64GB+ for large complexes.
 Storage needs include approximately 2TB for reference databases and additional space for output models.
 Prediction time varies significantly with protein size and complexity, ranging from 30 minutes for small proteins to several hours for complex structures.
-Cloud-based \textit{Deployment} typically costs between $10-$100 per prediction depending on computational requirements.
+Cloud-based deployments typically costs between $10-$100 per prediction depending on computational requirements.
 The high resource demands make AlphaFold particularly suitable for execution in specialized computing environments with access to dedicated hardware accelerators.
 
 
@@ -128,7 +128,7 @@ This architecture provides high availability and fault tolerance.
 The resource model in Kubernetes is declarative.
 Pod is the basic deployment unit in Kubernetes, representing one or more containers that share resources and are always run on the same cluster node.
 After loading a configuration file in YAML format, Kubernetes will strive to bring the actual state of the cluster to the state declared in the configuration.
-An example of a Deployment resource declaration shown in listing~\ref{lst:kube-deployment} contains comments explaining key elements:
+An example of a \texttt{Deployment} resource declaration shown in listing~\ref{lst:kube-deployment} contains comments explaining key elements:
 
 \begin{lstlisting}[language=yaml,caption={Example Deployment declaration in Kubernetes},label={lst:kube-deployment}]
 apiVersion: apps/v1
@@ -179,7 +179,8 @@ This extensibility is key for the KubeFold project, which uses these mechanisms 
 
 \subsection{Architecture and components of a Kubernetes cluster}
 
-A Kubernetes cluster consists of two main parts: the Control Plane and Worker Nodes, as shown in Figure \ref{fig:kubernetes-architecture}. This architecture provides the foundation for running containerized applications like AlphaFold in a distributed environment~\cite{kubernetes}.
+A Kubernetes cluster consists of two main parts: the Control Plane and Worker Nodes, as shown in Figure~\ref{fig:kubernetes-architecture}.
+This architecture provides the foundation for running containerized applications like AlphaFold in a distributed environment~\cite{kubernetes}.
 
 The Control Plane contains components that manage the entire cluster and store its state:
 \begin{itemize}
@@ -190,18 +191,25 @@ The Control Plane contains components that manage the entire cluster and store i
     \item \textbf{cloud-controller-manager} - integrates the cluster with cloud provider infrastructure, managing cloud-specific resources
 \end{itemize}
 
-Worker Nodes run actual workloads in the form of containers. Each worker node contains:
+Worker Nodes run actual workloads in the form of containers.
+Each worker node contains:
 \begin{itemize}
     \item \textbf{kubelet} - an agent managing containers on the node, ensuring they are running and healthy
     \item \textbf{kube-proxy} - handling network traffic and ensuring routing between services across the cluster
     \item \textbf{Pods} - the basic deployment units containing one or more containers that share networking and storage resources
 \end{itemize}
 
-As described earlier in the Kubernetes Platform section, the system defines higher-level abstractions such as Deployment or StatefulSet. These enable declarative application management through configuration files in YAML format. The Service resource provides a stable access point to a group of Pods, abstracting the underlying infrastructure changes.
+As described earlier in the Kubernetes Platform section, the system defines higher-level abstractions such as \texttt{Deployment} or \texttt{StatefulSet}.
+These enable declarative application management through configuration files in YAML format.
+The Service resource provides a stable access point to a group of Pods, abstracting the underlying infrastructure changes.
 
-The cluster uses a plugin system to extend functionality. This includes storage, network, or monitoring drivers. Particularly important for the KubeFold project are Custom Resource Definitions, which allow adding custom resource types as discussed in the Cluster Operator section.
+The cluster uses a plugin system to extend functionality.
+This includes storage, network, or monitoring drivers.
+Particularly important for the KubeFold project are Custom Resource Definitions, which allow adding custom resource types as discussed in the Cluster Operator section.
 
-The Kubernetes architecture ensures high availability, scalability, and fault tolerance required for computational tasks like protein structure prediction. Components can be duplicated across nodes to prevent single points of failure. The system automatically responds to failures by restarting and relocating applications, maintaining the desired state of the cluster.
+The Kubernetes architecture ensures high availability, scalability, and fault tolerance required for computational tasks like protein structure prediction.
+Components can be duplicated across nodes to prevent single points of failure.
+The system automatically responds to failures by restarting and relocating applications, maintaining the desired state of the cluster.
 
 \begin{figure}[htbp]
     \centering
@@ -579,7 +587,7 @@ This is particularly useful in distributed systems.
 
 The Go ecosystem provides tools for automatic code formatting, documentation generation, and dependency management.
 Go modules enable versioning and easy code sharing.
-The \textit{go mod} tool automatically manages project dependencies.
+The \texttt{go mod} tool automatically manages project dependencies.
 
 Go is a popular choice for creating DevOps tools and cloud systems.
 Kubernetes and Docker were written in Go. This language works well in projects requiring high performance and reliability.

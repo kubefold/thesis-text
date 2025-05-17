@@ -16,13 +16,13 @@ Projekt składa się z następujących komponentów:
 \end{itemize}
 
 %TODO(matisiekpl): verify translation of CRD
-Oprócz tego KubeFold wprowadza dwie CRD (\textit{custom resource definition}). Pierwszą z nich jest zasób \textit{ProteinDatabase}.
+Oprócz tego KubeFold wprowadza dwie CRD (\textit{custom resource definition}). Pierwszą z nich jest zasób \texttt{ProteinDatabase}.
 Reprezentuje on pojedynczą instalację bazy danych białek w klastrze.
 Przykładowy kod zasobu jest przedstawiony na listingu~\ref{lst:protein_database}.
 W specyfikacji zasobów użytkownik może wybrać jakie bazy danych powinny zostać zainstalowane.
 Co więcej, może też wskazać, jaką StorageClasse powinien przyjąć wolumen, służący do przechowywania danych.
 Dzięki temu możliwe jest wskazanie klasy, która odpowiada za system plików Lustre (szerzej opisany w sekcji~\ref{subsec:lustre-volumes}).
-W przykładowym kodzie wskazano klasę o nazwie \textit{fsx-sc}, która podpina się pod wolumeny AWS FSx for Lustre (zobacz~\ref{subsec:amazon-fsx-for-lustre}).
+W przykładowym kodzie wskazano klasę o nazwie \texttt{fsx-sc}, która podpina się pod wolumeny AWS FSx for Lustre (zobacz~\ref{subsec:amazon-fsx-for-lustre}).
 Z perspektywy użytkownika ten zasób może być zarządzany przez \texttt{kubectl} co zostało pokazane na grafice~\ref{fig:proteindatabase_terminal}.
 
 \begin{lstlisting}[language=yaml,caption={Przykładowy kod YAML zasobu ProteinDatabase},label={lst:protein_database}]
@@ -48,11 +48,11 @@ spec:
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{images/proteindatabase_terminal}
-    \caption{Terminal output presenting \textit{ProteinDatabase} resource}
+    \caption{Terminal output presenting \texttt{ProteinDatabase} resource}
     \label{fig:proteindatabase_terminal}
 \end{figure}
 
-Ponadto KubeFold obsługuje definicję zasobu \textit{ProteinConformationPrediction}.
+Ponadto KubeFold obsługuje definicję zasobu \texttt{ProteinConformationPrediction}.
 Odpowiada on za pojedyncze obliczenie konformacji białka na podstawie dostarczonej sekwencji aminokwasów.
 Przykład definicji jest przedstawiony na listingu~\ref{lst:protein_conformation_prediction}.
 Użytkownik może wskazać ustawienia zadania takie jak:
@@ -72,7 +72,7 @@ Zarządzanie może odbywać się przez \texttt{kubectl} co zostało pokazane na 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{images/proteinconformationprediction_terminal}
-    \caption{Terminal output presenting \textit{ProteinConformationPrediction} resource}
+    \caption{Terminal output presenting \texttt{ProteinConformationPrediction} resource}
     \label{fig:proteinconformationprediction_terminal}
 \end{figure}
 
@@ -127,7 +127,7 @@ KubeBuilder to framework, który służy do pisania natywnych operatorów Kubern
 Tworzy on strukturę katalogów projektu oraz od razu zapewnia zarządzanie elementami takimi jak:
 \begin{itemize}
     \item Elekcja lidera operatora-niektóre instancje operatorów mogą być uruchomione na wielu węzłach klastra jednocześnie, aczkolwiek jeżeli istnieje potrzeba wybrania jednej wyróżnionej instancji, to elekcja lidera wybiera go.
-    \item Generowanie skryptów instalacyjnych-KubeBuilder ma możliwość wygenerowania gotowych skryptów instalacyjnych, które mogą później posłużyć do automatycznej instalacji operatora i wszystkich jego zależności w klastrze jednym wykonaniem polecenia \textit{kubectl apply}.
+    \item Generowanie skryptów instalacyjnych-KubeBuilder ma możliwość wygenerowania gotowych skryptów instalacyjnych, które mogą później posłużyć do automatycznej instalacji operatora i wszystkich jego zależności w klastrze jednym wykonaniem polecenia \texttt{kubectl apply}.
     \item Definicje ról i permisji.
     Kubernetes korzysta z modelu autoryzacji o nazwie \textit{RBAC} (Role-Based Access Control)~\cite{k8s_rbac}.
     KubeBuilder wykrywa jakie permisje powinna mieć instancja operatora i upewnia się, że odpowiednie permisje zostały mu przyznane.
@@ -138,15 +138,15 @@ Tworzy on strukturę katalogów projektu oraz od razu zapewnia zarządzanie elem
 
 Oba wprowadzone zasoby CRD zarządzają pewnymi określonymi podrzędnymi zasobami.
 
-Zasób \textit{ProteinDatabase} tworzy przede wszystkim: persistent volume claim, który będzie składował dane baz danych białek oraz zbiór jobów, które odpowiadają za pobieranie poszczególnych baz.
+Zasób \texttt{ProteinDatabase} tworzy przede wszystkim: persistent volume claim, który będzie składował dane baz danych białek oraz zbiór jobów, które odpowiadają za pobieranie poszczególnych baz.
 Architektura zależności zasobów została przedstawiona na diagramie~\ref{fig:proteindatabase}.
 Ilość jobów jest dokładnie taka sama jak ilość wybranych baz danych zdefiniowanych w kodzie YAML.
 Ze względu na taki rozdział procesu pobierania, możliwe jest, by wiele węzłów pobierało dane niezależne w tym samym czasie.
 W takim przypadku sumaryczna przepustowość się zwiększy, ponieważ nie będzie ona ograniczona przez limit prędkości pobierania interfejsu sieciowego pojedynczego węzła.
 Wszystkie pody utworzone przez Joby podpinają się do wspólnego wolumenu i przeprowadzają pobieranie baz z serwerów Google, używając protokołu HTTP.
-W trakcie pobierania postęp jest na bieżąco logowany do wyjścia \textit{stdout} kontenera.
+W trakcie pobierania postęp jest na bieżąco logowany do wyjścia \texttt{stdout} kontenera.
 Dzięki temu operator może odczytywać logi kontenera i na bieżąco śledzić postęp.
-Pody jak i wolumen są dowiązane do zasobu \textit{ProteinDatabase} za pomocą mechanizmu \textit{ownerReferences}.
+Pody jak i wolumen są dowiązane do zasobu \texttt{ProteinDatabase} za pomocą mechanizmu \textit{ownerReferences}.
 W przypadku usunięcia nadrzędnego zasobu, zasoby podrzędne również zostaną automatycznie usunięte.
 Funkcjonalność automatycznego czyszczenia zasobów podrzędnych jest zrealizowana w implementacji Kubernetesa, a nie operatora.
 
@@ -164,7 +164,7 @@ Funkcjonalność automatycznego czyszczenia zasobów podrzędnych jest zrealizow
     \label{fig:proteinconformationprediction}
 \end{figure}
 
-z kolei zasób \textit{ProteinConformationPrediction} zarządza trzema Jobami.
+z kolei zasób \texttt{ProteinConformationPrediction} zarządza trzema Jobami.
 \begin{itemize}
     \item Faza Alignmentu.
     W tej fazie AlphaFold przeszukuje istniejące bazy danych białek w celu znalezienia dopasowań.
@@ -175,14 +175,14 @@ z kolei zasób \textit{ProteinConformationPrediction} zarządza trzema Jobami.
     Pod również używa obrazu AlphaFold.
     \item Faza Post Processingu.
     Ta faza odpowiada za wysłanie artefaktów do docelowego magazynu danych oraz ewentualne wysłanie powiadomień do członków zespołu badawczego.
-    Pod używa obrazu komponentu Managera.
+    Pod używa obrazu komponentu \textit{manager}.
 \end{itemize}
 
-Zatem na każde wystąpienie zasobu \textit{ProteinConformationPrediction} przypadają dokładnie trzy Joby i trzy pody.
-Oprócz tego \textit{ProteinConformationPrediction} tworzy PersistentVolumeClaim na dane tymczasowe.
+Zatem na każde wystąpienie zasobu \texttt{ProteinConformationPrediction} przypadają dokładnie trzy Joby i trzy pody.
+Oprócz tego \texttt{ProteinConformationPrediction} tworzy PersistentVolumeClaim na dane tymczasowe.
 W tym wolumenie są składowane wyniki fazy Alignment oraz potencjalnie znalezione struktury białka.
 
-Podobnie jak w przypadku \textit{ProteinDatabase} zasoby są ze sobą spięte mechanizmem \textit{ownerReferences}.
+Podobnie jak w przypadku \texttt{ProteinDatabase} zasoby są ze sobą spięte mechanizmem \textit{ownerReferences}.
 Architektura zależności zasobów została przedstawiona na diagramie~\ref{fig:proteinconformationprediction}.
 
 
@@ -200,14 +200,14 @@ Każdy operator klastra działa na wzór pętli kontroli-nieskończona pętla st
 W przypadku operatora KubeFold pętla kontroli działa jedynie na jednej, wyróżnionej instancji operatora.
 O tym, która uruchomiona instancja zostanie wyróżniona, decyduje system elekcji dostarczony przez narzędzie KubeBuilder.
 
-Pierwszy kontroler recounciluje stan zasobu \textit{ProteinDatabase}.
+Pierwszy kontroler recounciluje stan zasobu \texttt{ProteinDatabase}.
 W przypadku wykrycia pojawienia się nowego zasobu tego typu wykonuje następujące operacje:
 \begin{enumerate}
     \item Tworzy nowy PersistentVolumeClaim i ustawia parametr storageClassName.
     \item Gdy PersistentVolumeClaim zostanie zbindowany do konkretnego wolumenu, tworzy kilka Jobów odpowiadających za pobieranie poszczególnych baz danych.
     Każdy pod ma zamountowany PersistentVolumeClaim.
     \item Uruchamia obserwator logów-osobny wątek, który stale monitoruje stan Jobów, Podów oraz odczytuje z nich logi.
-    Dzięki logom jest w stanie dynamicznie aktualizować status \textit{ProteinDatabase} informując użytkownika o postępie pobierania, a także przepustowości łącza.
+    Dzięki logom jest w stanie dynamicznie aktualizować status \texttt{ProteinDatabase} informując użytkownika o postępie pobierania, a także przepustowości łącza.
 \end{enumerate}
 Operacje te zostały przedstawione na diagramie~\ref{fig:proteindatabase_controller}.
 
@@ -225,7 +225,7 @@ Operacje te zostały przedstawione na diagramie~\ref{fig:proteindatabase_control
     \label{fig:proteinconformationprediction_controller}
 \end{figure}
 
-Drugi kontroler obsługuje zasób \textit{ProteinConformationPrediction}.
+Drugi kontroler obsługuje zasób \texttt{ProteinConformationPrediction}.
 Zawiera on logikę obsługującą kolejne trzy fazy predykcji struktury białka.
 Logika biznesowa (przedstawiona na diagramie~\ref{fig:proteinconformationprediction_controller}) po wykryciu nowego zasobu realizuje następujace kroki:
 \begin{enumerate}
@@ -235,7 +235,7 @@ Logika biznesowa (przedstawiona na diagramie~\ref{fig:proteinconformationpredict
     Program AlphaFold oczekuje podania ustawień startowych (między innymi sekwencji aminokwasów) jako plik w formacie JSON o nazwie \texttt{fold\_input.json}.
     Ten plik jest w tym kroku tworzony za pomocą tak zwanego initContainera~\cite{k8s_init_containers}.
     Treść pliku jest przygotowywana jeszcze w operatorze, po czym jest ona enkodowana do \texttt{base64} i wstrzykiwana do kontenera inicjalizującego przez zmienne środowiskowe.
-    Kontener inicjalizujący używa obrazu komponentu managera (opisanego w~\ref{subsec:component-manager}).
+    Kontener inicjalizujący używa obrazu komponentu \textit{manager} (opisanego w~\ref{subsec:component-manager}).
     \item Uruchamia Job odpowiadający za predykcję trójwymiarowej struktury białka.
     Kontroler montuje poprzednio używany wolumen, który zawiera stan z poprzedniej fazy.
     Ten Job ma ustawiane nodeAffinity tak, by był schedulowany na węzłach o dużej mocy obliczeniowej GPU.
@@ -276,17 +276,17 @@ Wyjątkiem stanowi plik \texttt{pdb\_2022\_09\_28\_mmcif\_files.tar}, który jes
 Komponent pobiera i dekompresuje pliki w tym samym momencie.
 Co kilka chwil oddzielny wątek monitoruje progres już pobranych danych wypisując do \texttt{stdout} logline z bieżącym stanem.
 Przykładowy logline jest przedstawiony na listingu~\ref{lst:downloader_logline}.
-Dzięki temu operator może odczytywać progres pobierania i aktualizować status zasobu \textit{ProteinDatabase}.
+Dzięki temu operator może odczytywać progres pobierania i aktualizować status zasobu \texttt{ProteinDatabase}.
 Po skończonym sukcesem lub przerwanym w trybie awaryjnym pobieraniu, proces wychodzi logując odpowiedni komunikat do logów oraz zwracając odpowiedni exit code.
 
 \begin{lstlisting}[language=txt,caption={Sample logline from downloader},label={lst:downloader_logline}]
 {"dataset":"rnacentral_active_seq_id_90_cov_80_linclust.fasta","level":"info","msg":"Download progress","size":7700349721,"time":"2025-05-17T16:53:52+02:00","total":13860314914,"type":"download","unit":"bytes"}
 \end{lstlisting}
 
-\subsection{Komponent managera}\label{subsec:component-manager}
+\subsection{Komponent \textit{managera}}\label{subsec:component-manager}
 \textit{Repozytorium kodu: \url{https://github.com/kubefold/manager}}
 
-Komponent managera odpowiada za trzy niezależnie od siebie zadania:
+Komponent \textit{manager} odpowiada za trzy niezależnie od siebie zadania:
 \begin{itemize}
     \item konfigurowanie pliku wejściowego \textt{fold\_input.json} dla programu AlphaFold.
     \item wysyłanie artefaktów obliczeń do usługi AWS S3 (o której więcej w sekcji~\ref{subsec:amazon-s3-object-storage}).

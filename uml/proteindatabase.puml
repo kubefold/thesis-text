@@ -1,0 +1,42 @@
+@startuml
+
+skinparam dpi 300
+
+component [ProteinDatabase] as db
+
+component [Persistent Volume Claim] as claim
+package "External Storage Infrastructure" {
+    component [Persistent Volume] as volume
+}
+
+package "Node A" {
+    component [Downloader Job (RNA Central)] as job1
+    component [Downloader Pod (RNA Central)] as pod1
+
+    component [Downloader Job (UniRef90)] as job2
+    component [Downloader Pod (UniRef90)] as pod2
+}
+
+package "Node B" {
+    component [Downloader Job (PDB SeqReq)] as job3
+    component [Downloader Pod (PDB SeqReq)] as pod3
+}
+
+db -d-> job1 : Creates job
+db -d-> job2 : Creates job
+db -d-> job3 : Creates job
+
+job1 -d-> pod1 : Schedules pod
+job2 -d-> pod2 : Schedules pod
+job3 -d-> pod3 : Schedules pod
+
+pod1 -d-> claim
+pod2 -d-> claim
+pod3 -d-> claim
+db -d-> claim : Manages PVC
+
+claim .r.> volume : Binds
+
+note left of claim : Has AccessMode set to ReadWriteMany
+
+@enduml

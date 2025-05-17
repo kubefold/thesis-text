@@ -1,0 +1,22 @@
+@startuml
+
+skinparam dpi 300
+actor User as user
+participant "API Server" as api
+participant Operator as operator
+participant "Download pod" as pod
+database "Volume" as volume
+
+user -> api : Creates ProteinDatabase resource
+api -> operator : Resource is being fetched
+operator -> volume : Set up volume
+operator -> pod : Launches download jobs
+loop Downloading
+pod -> volume : Writes data
+pod -> pod : Prints progress as //stdout// log
+operator -> pod : Watches logs
+operator -> api : Progress is being written to resource status
+end
+user -> api : Reads download status
+
+@enduml

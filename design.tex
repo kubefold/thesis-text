@@ -122,7 +122,8 @@ Tworzy on strukturę katalogów projektu oraz od razu zapewnia zarządzanie elem
 
 Oba wprowadzone zasoby CRD zarządzają pewnymi określonymi podrzędnymi zasobami.
 
-Zasób \textit{ProteinDatabase} tworzy przede wszystkim: persistent volume claim, który będzie składował dane baz danych białek oraz zbiór jobów, które odpowiadają za pobieranie poszczególnych baz. Architektura zależności zasobów została przedstawiona na diagramie~\ref{fig:proteindatabase}.
+Zasób \textit{ProteinDatabase} tworzy przede wszystkim: persistent volume claim, który będzie składował dane baz danych białek oraz zbiór jobów, które odpowiadają za pobieranie poszczególnych baz.
+Architektura zależności zasobów została przedstawiona na diagramie~\ref{fig:proteindatabase}.
 Ilość jobów jest dokładnie taka sama jak ilość wybranych baz danych zdefiniowanych w kodzie YAML.
 Ze względu na taki rozdział procesu pobierania, możliwe jest, by wiele węzłów pobierało dane niezależne w tym samym czasie.
 W takim przypadku sumaryczna przepustowość się zwiększy, ponieważ nie będzie ona ograniczona przez limit prędkości pobierania interfejsu sieciowego pojedynczego węzła.
@@ -168,9 +169,30 @@ W tym wolumenie są składowane wyniki fazy Alignment oraz potencjalnie znalezio
 Podobnie jak w przypadku \textit{ProteinDatabase} zasoby są ze sobą spięte mechanizmem \textit{ownerReferences}.
 Architektura zależności zasobów została przedstawiona na diagramie~\ref{fig:proteinconformationprediction}.
 
+
 \section{Opis komponentów}
 
 \subsection{Komponent operatora}\label{subsec:component-operator}
+\textit{Link: \url{https://github.com/kubefold/operator}}
+
+Główny komponent platformy KubeFold napisany w języku Go.
+Operator jest instalowany na klastrze Kubernetes jako zasób Deployment i podpina się on do API Servera Kubernetesa używając do tego odpowiedniej ClusterRole.
+Dzięki temu ma on dostęp do interakcji z interfejsem REST API, który umożliwia zarządzanie zasobami utworzonymi w ramach klastra.
+
+Najważniejszymi elementami operatora KubeFold są dwa tak zwane kontrolery, odpowiadające za reconciling dwóch definicji CRD wprowadzonych w ramach projektu.
+Każdy operator klastra działa na wzór pętli kontroli-nieskończona pętla stale monitoruje zmiany oczekiwanych stanów zasobów w klastrze i koryguje stan faktyczny by był jak najbardziej zgodny z zadanym.
+W przypadku operatora KubeFold pętla kontroli działa jedynie na jednej, wyróżnionej instancji operatora.
+O tym, która uruchomiona instancja zostanie wyróżniona, decyduje system elekcji dostarczony przez narzędzie KubeBuilder.
+
+Pierwszy kontroler recounciluje stan zasobu \textit{ProteinDatabase}.
+W przypadku wykrycia pojawienia się nowego zasobu tego typu wykonuje następujące operacje:
+\begin{enumerate}
+    \item Tworzy nowy PersistentVolumeClaim i ustawia parametr storageClassName.
+    \item Gdy PersistentVolumeClaim zostanie zbindowany do konkretnego wolumenu, tworzy kilka Jobów odpowiadających za pobieranie poszczególnych baz danych.
+    Każdy pod ma zamountowany PersistentVolumeClaim.
+    \item Uruchamia obserwator logów-osobny wątek, który stale monitoruje stan Jobów, Podów oraz odczytuje z nich logi.
+    Dzięki logom jest w stanie dynamicznie aktualizować status \textit{ProteinDatabase} informując użytkownika o postępie pobierania, a także przepustowości łącza.
+\end{enumerate}
 
 \subsection{Komponent pobierania}\label{subsec:component-downloader}
 

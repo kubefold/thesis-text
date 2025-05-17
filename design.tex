@@ -213,18 +213,21 @@ Operacje te zostały przedstawione na diagramie~\ref{fig:proteindatabase_control
 Drugi kontroler obsługuje zasób \textit{ProteinConformationPrediction}.
 Zawiera on logikę obsługującą kolejne trzy fazy predykcji struktury białka.
 Logika biznesowa (przedstawiona na diagramie~\ref{fig:proteinconformationprediction_controller}) po wykryciu nowego zasobu realizuje następujace kroki:
-\begin{itemize}
+\begin{enumerate}
     \item Tworzy nowy PersistentVolumeClaim służący do przechowywania tymczasowych plików programu AlphaFold.
     \item Uruchamia Job, który wykonuje Alignment sekwencji i zapisuje stan do tymczasowego wolumenu.
     Montuje również wolumen zawierający bazy danych białek.
-%    TODO(matisiekpl): wspomnieć o tym jak sekwencja jest ładowana do pliku
+    Program AlphaFold oczekuje podania ustawień startowych (między innymi sekwencji aminokwasów) jako plik w formacie JSON o nazwie \textit{fold\_input.json}.
+    Ten plik jest w tym kroku tworzony za pomocą tak zwanego initContainera~\cite{k8s_init_containers}.
+    Treść pliku jest przygotowywana jeszcze w operatorze, po czym jest ona enkodowana do \textit{base64} i wstrzykiwana do kontenera inicjalizującego przez zmienne środowiskowe.
+    Kontener inicjalizujący używa obrazu komponentu managera (opisanego w~\ref{subsec:component-manager}).
     \item Uruchamia Job odpowiadający za predykcję trójwymiarowej struktury białka.
     Kontroler montuje poprzednio używany wolumen, który zawiera stan z poprzedniej fazy.
     Ten Job ma ustawiane nodeAffinity tak, by był schedulowany na węzłach o dużej mocy obliczeniowej GPU.
     \item Uruchamia Job do post processingu.
     Ten krok ładuje artefakty obliczeń i przesyła je do magazynu AWS S3. Odpowiada również za zakolejkowanie powiadomień (np.
     SMS) dla poszczególnych członków zespołu badawczego.
-\end{itemize}
+\end{enumerate}
 
 \subsection{Komponent pobierania}\label{subsec:component-downloader}
 

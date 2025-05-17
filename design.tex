@@ -261,10 +261,35 @@ Wyjątkiem stanowi plik \texttt{pdb\_2022\_09\_28\_mmcif\_files.tar}, który jes
 Komponent pobiera i dekompresuje pliki w tym samym momencie.
 Co kilka chwil oddzielny wątek monitoruje progres już pobranych danych wypisując do \texttt{stdout} logline z bieżącym stanem.
 Przykładowy logline jest przedstawiony na listingu~\ref{lst:downloader_logline}.
+Dzięki temu operator może odczytywać progres pobierania i aktualizować status zasobu \textit{ProteinDatabase}.
 Po skończonym sukcesem lub przerwanym w trybie awaryjnym pobieraniu, proces wychodzi logując odpowiedni komunikat do logów oraz zwracając odpowiedni exit code.
 
 \begin{lstlisting}[language=txt,caption={Sample logline from downloader},label={lst:downloader_logline}]
 {"dataset":"rnacentral_active_seq_id_90_cov_80_linclust.fasta","level":"info","msg":"Download progress","size":7700349721,"time":"2025-05-17T16:53:52+02:00","total":13860314914,"type":"download","unit":"bytes"}
 \end{lstlisting}
 
-\subsection{Komponent zarządzający obliczeniami}\label{subsec:component-manager}
+\subsection{Komponent managera}\label{subsec:component-manager}
+\textit{Repozytorium kodu: \url{https://github.com/kubefold/manager}}
+
+Komponent managera odpowiada za trzy niezależnie od siebie zadania:
+\begin{itemize}
+    \item konfigurowanie pliku wejściowego \textt{fold\_input.json} dla programu AlphaFold.
+    \item wysyłanie artefaktów obliczeń do usługi AWS S3 (o której więcej w sekcji~\ref{subsec:amazon-s3-object-storage}).
+    \item kolejkowanie powiadomień za pomocą usługi AWS SNS / AWS End User Messaging (o której więcej w sekcji~\ref{subsec:amazon-sns})
+\end{itemize}
+
+Wybór wykonywanej operacji zależy od tego, jakie zmienne środowiskowe zostaną skonfigurowane w kontenerze.
+Dla każdej operacji wymagane jest podanie dwóch obowiązkowych zmiennych środowiskowych:
+\begin{itemize}
+    \item \texttt{INPUT\_PATH} - ścieżka do katalogu danych wejściowych programu AlphaFold
+    \item \texttt{OUTPUT\_PATH} - ścieżka do katalogu danych wyjściowych programu AlphaFold
+\end{itemize}
+
+W celu zapisu pliku wejściowego \textt{fold\_input.json} należy ustawić zmienną \texttt{ENCODED\_INPUT}, która powinna zawierać zakodowany w \texttt{base64} kod JSON zawierający konfigurację obliczeń.
+
+Z kolei w celu wysłania artefaktów należy ustawić zmienną środowiskową \texttt{BUCKET} na nazwę bucketu usługi S3 (pełna scieżka, wraz w prefiksem \textt{s3:\/\/}).
+Aby wysłać powiadomienie za pomocą usługi AWS End User Messaging kontener musi mieć ustawione zmienne \texttt{NOTIFICATION\_PHONES} i \texttt{NOTIFICATION\_MESSAGE}.
+Zmienna z numerami telefonów może zawierać więcej niż jednego odbiorcę-w takim przypadku należy podać phone numbers jako listę oddzieloną przecinkami.
+
+Oczywiście w przypadku korzystania z usług AWS powinny zostać skonfigurowane zmienne klienta AWS. Można to zrealizować za pomocą np. zmiennych środowiskowych \texttt{AWS\_ACCESS\_KEY\_ID} i \texttt{AWS\_SECRET\_ACCESS\_KEY}.
+Alternatywą jest skonfigurowanie roli AWS IAM, która ma być używana przez kontener i posiada permisje dostępu do poszczególnych usług.

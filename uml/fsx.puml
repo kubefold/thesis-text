@@ -1,24 +1,5 @@
 @startuml
-
-skinparam rectangle {
-    BackgroundColor<<VPC>> #EDFBFF
-    BorderColor<<VPC>> #2196F3
-}
-
-skinparam rectangle {
-    BackgroundColor<<Subnet>> #F1FAEE
-    BorderColor<<Subnet>> #A8DADC
-}
-
-skinparam database {
-    BackgroundColor #FFF8E1
-    BorderColor #FFB74D
-}
-
-skinparam component {
-    BackgroundColor #E8F5E9
-    BorderColor #66BB6A
-}
+skinparam dpi 300
 
 rectangle "AWS Cloud" {
     rectangle "VPC" as vpc <<VPC>> {

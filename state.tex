@@ -38,11 +38,11 @@ This problem becomes particularly important for proteins whose structures could 
 The application of predicted structures in personalized medicine and pharmacy represents one of the most promising directions in modern biotechnology.
 
 \subsection{Encoding three-dimensional protein structure}
-Amino acids in the polypeptide chain encode the spatial structure of the protein through their sequence and physicochemical properties.
-Each amino acid has specific features, such as hydrophobicity, electrical charge, or size, which determine possible interactions and arrangement in space~\cite{protein_folding}.
+Amino acids in the polypeptide chain encode the spatial structure of the protein through their sequence and physicochemical properties~\cite{protein_folding}.
+Each amino acid has specific features, such as hydrophobicity, electrical charge, or size, which determine possible interactions and arrangement in space.
 The arrangement of amino acids in space is encoded in the so-called conformational code, which describes different levels of protein structure organization.
 
-Figure \ref{fig:protein-folding} illustrates how proteins fold into their three-dimensional structures, a process essential for their biological function.
+Figure \ref{fig:protein-folding} illustrates how proteins fold into their three-dimensional structures, a process essential for their biological function~\cite{dill2012protein}.
 The folding process transforms a linear chain of amino acids into a specific spatial conformation that determines the protein's functional capabilities.
 
 \begin{figure}[htbp]
@@ -52,7 +52,7 @@ The folding process transforms a linear chain of amino acids into a specific spa
     \label{fig:protein-folding}
 \end{figure}
 
-The spatial structure of a protein is described at several hierarchical levels of organization:
+The spatial structure of a protein is described at several hierarchical levels of organization~\cite{protein_folding, dill2012protein}:
 
 \begin{itemize}
     \item Primary structure-linear sequence of amino acids connected by peptide bonds, which contains all information necessary to form the native structure
@@ -70,18 +70,18 @@ Interpretation of electron density maps is a challenge often requiring manual fi
 The process of protein crystallization is often the most difficult stage, requiring significant financial investments and advanced laboratory infrastructure.
 
 \subsection{Computational methods for protein structure prediction}
-Computational methods for protein structure prediction are divided into several main categories, among which homology-based methods use sequence similarity to proteins with known structures.
+Computational methods for protein structure prediction are divided into several main categories, among which homology-based methods use sequence similarity to proteins with known structures~\cite{baek2023overview}.
 Ab initio methods attempt to predict structure solely based on sequence and laws of physics~\cite{ab_initio_protein_folding}, while fold recognition methods match the sequence to known structural motifs.
 Each of these methods has its limitations and works best under specific conditions, depending on the availability of reference data.
 Hybrids of these methods often give better results than single approaches, combining advantages of different prediction techniques.
 
-Traditional computational approaches include molecular dynamics simulations and Monte Carlo methods, which use force fields to describe interactions between atoms.
-These calculations are very computationally expensive and often limited to small proteins, but in recent years, machine learning and deep learning methods have achieved significant success in this area.
+Traditional computational approaches include molecular dynamics simulations and Monte Carlo methods, which use force fields to describe interactions between atoms~\cite{zhang2008itasser}.
+These calculations are very computationally expensive and often limited to small proteins, but in recent years, machine learning and deep learning methods have achieved significant success in this area~\cite{senior2020deep}.
 Advances in computational hardware, particularly in the area of GPU accelerators and specialized tensor processors, have significantly accelerated protein structure calculations.
 The development of cloud infrastructure has enabled democratization of access to advanced bioinformatics tools.
 
 A breakthrough in the field was the development of the AlphaFold algorithm by Google DeepMind, which uses neural networks to predict protein structures with accuracy comparable to experimental methods.
-AlphaFold2 revolutionized the field by winning the CASP14~\cite{casp} (Critical Assessment of protein Structure Prediction) competition in 2020~\cite{alphafold2}.
+AlphaFold2 revolutionized the field by winning the CASP14~\cite{casp} (Critical Assessment of protein Structure Prediction) competition in 2020~\cite{alphafold2, tunyasuvunakool2021casp14}.
 Deep learning methods have significantly accelerated the pace of scientific discoveries in structural biology, and the public release of the AlphaFold model has enabled researchers worldwide to use this technology in research and medical projects.
 Integration of AlphaFold results with other bioinformatics techniques has opened new possibilities in protein-protein interaction analysis and drug design.
 The latest version of the algorithm-AlphaFold 3-achieves protein structure prediction accuracy at the level of 90-95\% for single polypeptide chains, and for protein complexes, the accuracy reaches 80-85\%, which represents significant progress compared to previous versions~\cite{alphafold3}.
@@ -141,7 +141,7 @@ The high resource demands make AlphaFold particularly suitable for execution in 
 
 \subsection{Kubernetes Platform}
 
-Kubernetes is an open-source container orchestration software that automates the deployment, scaling, and management of applications~\cite{kubernetes}.
+Kubernetes is an open-source container orchestration software that automates the deployment, scaling, and management of applications~\cite{kubernetes, container_orchestration}.
 It is currently the main solution in the area of computational cluster management.
 Kubernetes originates from Google's internal project called Borg, which was released as an open-source project in 2014.
 
@@ -532,7 +532,7 @@ The system sends SMS messages containing information about task status and links
 
 \section{Cluster operator concept}
 
-A Kubernetes operator is a program that extends cluster capabilities with automatic management of complex applications.
+A Kubernetes operator is a program that extends cluster capabilities with automatic management of complex applications~\cite{k8s_operators}.
 An operator automates tasks that would normally require manual intervention from a system administrator.
 
 Custom Resource Definitions (CRDs) are the fundamental building blocks of an operator.

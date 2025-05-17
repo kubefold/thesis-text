@@ -1,0 +1,45 @@
+@startuml
+
+skinparam dpi 300
+
+actor User as user
+participant "API Server" as api
+participant Operator as operator
+participant "Alignment pod" as alignmentPod
+participant "Prediction pod" as predictionPod
+participant "Post processing pod" as postProcessingPod
+database "Protein Database Volume" as dbVolume
+database "Ephemeral Volume" as tmpVolume
+database "AWS S3" as s3
+queue "AWS SNS" as sns
+
+user -> api : Creates ProteinConformationPrediction resource
+api -> operator : Resource is being fetched
+operator -> tmpVolume : Set up volume
+group "Alignment Phase"
+operator -> alignmentPod : Schedule job
+alignmentPod -> dbVolume : Scan protein databases
+alignmentPod -> alignmentPod : Perform MSA search and alignment
+alignmentPod -> tmpVolume : Write alignment temporal state
+operator -> alignmentPod : Detect job finish
+operator -> api : Update phase status
+end
+group "Prediction Phase"
+operator -> predictionPod : Schedule prediction job
+predictionPod -> tmpVolume : Load alignment artifacts
+predictionPod -> predictionPod : Compute protein structure
+predictionPod -> tmpVolume : Write Machine Learning processing output
+operator -> predictionPod : Detect job finish
+operator -> api : Update phase status
+end
+group "Post Processing Phase"
+operator -> postProcessingPod : Schedule post processing job
+postProcessingPod -> tmpVolume : Read prediction artifacts
+postProcessingPod -> s3 : Upload prediction artifacts
+postProcessingPod -> sns : Send notifications
+operator -> postProcessingPod : Detect job finish
+operator -> api : Update phase status
+end
+user -> api : Monitor task status
+
+@enduml

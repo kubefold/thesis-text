@@ -15,6 +15,62 @@ Projekt składa się z następujących komponentów:
     Opisany został w sekcji~\ref{subsec:component-manager}.
 \end{itemize}
 
+%TODO(matisiekpl): verify translation of CRD
+Oprócz tego KubeFold wprowadza dwie CRD (\textit{custom resource definition}). Pierwszą z nich jest zasób $ProteinDatabase$.
+Reprezentuje on pojedynczą instalację bazy danych białek w klastrze.
+Przykładowy kod zasobu jest przedstawiony na listingu~\ref{lst:protein_database}.
+W specyfikacji zasobów użytkownik może wybrać jakie bazy danych powinny zostać zainstalowane.
+Co więcej, może też wskazać, jaką StorageClasse powinien przyjąć wolumen, służący do przechowywania danych.
+Dzięki temu możliwe jest wskazanie klasy, która odpowiada za system plików Lustre (szerzej opisany w sekcji~\ref{subsec:lustre-volumes}).
+W przykładowym kodzie wskazano klasę o nazwie \textit{fsx-sc}, która podpina się pod wolumeny AWS FSx for Lustre (zobacz~\ref{subsec:amazon-fsx-for-lustre}).
+
+\begin{lstlisting}[language=yaml,caption={Przykładowy kod YAML zasobu ProteinDatabase},label={lst:protein_database}]
+apiVersion: data.kubefold.io/v1
+kind: ProteinDatabase
+metadata:
+  name: proteindatabase-sample
+spec:
+  datasets:
+    bfd: true
+    mgyclusters: true
+    nt: true
+    pdb: true
+    pdbseqreq: true
+    rfam: true
+    rnacentral: true
+    uniref90: true
+    uniprot: true
+  volume:
+    storageClassName: fsx-sc
+\end{lstlisting}
+
+\begin{lstlisting}[language=yaml,caption={Przykładowy kod YAML zasobu ProteinConformationPrediction},label={lst:protein_conformation_prediction}]
+apiVersion: data.kubefold.io/v1
+kind: ProteinConformationPrediction
+metadata:
+  name: proteinconformationprediction-sample
+spec:
+  database: proteindatabase-sample
+  protein:
+    id: [ 'A','B' ]
+    sequence: GMRESY...LQQANDLKQG
+  model:
+    volume:
+      storageClassName: fsx-sc
+    weights:
+      http: https://staticfilehosting.com/af3.bin.zst
+    seeds:
+      - 1
+  destination:
+    s3:
+      bucket: kubefold-artifacts-sample
+      region: eu-central-1
+  notify:
+    region: eu-central-1
+    sms:
+      - "+48140690323"
+\end{lstlisting}
+
 
 \section{Użyte technologie}
 Wszystkie trzy komponenty zostały napisane w języku Go w wersji 1.24 (więcej o nim w sekcji~\ref{subsec:go-programming-language}).

@@ -1,9 +1,5 @@
 @startuml
-' Global appearance
-skinparam rectangle {
-  BackgroundColor #ffffff
-  BorderColor black
-}
+
 skinparam shadowing false
 skinparam dpi 300
 
@@ -18,25 +14,25 @@ rectangle "CLUSTER" {
     ' Control plane components stacked vertically
     top to bottom direction
 
-    rectangle "cloud-controller-manager" as CCM #00BFFF
-    rectangle "kube-api-server" as API #1E90FF
-    rectangle "etcd" as ETCD #1E90FF
-    rectangle "scheduler\n(kube-scheduler)" as SCHED #1E90FF
-    rectangle "controller manager\n(kube-controller-manager)" as CTRL #1E90FF
+    rectangle "cloud-controller-manager" as CCM
+    rectangle "kube-api-server" as API
+    rectangle "etcd" as ETCD
+    rectangle "scheduler\n(kube-scheduler)" as SCHED
+    rectangle "controller manager\n(kube-controller-manager)" as CTRL
   }
 
   rectangle "Node 1" {
     ' Node 1 components stacked vertically
     top to bottom direction
 
-    rectangle "kubelet" as KLET1 #1E90FF
-    rectangle "kube-proxy" as KPROXY1 #00BFFF
+    rectangle "kubelet" as KLET1
+    rectangle "kube-proxy" as KPROXY1
     rectangle "pods (Node 1)" {
       top to bottom direction
 
-      rectangle "pod" as POD1_1 #1E90FF
-      rectangle "pod" as POD1_2 #1E90FF
-      rectangle "pod" as POD1_3 #1E90FF
+      rectangle "pod" as POD1_1
+      rectangle "pod" as POD1_2
+      rectangle "pod" as POD1_3
     }
   }
 
@@ -44,12 +40,12 @@ rectangle "CLUSTER" {
     ' Node 2 components stacked vertically
     top to bottom direction
 
-    rectangle "kubelet" as KLET2 #1E90FF
-    rectangle "kube-proxy" as KPROXY2 #00BFFF
+    rectangle "kubelet" as KLET2
+    rectangle "kube-proxy" as KPROXY2
     rectangle "pods (Node 2)" {
       top to bottom direction
 
-      rectangle "pod" as POD2_1 #1E90FF
+      rectangle "pod" as POD2_1
     }
   }
 }

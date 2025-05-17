@@ -1,22 +1,6 @@
 @startuml
 
 skinparam dpi 300
-skinparam componentStyle rectangle
-skinparam backgroundColor white
-skinparam ArrowColor #333333
-
-<style>
-componentDiagram {
-  BackGroundColor white
-  LineThickness 1
-  LineColor #333333
-}
-component {
-  BackgroundColor #C5E1A5
-  LineColor #33691E
-  FontColor #33691E
-}
-</style>
 
 title AlphaFold Two-Stage Processing Pipeline
 

@@ -5,10 +5,12 @@ skinparam dpi 300
 component [ProteinConformationPrediction] as prediction
 component [ProteinDatabase] as db
 
-package "Node" {
+package "CPU-Optimized Node" {
     component [Alignment phase job] as alignmentJob
     component [Alignment phase pod] as alignmentPod
+}
 
+package "GPU-Optimized Node" {
     component [Prediction phase job] as predictionJob
     component [Prediction phase pod] as predictionPod
 

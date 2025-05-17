@@ -136,19 +136,37 @@ Funkcjonalność automatycznego czyszczenia zasobów podrzędnych jest zrealizow
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{images/proteindatabase}
-    \caption{Cluster resource archuitecture of ProteinDatabase}
+    \caption{Cluster resource architecture of ProteinDatabase}
     \label{fig:proteindatabase}
 \end{figure}
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{images/proteinconformationprediction}
-    \caption{Cluster resource archuitecture of ProteinConformationPrediction}
+    \caption{Cluster resource architecture of ProteinConformationPrediction}
     \label{fig:proteinconformationprediction}
 \end{figure}
 
-%z kolei zasób \textit{ProteinConformationPrediction},
+z kolei zasób \textit{ProteinConformationPrediction} zarządza trzema Jobami.
+\begin{itemize}
+    \item Faza Alignmentu.
+    W tej fazie AlphaFold przeszukuje istniejące bazy danych białek w celu znalezienia dopasowań.
+    Ta faza odbywa się w podzie schedulowanych na instancjach zoptymalizowanych pod względem CPU. Pod używa obrazu AlphaFold.
+    \item Faza Predykcji.
+    Faza, w której algorytm dokonuje faktycznej predykcji trójwymiarowej struktury białka.
+    W tej fazie pody są scheduowane na instancjach wyposażonych w akceleratory obliczeń tensorowych.
+    Pod również używa obrazu AlphaFold.
+    \item Faza Post Processingu.
+    Ta faza odpowiada za wysłanie artefaktów do docelowego magazynu danych oraz ewentualne wysłanie powiadomień do członków zespołu badawczego.
+    Pod używa obrazu komponentu Managera.
+\end{itemize}
 
+Zatem na każde wystąpienie zasobu \textit{ProteinConformationPrediction} przypadają dokładnie trzy Joby i trzy pody.
+Oprócz tego \textit{ProteinConformationPrediction} tworzy PersistentVolumeClaim na dane tymczasowe.
+W tym wolumenie są składowane wyniki fazy Alignment oraz potencjalnie znalezione struktury białka.
+
+Podobnie jak w przypadku \textit{ProteinDatabase} zasoby są ze sobą spięte mechanizmem \textit{ownerReferences}.
+Architektura zależności zasobów została przedstawiona na diagramie~\ref{fig:proteinconformationprediction}.
 
 \section{Opis komponentów}
 

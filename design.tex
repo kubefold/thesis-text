@@ -25,7 +25,7 @@ This enables specifying a class that corresponds to the Lustre file system (desc
 In the example code, the class named \texttt{fsx-sc} is specified, which connects to AWS FSx for Lustre volumes (see~\ref{subsec:amazon-fsx-for-lustre}).
 From the user's perspective, this resource can be managed using \texttt{kubectl} as shown in figure~\ref{fig:proteindatabase_terminal}.
 
-\begin{lstlisting}[language=yaml,caption={Przykładowy kod YAML zasobu ProteinDatabase},label={lst:protein_database}]
+\begin{lstlisting}[language=yaml,caption={Example \texttt{ProteinDatabase} resource definition},label={lst:protein_database}]
 apiVersion: data.kubefold.io/v1
 kind: ProteinDatabase
 metadata:
@@ -76,7 +76,7 @@ Management can be done using \texttt{kubectl} as shown in figure~\ref{fig:protei
     \label{fig:proteinconformationprediction_terminal}
 \end{figure}
 
-\begin{lstlisting}[language=yaml,caption={Przykładowy kod YAML zasobu ProteinConformationPrediction},label={lst:protein_conformation_prediction}]
+\begin{lstlisting}[language=yaml,caption={Example \texttt{ProteinConformationPrediction} resource definition},label={lst:protein_conformation_prediction}]
 apiVersion: data.kubefold.io/v1
 kind: ProteinConformationPrediction
 metadata:
@@ -189,7 +189,7 @@ The resource dependency architecture is shown in figure~\ref{fig:proteinconforma
 \section{Component Description}
 
 \subsection{Kubernetes Operator}\label{subsec:component-operator}
-\textit{Repozytorium kodu: \url{https://github.com/kubefold/operator}}
+\textit{Code repository: \url{https://github.com/kubefold/operator}}
 
 The main component of the KubeFold platform written in Go.
 The operator is installed on the Kubernetes cluster as a Deployment resource and connects to the Kubernetes API Server using the appropriate ClusterRole.
@@ -245,7 +245,7 @@ The business logic (shown in figure~\ref{fig:proteinconformationprediction_contr
 \end{enumerate}
 
 \subsection{Downloader Component}\label{subsec:component-downloader}
-\textit{Repozytorium kodu: \url{https://github.com/kubefold/downloader}}
+\textit{Code repository: \url{https://github.com/kubefold/downloader}}
 
 The \textit{downloader} component is responsible for downloading a single selected protein database.
 Running this component in a container automatically starts download process.
@@ -284,7 +284,7 @@ After successful completion or interrupted download, the process exits logging t
 \end{lstlisting}
 
 \subsection{Manager Component}\label{subsec:component-manager}
-\textit{Repozytorium kodu: \url{https://github.com/kubefold/manager}}
+\textit{Code repository: \url{https://github.com/kubefold/manager}}
 
 The \textit{manager} component is responsible for three independent tasks:
 \begin{itemize}

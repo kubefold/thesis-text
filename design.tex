@@ -139,7 +139,7 @@ Tworzy on strukturę katalogów projektu oraz od razu zapewnia zarządzanie elem
 Oba wprowadzone zasoby CRD zarządzają pewnymi określonymi podrzędnymi zasobami.
 
 Zasób \texttt{ProteinDatabase} tworzy przede wszystkim: persistent volume claim, który będzie składował dane baz danych białek oraz zbiór jobów, które odpowiadają za pobieranie poszczególnych baz.
-Architektura zależności zasobów została przedstawiona na diagramie~\ref{fig:proteindatabase}.
+Architektura zależności zasobu została przedstawiona na diagramie~\ref{fig:proteindatabase}.
 Ilość jobów jest dokładnie taka sama jak ilość wybranych baz danych zdefiniowanych w kodzie YAML.
 Ze względu na taki rozdział procesu pobierania, możliwe jest, by wiele węzłów pobierało dane niezależne w tym samym czasie.
 W takim przypadku sumaryczna przepustowość się zwiększy, ponieważ nie będzie ona ograniczona przez limit prędkości pobierania interfejsu sieciowego pojedynczego węzła.

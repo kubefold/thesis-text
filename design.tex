@@ -16,7 +16,7 @@ Projekt składa się z następujących komponentów:
 \end{itemize}
 
 %TODO(matisiekpl): verify translation of CRD
-Oprócz tego KubeFold wprowadza dwie CRD (\textit{custom resource definition}). Pierwszą z nich jest zasób $ProteinDatabase$.
+Oprócz tego KubeFold wprowadza dwie CRD (\textit{custom resource definition}). Pierwszą z nich jest zasób \textit{ProteinDatabase}.
 Reprezentuje on pojedynczą instalację bazy danych białek w klastrze.
 Przykładowy kod zasobu jest przedstawiony na listingu~\ref{lst:protein_database}.
 W specyfikacji zasobów użytkownik może wybrać jakie bazy danych powinny zostać zainstalowane.
@@ -44,7 +44,7 @@ spec:
     storageClassName: fsx-sc
 \end{lstlisting}
 
-Ponadto KubeFold obsługuje definicję zasobu $ProteinConformationPrediction$.
+Ponadto KubeFold obsługuje definicję zasobu \textit{ProteinConformationPrediction}.
 Odpowiada on za pojedyncze obliczenie konformacji białka na podstawie dostarczonej sekwencji aminokwasów.
 Przykład definicji jest przedstawiony na listingu~\ref{lst:protein_conformation_prediction}.
 Użytkownik może wskazać ustawienia zadania takie jak:
@@ -119,6 +119,35 @@ Tworzy on strukturę katalogów projektu oraz od razu zapewnia zarządzanie elem
 
 
 \section{Architektura rozwiązania}
+
+Oba wprowadzone zasoby CRD zarządzają pewnymi określonymi podrzędnymi zasobami.
+
+Zasób \textit{ProteinDatabase} tworzy przede wszystkim: persistent volume claim, który będzie składował dane baz danych białek oraz zbiór jobów, które odpowiadają za pobieranie poszczególnych baz. Architektura zależności zasobów została przedstawiona na diagramie~\ref{fig:proteindatabase}.
+Ilość jobów jest dokładnie taka sama jak ilość wybranych baz danych zdefiniowanych w kodzie YAML.
+Ze względu na taki rozdział procesu pobierania, możliwe jest, by wiele węzłów pobierało dane niezależne w tym samym czasie.
+W takim przypadku sumaryczna przepustowość się zwiększy, ponieważ nie będzie ona ograniczona przez limit prędkości pobierania interfejsu sieciowego pojedynczego węzła.
+Wszystkie pody utworzone przez Joby podpinają się do wspólnego wolumenu i przeprowadzają pobieranie baz z serwerów Google, używając protokołu HTTP.
+W trakcie pobierania postęp jest na bieżąco logowany do wyjścia \textit{stdout} kontenera.
+Dzięki temu operator może odczytywać logi kontenera i na bieżąco śledzić postęp.
+Pody jak i wolumen są dowiązane do zasobu \textit{ProteinDatabase} za pomocą mechanizmu \textit{ownerReferences}.
+W przypadku usunięcia nadrzędnego zasobu, zasoby podrzędne również zostaną automatycznie usunięte.
+Funkcjonalność automatycznego czyszczenia zasobów podrzędnych jest zrealizowana w implementacji Kubernetesa, a nie operatora.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/proteindatabase}
+    \caption{Cluster resource archuitecture of ProteinDatabase}
+    \label{fig:proteindatabase}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/proteinconformationprediction}
+    \caption{Cluster resource archuitecture of ProteinConformationPrediction}
+    \label{fig:proteinconformationprediction}
+\end{figure}
+
+%z kolei zasób \textit{ProteinConformationPrediction},
 
 
 \section{Opis komponentów}

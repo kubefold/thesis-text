@@ -1,0 +1,24 @@
+@startuml
+skinparam dpi 300
+
+package "Kubernetes Cluster" {
+    component [KubeFold Operator] as operator
+    component [KubeFold Downloader] as downloader
+    component [KubeFold Manager] as manager
+}
+
+package "Development workflow" {
+    node [Development Laptop] as laptop
+    database [GitHub Repository] as repo
+    laptop -d-> repo : Pushes Git tag
+    node [GitHub Actions] as actions
+    repo -> actions : Triggers build
+    database [GitHub Container Registry] as ghcr
+    actions -d-> ghcr : Pushes image
+
+    ghcr -d-> operator : Fetches image
+    ghcr -d-> downloader : Fetches image
+    ghcr -d-> manager : Fetches image
+}
+
+@enduml

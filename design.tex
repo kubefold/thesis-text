@@ -25,6 +25,14 @@ W celu kompilacji aplikacji i spakowania plików wykonywalnych do obrazu kontene
 
 Dystrybucja obrazów odbywa się za pomocą rejestru Github Container Registry (\textit{ghcr.io})~\cite{ghcr}.
 Obrazy są automatycznie budowane przy każdym wypchnięciu tagu Git przez narzędzie GitHub Actions~\cite{github_actions}.
+Flow działania zostało przestawione na rys.~\ref{fig:docker-images-flow}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.8\textwidth]{images/images}
+    \caption{Development workflow between GitHub and cluster}
+    \label{fig:docker-images-flow}
+\end{figure}
 
 Komponent Operatora (szerzej opisany w~\ref{subsec:component-operator}) został utworzony na podstawie framework KubeBuilder~\cite{kubebuilder}.
 KubeBuilder to framework, który służy do pisania natywnych operatorów Kubernetes.

@@ -193,6 +193,38 @@ W przypadku wykrycia pojawienia się nowego zasobu tego typu wykonuje następuj�
     \item Uruchamia obserwator logów-osobny wątek, który stale monitoruje stan Jobów, Podów oraz odczytuje z nich logi.
     Dzięki logom jest w stanie dynamicznie aktualizować status \textit{ProteinDatabase} informując użytkownika o postępie pobierania, a także przepustowości łącza.
 \end{enumerate}
+Operacje te zostały przedstawione na diagramie~\ref{fig:proteindatabase_controller}.
+% TODO(matisiekpl): wspomnieć o logach i ich formacie
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/proteindatabase_controller}
+    \caption{ProteinDatabase Controller behaviour}
+    \label{fig:proteindatabase_controller}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=0.9\textwidth]{images/proteinconformationprediction_controller}
+    \caption{ProteinConformationPrediction Controller behaviour}
+    \label{fig:proteinconformationprediction_controller}
+\end{figure}
+
+Drugi kontroler obsługuje zasób \textit{ProteinConformationPrediction}.
+Zawiera on logikę obsługującą kolejne trzy fazy predykcji struktury białka.
+Logika biznesowa (przedstawiona na diagramie~\ref{fig:proteinconformationprediction_controller}) po wykryciu nowego zasobu realizuje następujace kroki:
+\begin{itemize}
+    \item Tworzy nowy PersistentVolumeClaim służący do przechowywania tymczasowych plików programu AlphaFold.
+    \item Uruchamia Job, który wykonuje Alignment sekwencji i zapisuje stan do tymczasowego wolumenu.
+    Montuje również wolumen zawierający bazy danych białek.
+%    TODO(matisiekpl): wspomnieć o tym jak sekwencja jest ładowana do pliku
+    \item Uruchamia Job odpowiadający za predykcję trójwymiarowej struktury białka.
+    Kontroler montuje poprzednio używany wolumen, który zawiera stan z poprzedniej fazy.
+    Ten Job ma ustawiane nodeAffinity tak, by był schedulowany na węzłach o dużej mocy obliczeniowej GPU.
+    \item Uruchamia Job do post processingu.
+    Ten krok ładuje artefakty obliczeń i przesyła je do magazynu AWS S3. Odpowiada również za zakolejkowanie powiadomień (np.
+    SMS) dla poszczególnych członków zespołu badawczego.
+\end{itemize}
 
 \subsection{Komponent pobierania}\label{subsec:component-downloader}
 

@@ -3,21 +3,21 @@
 skinparam dpi 300
 
 actor User as user
-participant "API Server" as api
+participant "API\nServer" as api
 participant Operator as operator
-participant "Alignment pod" as alignmentPod
-participant "Prediction pod" as predictionPod
-participant "Post processing pod" as postProcessingPod
-database "Protein Database Volume" as dbVolume
-database "Ephemeral Volume" as tmpVolume
-database "AWS S3" as s3
-queue "AWS SNS" as sns
+participant "Alignment\npod" as alignmentPod
+participant "Prediction\npod" as predictionPod
+participant "Post\nprocessing\npod" as postProcessingPod
+database "Protein\nDatabase\nVolume" as dbVolume
+database "Ephemeral\nVolume" as tmpVolume
+database "AWS\nS3" as s3
+queue "AWS\nSNS" as sns
 
 user -> api : Creates\n//Protein//\n//Conformation//\n//Prediction//\nresource
-api -> operator : Resource is\nbeing\nfetched
-operator -> tmpVolume : Set up volume
+api -> operator : Resource\nis\nbeing\nfetched
+operator -> tmpVolume : Set up\nvolume
 group "Alignment Phase"
-operator -> alignmentPod : Schedule job
+operator -> alignmentPod : Schedule\njob
 alignmentPod -> dbVolume : Scan protein databases
 alignmentPod -> alignmentPod : Perform\nMSA search\nand alignment
 alignmentPod -> tmpVolume : Write alignment\ntemporal state
@@ -26,9 +26,9 @@ operator -> api : Update\nphase\nstatus
 end
 group "Prediction Phase"
 operator -> predictionPod : Schedule prediction job
-predictionPod -> tmpVolume : Load alignment\nartifacts
-predictionPod -> predictionPod : Compute\nprotein structure
-predictionPod -> tmpVolume : Write Machine Learning processing output
+predictionPod -> tmpVolume : Load\nalignment\nartifacts
+predictionPod -> predictionPod : Compute\nprotein\nstructure
+predictionPod -> tmpVolume : Write Machine Learning\nprocessing output
 operator -> predictionPod : Detect\njob finish
 operator -> api : Update\nphase\nstatus
 end
@@ -40,6 +40,6 @@ postProcessingPod -> sns : Send notifications
 operator -> postProcessingPod : Detect\njob finish
 operator -> api : Update\nphase\nstatus
 end
-user -> api : Monitor task status
+user -> api : Monitor\ntask status
 
 @enduml

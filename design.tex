@@ -23,6 +23,7 @@ W specyfikacji zasobów użytkownik może wybrać jakie bazy danych powinny zost
 Co więcej, może też wskazać, jaką StorageClasse powinien przyjąć wolumen, służący do przechowywania danych.
 Dzięki temu możliwe jest wskazanie klasy, która odpowiada za system plików Lustre (szerzej opisany w sekcji~\ref{subsec:lustre-volumes}).
 W przykładowym kodzie wskazano klasę o nazwie \textit{fsx-sc}, która podpina się pod wolumeny AWS FSx for Lustre (zobacz~\ref{subsec:amazon-fsx-for-lustre}).
+Z perspektywy użytkownika ten zasób może być zarządzany przez \texttt{kubectl} co zostało pokazane na grafice~\ref{fig:proteindatabase_terminal}.
 
 \begin{lstlisting}[language=yaml,caption={Przykładowy kod YAML zasobu ProteinDatabase},label={lst:protein_database}]
 apiVersion: data.kubefold.io/v1
@@ -44,6 +45,13 @@ spec:
     storageClassName: fsx-sc
 \end{lstlisting}
 
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/proteindatabase_terminal}
+    \caption{Terminal output presenting \textit{ProteinDatabase} resource}
+    \label{fig:proteindatabase_terminal}
+\end{figure}
+
 Ponadto KubeFold obsługuje definicję zasobu \textit{ProteinConformationPrediction}.
 Odpowiada on za pojedyncze obliczenie konformacji białka na podstawie dostarczonej sekwencji aminokwasów.
 Przykład definicji jest przedstawiony na listingu~\ref{lst:protein_conformation_prediction}.
@@ -59,6 +67,14 @@ Użytkownik może wskazać ustawienia zadania takie jak:
     \item opcje powiadamiania użytkownika.
     Przykładowy kod ma ustawione pojedyczne powiadomienie SMS na numer telefonu.
 \end{itemize}
+Zarządzanie może odbywać się przez \texttt{kubectl} co zostało pokazane na grafice~\ref{fig:proteinconformationprediction_terminal}.
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/proteinconformationprediction_terminal}
+    \caption{Terminal output presenting \textit{ProteinConformationPrediction} resource}
+    \label{fig:proteinconformationprediction_terminal}
+\end{figure}
 
 \begin{lstlisting}[language=yaml,caption={Przykładowy kod YAML zasobu ProteinConformationPrediction},label={lst:protein_conformation_prediction}]
 apiVersion: data.kubefold.io/v1
@@ -194,7 +210,6 @@ W przypadku wykrycia pojawienia się nowego zasobu tego typu wykonuje następuj�
     Dzięki logom jest w stanie dynamicznie aktualizować status \textit{ProteinDatabase} informując użytkownika o postępie pobierania, a także przepustowości łącza.
 \end{enumerate}
 Operacje te zostały przedstawione na diagramie~\ref{fig:proteindatabase_controller}.
-% TODO(matisiekpl): wspomnieć o logach i ich formacie
 
 \begin{figure}[htbp]
     \centering

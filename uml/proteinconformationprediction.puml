@@ -1,0 +1,48 @@
+@startuml
+
+skinparam dpi 300
+
+component [ProteinConformationPrediction] as prediction
+component [ProteinDatabase] as db
+
+package "Node" {
+    component [Alignment phase job] as alignmentJob
+    component [Alignment phase pod] as alignmentPod
+
+    component [Prediction phase job] as predictionJob
+    component [Prediction phase pod] as predictionPod
+
+    component [Post Processing phase job] as postProcessingJob
+    component [Post Processing phase pod] as postProcessingPod
+}
+
+component [Protein Database Persistent Volume Claim] as dbClaim
+component [Ephemeral Persistent Volume Claim] as tmpClaim
+package "External Storage Infrastructure" {
+    component [Protein Database Persistent Volume] as dbVolume
+    component [Ephemeral Persistent Volume] as tmpVolume
+}
+
+prediction -d-> alignmentJob : Creates job
+alignmentJob -d-> alignmentPod : Schedules pod
+alignmentPod -d-> dbClaim
+alignmentPod -d-> tmpClaim
+
+prediction -d-> predictionJob : Creates job
+predictionJob -d-> predictionPod : Schedules pod
+predictionPod -d-> tmpClaim
+
+prediction -d-> postProcessingJob : Creates job
+postProcessingJob -d-> postProcessingPod : Schedules pod
+postProcessingPod -d-> tmpClaim
+
+dbClaim ..> dbVolume : Binds
+tmpClaim ..> tmpVolume : Binds
+
+prediction .r.> db : References
+
+db ..> dbVolume : Owns
+
+'db -d->
+
+@enduml

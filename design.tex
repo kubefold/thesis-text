@@ -1,4 +1,4 @@
-\chapter{Project Implementation}
+\chapter{System design and implementation}
 This chapter discusses the architecture and implementation of the KubeFold project.
 
 
@@ -104,7 +104,7 @@ spec:
 \end{lstlisting}
 
 
-\section{Used Technologies}
+\section{Technologies}
 All three components were written in Go version 1.24 (more about it in a section~\ref{subsec:go-programming-language}).
 This was a natural choice, as Go is the de facto standard for cloud software development.
 The source code of the components was archived in the Git repository~\cite{git} on GitHub\cite{github}.
@@ -134,7 +134,7 @@ It creates project directory structure and immediately provides management of el
 \end{itemize}
 
 
-\section{Solution Architecture}
+\section{Architecture}
 
 Both introduced CRD resources manage certain subordinate resources.
 
@@ -186,7 +186,7 @@ Similarly to the \texttt{ProteinDatabase} resource, the resources are connected 
 The resource dependency architecture is shown in figure~\ref{fig:proteinconformationprediction}.
 
 
-\section{Component Description}
+\section{Components Overview}
 
 \subsection{Kubernetes Operator}\label{subsec:component-operator}
 \textit{Code repository: \url{https://github.com/kubefold/operator}}

@@ -44,6 +44,22 @@ spec:
     storageClassName: fsx-sc
 \end{lstlisting}
 
+Ponadto KubeFold obsługuje definicję zasobu $ProteinConformationPrediction$.
+Odpowiada on za pojedyncze obliczenie konformacji białka na podstawie dostarczonej sekwencji aminokwasów.
+Przykład definicji jest przedstawiony na listingu~\ref{lst:protein_conformation_prediction}.
+Użytkownik może wskazać ustawienia zadania takie jak:
+\begin{itemize}
+    \item bazę danych białek, na podstawie której algorytm AlphaFold ma przeprowadzić przeszukiwanie
+    \item sekwencję aminokwasów w postaci ciągu liter
+    \item ustawienia wolumenu służącego do przechowywania tymczasowych plików obliczenia
+    \item wskazanie źródła pliku wag modelu AlphaFold.
+    W przykładowym kodzie ustawiono źródło jako zdalny serwer HTTP.
+    \item docelową lokalizację artefaktów.
+    W aktualnej wersji projektu KubeFold wspierany jest jedynie system składowania obiektów AWS S3 (zobacz.~\ref{subsec:amazon-s3-object-storage}).
+    \item opcje powiadamiania użytkownika.
+    Przykładowy kod ma ustawione pojedyczne powiadomienie SMS na numer telefonu.
+\end{itemize}
+
 \begin{lstlisting}[language=yaml,caption={Przykładowy kod YAML zasobu ProteinConformationPrediction},label={lst:protein_conformation_prediction}]
 apiVersion: data.kubefold.io/v1
 kind: ProteinConformationPrediction

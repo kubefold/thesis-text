@@ -173,7 +173,7 @@ Architektura zależności zasobów została przedstawiona na diagramie~\ref{fig:
 \section{Opis komponentów}
 
 \subsection{Komponent operatora}\label{subsec:component-operator}
-\textit{Link: \url{https://github.com/kubefold/operator}}
+\textit{Repozytorium kodu: \url{https://github.com/kubefold/operator}}
 
 Główny komponent platformy KubeFold napisany w języku Go.
 Operator jest instalowany na klastrze Kubernetes jako zasób Deployment i podpina się on do API Servera Kubernetesa używając do tego odpowiedniej ClusterRole.
@@ -217,9 +217,9 @@ Logika biznesowa (przedstawiona na diagramie~\ref{fig:proteinconformationpredict
     \item Tworzy nowy PersistentVolumeClaim służący do przechowywania tymczasowych plików programu AlphaFold.
     \item Uruchamia Job, który wykonuje Alignment sekwencji i zapisuje stan do tymczasowego wolumenu.
     Montuje również wolumen zawierający bazy danych białek.
-    Program AlphaFold oczekuje podania ustawień startowych (między innymi sekwencji aminokwasów) jako plik w formacie JSON o nazwie \textit{fold\_input.json}.
+    Program AlphaFold oczekuje podania ustawień startowych (między innymi sekwencji aminokwasów) jako plik w formacie JSON o nazwie \texttt{fold\_input.json}.
     Ten plik jest w tym kroku tworzony za pomocą tak zwanego initContainera~\cite{k8s_init_containers}.
-    Treść pliku jest przygotowywana jeszcze w operatorze, po czym jest ona enkodowana do \textit{base64} i wstrzykiwana do kontenera inicjalizującego przez zmienne środowiskowe.
+    Treść pliku jest przygotowywana jeszcze w operatorze, po czym jest ona enkodowana do \texttt{base64} i wstrzykiwana do kontenera inicjalizującego przez zmienne środowiskowe.
     Kontener inicjalizujący używa obrazu komponentu managera (opisanego w~\ref{subsec:component-manager}).
     \item Uruchamia Job odpowiadający za predykcję trójwymiarowej struktury białka.
     Kontroler montuje poprzednio używany wolumen, który zawiera stan z poprzedniej fazy.
@@ -229,6 +229,42 @@ Logika biznesowa (przedstawiona na diagramie~\ref{fig:proteinconformationpredict
     SMS) dla poszczególnych członków zespołu badawczego.
 \end{enumerate}
 
-\subsection{Komponent pobierania}\label{subsec:component-downloader}
+\subsection{Komponent downloader}\label{subsec:component-downloader}
+\textit{Repozytorium kodu: \url{https://github.com/kubefold/downloader}}
+
+Komponent \textit{downloader} służy do pobierania jednej wybranej bazy danych białek.
+Uruchomienie tego komponentu w kontenerze skutkuje automatycznym rozpoczęciem pobierania.
+Kontener oczekuje skonfigurowania następujących zmienncyh środowiskowych:
+
+\begin{itemize}
+    \item \texttt{DATASET} - nazwa zbioru danych.
+    Dopuszczalne wartości tej zmiennnej są z góry ustalone.
+    Są to:
+    \subitem \texttt{mgy\_clusters\_2022\_05.fa} - MGY Clusters
+    \subitem \texttt{bfd-first\_non\_consensus\_sequences.fasta} - BFD non-consensus sequences
+    \subitem \texttt{uniref90\_2022\_05.fa} - UniRef90
+    \subitem \texttt{uniprot\_all\_2021\_04.fa} - UniProt
+    \subitem \texttt{pdb\_2022\_09\_28\_mmcif\_files.tar} - PDB mmCIF files
+    \subitem \texttt{pdb\_seqres\_2022\_09\_28.fasta} - PDB sequence resources
+    \subitem \texttt{rnacentral\_active\_seq\_id\_90\_cov\_80\_linclust.fasta} - RNACentral
+    \subitem \texttt{nt\_rna\_2023\_02\_23\_clust\_seq\_id\_90\_cov\_80\_rep\_seq.fasta} - NT RNA
+    \subitem \texttt{rfam\_14\_9\_clust\_seq\_id\_90\_cov\_80\_rep\_seq.fasta} - RFam
+    \item \texttt{DESTINATION} - ścieżka do katalogu wyjściowego.
+    \item \texttt{RATE} (opcjonalnie) - limit prędkości pobierania wyrażony w kilobajtach na sekundę.
+    Domyślnie proces pobierania nie ma ustawionego górnego limitu.
+\end{itemize}.
+
+Wszystkie bazy danych są hostowane w usłudze Google Cloud Storage.
+Prawie wszystkie z nich to pliki w formacie \textit{.fasta} skompresowane z użyciem algorytmu \textit{ZStandard} (lub krócej \textit{zstd}) od Facebooka.
+Wyjątkiem stanowi plik \texttt{pdb\_2022\_09\_28\_mmcif\_files.tar}, który jest archiwum TAR (również jest skompresowany algorytmem \textit{zstd}).
+
+Komponent pobiera i dekompresuje pliki w tym samym momencie.
+Co kilka chwil oddzielny wątek monitoruje progres już pobranych danych wypisując do \texttt{stdout} logline z bieżącym stanem.
+Przykładowy logline jest przedstawiony na listingu~\ref{lst:downloader_logline}.
+Po skończonym sukcesem lub przerwanym w trybie awaryjnym pobieraniu, proces wychodzi logując odpowiedni komunikat do logów oraz zwracając odpowiedni exit code.
+
+\begin{lstlisting}[language=txt,caption={Sample logline from downloader},label={lst:downloader_logline}]
+{"dataset":"rnacentral_active_seq_id_90_cov_80_linclust.fasta","level":"info","msg":"Download progress","size":7700349721,"time":"2025-05-17T16:53:52+02:00","total":13860314914,"type":"download","unit":"bytes"}
+\end{lstlisting}
 
 \subsection{Komponent zarządzający obliczeniami}\label{subsec:component-manager}

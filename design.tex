@@ -306,6 +306,6 @@ To send artifacts, the \texttt{BUCKET} environment variable should be set to the
 To send a notification using the AWS End User Messaging service, the container must have the \texttt{NOTIFICATION\_PHONES} and \texttt{NOTIFICATION\_MESSAGE} variables set.
 The variable with phone numbers can contain more than one recipient-in such a case, phone numbers should be provided as a comma-separated list.
 
-Of course, if using AWS services, the AWS client variables should be configured.
+If using AWS services, the AWS client variables should be configured.
 This can be done using environment variables such as \texttt{AWS\_ACCESS\_KEY\_ID} and \texttt{AWS\_SECRET\_ACCESS\_KEY}.
 An alternative is to configure the AWS IAM role to be used by the container and have access permissions to the individual services.

@@ -133,9 +133,69 @@ echo 'Done'
 
 W celu szybkiego postawienia klastra wraz ze wszystkimi potrzebnymi zależnościami został przygotowany skrypt \texttt{up.sh}, który został przedstawiony na listingu~\ref{lst:up-script}.
 Po wykonaniu skryptu można bezpośrednio przejść do rozpoczęcia pracy z KubeFold.
+Jeżeli klaster został zainstalowany poprawnie, wykonanie polecenia \texttt{kubectl get pods -A} powinno pokazać wyjście podobne do tego na zrzucie ekranu~\ref{fig:eks_pods_terminal}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{images/eks_pods_terminal}
+  \caption{\texttt{kubectl get pods} output after successful cluster installation}
+  \label{fig:eks_pods_terminal}
+\end{figure}
 
 
 \section{Prepared resource definitions}
+
+W celu przeprowadzenia testów KubeFold przygotowano następujące definicje zasobów w kodzie YAML.
+Pierwszy z nich to zasób \texttt{ProteinDatabase} przedstawiony na listingu~\ref{lst:used_protein_database}.
+Drugi z nich z kolei to zasób \texttt{ProteinConformationPrediction} przedstawiony na listingu~\ref{lst:used_protein_conformation_prediction}.
+Oba te zasoby zostały zaaplikowane na klaster za pomocą \texttt{kubectl apply} tuż po instalacji.
+
+\begin{lstlisting}[language=yaml,caption={Used \texttt{ProteinDatabase} resource definition},label={lst:used_protein_database}]
+apiVersion: data.kubefold.io/v1
+kind: ProteinDatabase
+metadata:
+  name: proteindatabase-sample
+spec:
+  datasets:
+    bfd: true
+    mgyclusters: true
+    nt: true
+    pdb: true
+    pdbseqreq: true
+    rfam: true
+    rnacentral: true
+    uniref90: true
+    uniprot: true
+  volume:
+    storageClassName: fsx-sc
+\end{lstlisting}
+
+\begin{lstlisting}[language=yaml,caption={Used \texttt{ProteinConformationPrediction} resource definition},label={lst:used_protein_conformation_prediction}]
+apiVersion: data.kubefold.io/v1
+kind: ProteinConformationPrediction
+metadata:
+  name: proteinconformationprediction-sample
+spec:
+  database: proteindatabase-sample
+  protein:
+    id: [ 'A','B' ]
+    sequence: GMRESY...LQQANDLKQG
+  model:
+    volume:
+      storageClassName: fsx-sc
+    weights:
+      http: https://staticfilehosting.com/af3.bin.zst
+    seeds:
+      - 1
+  destination:
+    s3:
+      bucket: kubefold-artifacts-sample
+      region: eu-central-1
+  notify:
+    region: eu-central-1
+    sms:
+      - "+48140690323"
+\end{lstlisting}
 
 
 \section{Computation artifacts overview}

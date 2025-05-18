@@ -2,6 +2,9 @@
 %2. Describe how was operator installed (screenshots etc)
 %3. Describe prepared CRD
 %4. Describe execution (screenshots)
+%4.1 Aligning
+%4.2 Prediction
+%4.3 Post Processing
 %5. Describe artifacts
 %6. Show SMS
 
@@ -200,6 +203,7 @@ spec:
 Po utworzeniu zasobu \texttt{ProteinDatabase} FSx CSI Driver spowodował utworzenie systemu plików FSx for Lustre (zobacz rys.~\ref{fig:fsx_fs}).
 Gdy tylko system plików został utworzony, proces pobierania baz danych białek rozpoczął się w wielu podach jednocześnie.
 Użytkownik może na bieżąco kontrolować postęp pobierania co zostało pokazane na zrzucie ekranu~\ref{fig:used_proteindatabase_terminal}.
+Po zakończeniu pobierania status zostanie zmieniony na \textit{Completed} (zobacz zrzut ekranu~\ref{fig:proteindatabase_completed_terminal}).
 
 \begin{figure}[htbp]
   \centering
@@ -213,6 +217,13 @@ Użytkownik może na bieżąco kontrolować postęp pobierania co zostało pokaz
   \includegraphics[width=\textwidth]{images/old_proteindatabase_terminal}
   \caption{Terminal output presenting \texttt{ProteinDatabase} resource}
   \label{fig:used_proteindatabase_terminal}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{images/proteindatabase_completed_terminal}
+  \caption{Completed downloading of protein database}
+  \label{fig:proteindatabase_completed_terminal}
 \end{figure}
 
 \section{Computation artifacts overview}

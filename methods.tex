@@ -195,7 +195,24 @@ spec:
     region: eu-central-1
     sms:
       - "+48140690323"
-\end{lstlisting}
+\end{lstlisting}.
 
+Po utworzeniu zasobu \texttt{ProteinDatabase} FSx CSI Driver spowodował utworzenie systemu plików FSx for Lustre (zobacz rys.~\ref{fig:fsx_fs}).
+Gdy tylko system plików został utworzony, proces pobierania baz danych białek rozpoczął się w wielu podach jednocześnie.
+Użytkownik może na bieżąco kontrolować postęp pobierania co zostało pokazane na zrzucie ekranu~\ref{fig:used_proteindatabase_terminal}.
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{images/fsx_fs}
+  \caption{Created FSx for Lustre file system in AWS Web Console}
+  \label{fig:fsx_fs}
+\end{figure}
+
+\begin{figure}[htbp]
+  \centering
+  \includegraphics[width=\textwidth]{images/old_proteindatabase_terminal}
+  \caption{Terminal output presenting \texttt{ProteinDatabase} resource}
+  \label{fig:used_proteindatabase_terminal}
+\end{figure}
 
 \section{Computation artifacts overview}

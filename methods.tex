@@ -139,10 +139,10 @@ Po wykonaniu skryptu można bezpośrednio przejść do rozpoczęcia pracy z Kube
 Jeżeli klaster został zainstalowany poprawnie, wykonanie polecenia \texttt{kubectl get pods -A} powinno pokazać wyjście podobne do tego na zrzucie ekranu~\ref{fig:eks_pods_terminal}.
 
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\textwidth]{images/eks_pods_terminal}
-  \caption{\texttt{kubectl get pods} output after successful cluster installation}
-  \label{fig:eks_pods_terminal}
+    \centering
+    \includegraphics[width=\textwidth]{images/eks_pods_terminal}
+    \caption{\texttt{kubectl get pods} output after successful cluster installation}
+    \label{fig:eks_pods_terminal}
 \end{figure}
 
 
@@ -200,30 +200,70 @@ spec:
       - "+48140690323"
 \end{lstlisting}.
 
+%ProteinDatabase
 Po utworzeniu zasobu \texttt{ProteinDatabase} FSx CSI Driver spowodował utworzenie systemu plików FSx for Lustre (zobacz rys.~\ref{fig:fsx_fs}).
 Gdy tylko system plików został utworzony, proces pobierania baz danych białek rozpoczął się w wielu podach jednocześnie.
 Użytkownik może na bieżąco kontrolować postęp pobierania co zostało pokazane na zrzucie ekranu~\ref{fig:used_proteindatabase_terminal}.
 Po zakończeniu pobierania status zostanie zmieniony na \textit{Completed} (zobacz zrzut ekranu~\ref{fig:proteindatabase_completed_terminal}).
 
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\textwidth]{images/fsx_fs}
-  \caption{Created FSx for Lustre file system in AWS Web Console}
-  \label{fig:fsx_fs}
+    \centering
+    \includegraphics[width=\textwidth]{images/fsx_fs}
+    \caption{Created FSx for Lustre file system in AWS Web Console}
+    \label{fig:fsx_fs}
 \end{figure}
 
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\textwidth]{images/old_proteindatabase_terminal}
-  \caption{Terminal output presenting \texttt{ProteinDatabase} resource}
-  \label{fig:used_proteindatabase_terminal}
+    \centering
+    \includegraphics[width=\textwidth]{images/old_proteindatabase_terminal}
+    \caption{Terminal output presenting \texttt{ProteinDatabase} resource}
+    \label{fig:used_proteindatabase_terminal}
 \end{figure}
 
 \begin{figure}[htbp]
-  \centering
-  \includegraphics[width=\textwidth]{images/proteindatabase_completed_terminal}
-  \caption{Completed downloading of protein database}
-  \label{fig:proteindatabase_completed_terminal}
+    \centering
+    \includegraphics[width=\textwidth]{images/proteindatabase_completed_terminal}
+    \caption{Completed downloading of protein database}
+    \label{fig:proteindatabase_completed_terminal}
 \end{figure}
+
+%ProteinConformationPrediction
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/proteinconformationprediction_aligning_terminal}
+    \caption{Aligning phase in protein conformation prediction task}
+    \label{fig:proteinconformationprediction_aligning_terminal}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/proteinconformationprediction_predicting_terminal}
+    \caption{Predicting phase in protein conformation prediction task}
+    \label{fig:proteinconformationprediction_predicting_terminal}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/proteinconformationprediction_uploading_terminal}
+    \caption{Post processing phase in protein conformation prediction task}
+    \label{fig:proteinconformationprediction_uploading_terminal}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/proteinconformationprediction_completed_terminal}
+    \caption{Completed protein conformation prediction task}
+    \label{fig:proteinconformationprediction_completed_terminal}
+\end{figure}
+
+Po zaaplikowaniu zasobu \texttt{ProteinConformationPrediction} operator KubeFold uruchamia kolejno trzy Joby, odpowiadające za trzy fazy zadania.
+Początkowa faza to faza \textit{Aligning}, co użytkownik może sprawdzić wykonując polecenie \texttt{kubectl get proteinconformationprediction} w terminalu (zobacz zrzut ekranu.~\ref{fig:proteinconformationprediction_aligning_terminal}). Uruchamia ona pod z sufiksem \texttt{\-search} na węźle wyposażonym w duże zasoby CPU.
+
+Druga faza to faza \textit{Predicting} (wyjście terminala zostało przedstawione na zrzucie ekranu~\ref{fig:proteinconformationprediction_predicting_terminal}), która jest uruchamiana na węźle wyposażonym w akcelerator obliczeń tensorowych.
+W tej fazie pod został utworzony z sufiksem~\texttt{-predict}.
+
+Ostatnia faza to faza \texttt{UploadingArtifacts}, która odpowiada za wysłanie artefaktów obliczeń do magazynu AWS S3 oraz zakolejkowanie powiadomień do członków zespołu badawczego (zobacz zrzut ekranu~\ref{fig:proteinconformationprediction_uploading_terminal}). Gdy ten krok zostanie wykonany, status zostanie zmieniony na \texttt{Completed} (zobacz zrzut ekranu~\ref{fig:proteindatabase_completed_terminal}).
+
 
 \section{Computation artifacts overview}

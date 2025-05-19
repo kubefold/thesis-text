@@ -258,12 +258,42 @@ Po zakończeniu pobierania status zostanie zmieniony na \textit{Completed} (zoba
 \end{figure}
 
 Po zaaplikowaniu zasobu \texttt{ProteinConformationPrediction} operator KubeFold uruchamia kolejno trzy Joby, odpowiadające za trzy fazy zadania.
-Początkowa faza to faza \textit{Aligning}, co użytkownik może sprawdzić wykonując polecenie \texttt{kubectl get proteinconformationprediction} w terminalu (zobacz zrzut ekranu.~\ref{fig:proteinconformationprediction_aligning_terminal}). Uruchamia ona pod z sufiksem \texttt{\-search} na węźle wyposażonym w duże zasoby CPU.
+Początkowa faza to faza \textit{Aligning}, co użytkownik może sprawdzić wykonując polecenie \texttt{kubectl get proteinconformationprediction} w terminalu (zobacz zrzut ekranu.~\ref{fig:proteinconformationprediction_aligning_terminal}). Uruchamia ona pod z sufiksem \texttt{-search} na węźle wyposażonym w duże zasoby CPU.
 
 Druga faza to faza \textit{Predicting} (wyjście terminala zostało przedstawione na zrzucie ekranu~\ref{fig:proteinconformationprediction_predicting_terminal}), która jest uruchamiana na węźle wyposażonym w akcelerator obliczeń tensorowych.
 W tej fazie pod został utworzony z sufiksem~\texttt{-predict}.
 
 Ostatnia faza to faza \texttt{UploadingArtifacts}, która odpowiada za wysłanie artefaktów obliczeń do magazynu AWS S3 oraz zakolejkowanie powiadomień do członków zespołu badawczego (zobacz zrzut ekranu~\ref{fig:proteinconformationprediction_uploading_terminal}). Gdy ten krok zostanie wykonany, status zostanie zmieniony na \texttt{Completed} (zobacz zrzut ekranu~\ref{fig:proteindatabase_completed_terminal}).
 
-
 \section{Computation artifacts overview}
+
+Po wykonaniu obliczeń, artefakty zostały wysłane do magazynu AWS S3. W buckecie został utworzony katalog o nazwie zawierającej czas wykonania obliczenia np. \texttt{default-proteinconformationprediction-sample\_20250518\_181911}.
+Nazwa zawiera także nazwę zasobu z platformy Kubernetes oraz namespace.
+Zawartość katalogu została przedstawiona na zrzucie ekranu~\ref{fig:bucket}.
+%TODO(matisiekpl): omów każdy plik
+
+Plik \texttt{.cif} pozwala na zwizualizowanie struktury trójwymiarowej białka używając np. oprogramowania \textit{RCSB 3D View} (\url{https://www.rcsb.org/3d-view}).
+Przykładowa wizualizacja została przedstawiona na rys.~\ref{fig:protein_visualization}.
+
+Oprócz tego do użytkownika została wysłana wiadomość SMS, informująca o zakończonym obliczeniu (zobacz rys.~\ref{fig:sns_notification}).
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/bucket2}
+    \caption{Contents of bucket containg computation artifacts}
+    \label{fig:bucket}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/protein_visualization_small}
+    \caption{Visualization of folded protein using RCSB visualization software \url{https://www.rcsb.org/3d-view}}
+    \label{fig:protein_visualization}
+\end{figure}
+
+\begin{figure}[htbp]
+    \centering
+    \includegraphics[width=\textwidth]{images/sns_notification_light}
+    \caption{SMS Notification sent to research team member when computation is done}
+    \label{fig:sns_notification}
+\end{figure}

@@ -266,7 +266,20 @@ After the computations were completed, the artifacts were sent to AWS S3 storage
 A directory was created in the bucket with a name containing the computation execution time, e.g., \texttt{default-proteinconformationprediction-sample\_20250518\_181911}.
 The name also includes the Kubernetes resource name and namespace.
 The directory contents are shown in screenshot~\ref{fig:bucket}.
-%TODO(matisiekpl): discuss each file
+The output directory contains several types of files that provide different aspects of the protein structure prediction:
+
+\begin{itemize}
+    \item \texttt{TERMS\_OF\_USE.md} - A markdown file containing the terms of use for AlphaFold predictions
+    \item \texttt{*\_model.cif} - The main output file containing the predicted 3D structure of the protein in CIF format, which can be visualized using molecular visualization software
+    \item \texttt{*\_confidences.json} - Detailed confidence scores for each residue in the predicted structure
+    \item \texttt{*\_summary\_confidences.json} - A condensed version of the confidence scores providing an overview of prediction reliability
+    \item \texttt{*\_ranking\_scores.csv} - A CSV file containing ranking scores for different model variants
+    \item \texttt{*\_data.json} - Additional metadata about the prediction run
+\end{itemize}
+
+For each prediction run, AlphaFold generates multiple samples (in this case, 5 samples) to account for the stochastic nature of the prediction process.
+Each sample is stored in its own subdirectory (e.g., \texttt{seed-1\_sample-0/}) and contains its own set of model files and confidence scores.
+The final model file in the root directory represents the best prediction selected from all samples.
 
 The \texttt{.cif} file allows visualization of the three-dimensional protein structure using software such as \textit{RCSB 3D View} (\url{https://www.rcsb.org/3d-view}).
 An example visualization is shown in fig.~\ref{fig:protein_visualization}.

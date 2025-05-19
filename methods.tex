@@ -93,7 +93,7 @@ addons:
 On the cluster, the AWS FSx CSI Driver has been installed.
 It is used for automatic creation and management of AWS FSx for Lustre volumes based on \texttt{PersistentVolumeClaim} resources created in the cluster.
 To make this possible, it is necessary to configure a \texttt{StorageClass} that specifies how volumes should be created.
-In the configuration shown in listing~\ref{lst:storage-class}, options such as file system version, compression type (disabled), volume throughput, and network options were set.
+In the configuration shown in listing~\ref{lst:storage-class}, parameters such as file system version, compression type (disabled), volume throughput, and network settings were defined.
 This means that creating a \texttt{PersistentVolumeClaim} resource pointing to the \texttt{StorageClass} named \texttt{fsx-sc} will automatically provision a new FSx file system in AWS.
 
 \begin{lstlisting}[language=yaml,caption={Definition of \texttt{StorageClass} for FSx CSI Driver},label={lst:storage-class}]
@@ -133,9 +133,9 @@ kubectl apply -f config/samples/data_v1_proteindatabase.yaml
 echo 'Done'
 \end{lstlisting}
 
-A \texttt{up.sh} script was prepared for quickly setting up the cluster with all necessary dependencies, which is shown in listing~\ref{lst:up-script}.
+A \texttt{up.sh} script was prepared for quickly setting up the environment with all necessary dependencies, which is shown in listing~\ref{lst:up-script}.
 After executing the script, you can directly proceed to start working with KubeFold.
-If the cluster was installed correctly, running the command \texttt{kubectl get pods -A} should show output similar to that in screenshot~\ref{fig:eks_pods_terminal}.
+If the setup was installed correctly, running the command \texttt{kubectl get pods -A} should show output similar to that in screenshot~\ref{fig:eks_pods_terminal}.
 
 \begin{figure}[htbp]
     \centering

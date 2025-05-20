@@ -51,28 +51,30 @@ Compared to ColabFold, the KubeFold platform offers much greater scalability and
 
 This approach combines the advantages of flexibility and computational power with ease of use, making KubeFold a more comprehensive solution adapted to the real needs of research environments and production applications.
 
+A detailed comparison of the computational infrastructure for OpenFold, ColabFold, and KubeFold is presented in Table~\ref{tab:comparison}.
+
 \begin{table}[H]
     \centering
-    \resizebox{\textwidth}{!}{
-        \begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
+    \small
+    \begin{tabularx}{\textwidth}{|X|X|X|X|}
         \hline
-        \textbf{Features}                           & \textbf{OpenFold}                         & \textbf{ColabFold}                & \textbf{KubeFold}                                      \\
+        \textbf{Features}                           & \textbf{OpenFold}                         & \textbf{ColabFold}                & \textbf{KubeFold (proposed)}                          \\
         \hline
         \textbf{Platform}                           & HPC clusters, cloud (AWS, GCP)            & Google Colab, local environments & Kubernetes + AWS EKS \\
         \hline
-        \textbf{Hardware requirements}              & High (e.g. GPU A100, RAM 64GB+)           & Low (free GPU in Colab) & Medium-high, dynamically scalable \\
+        \textbf{Hardware requirements}              & High (GPU A100, RAM 64GB+)                & Low (free GPU in Colab) & Medium-high, dynamically scalable \\
         \hline
         \textbf{Automation}                         & Manual task and environment configuration & None, manual handling by user & Full automation through Kubernetes operator \\
         \hline
         \textbf{Scalability}                        & High, but difficult to configure          & Limited to single predictions & Very high, supports parallel processing \\
         \hline
-        \textbf{Ease of deployment}                 & High difficulty (DevOps, ML)              & Very easy, suitable for beginners & Medium difficulty, requires basic Kubernetes knowledge \\
+        \textbf{Ease of deployment}                 & High entry threshold (DevOps, ML)         & Very easy, suitable for beginners & Medium threshold, requires basic Kubernetes knowledge \\
         \hline
-        \textbf{Integration with external services} & Requires own implementation               & None                              & Yes – AWS S3, FSx, SNS, IAM                            \\
+        \textbf{Integration with external services} & Requires own implementation               & None                              & Yes – AWS S3, FSx, SNS, IAM                           \\
         \hline
-    \end{tabular}
-    }
-    \caption{Comparison of computational infrastructure solutions: OpenFold, ColabFold, and KubeFold}
+    \end{tabularx}
+    \caption{Comparison of computational infrastructure: OpenFold, ColabFold, and KubeFold}
+    \label{tab:comparison}
 \end{table}
 
 \section{Challenges}

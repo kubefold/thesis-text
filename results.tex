@@ -79,5 +79,18 @@ A detailed comparison of the computational infrastructure for OpenFold, ColabFol
 
 \section{Challenges}
 
+Głównym wyzwaniem było opracowanie odpowiedniej architektury platformy KubeFold, która jest w stanie działać na wielu węzłach klastra jednocześnie, optymalizując koszta i szybkość obliczeń.
+Dzięki podziale procesu pobierania na wiele podów udało się zwiększyć potencajną szybkość pobierania baz danych białek.
+Z kolei rozdział fazy \textit{Aligning} i \textit{Predicting} pozwolił optymalnie zutylizować zasoby obliczeniowe CPU i GPU.
+Taki setup pozwala na zaoszczędzenie wydatków w chmurze publicznej.
+
+Drugim wyzwaniem była odpowiednia implementacja komponentu \textit{downloader}.
+Komponent ten musi w tym samym czasie pobierać jak i dekompresować dane.
+Gdyby ten proces odbywał się sekwencyjnie, to chwilowo używana przestrzeń dyskowa byłaby dużo większa niż faktyczny rozmiar bazy danych.
+
+Trzecim wyzwaniem było odpowiednie utworzenie infrastruktury do testowania platformy KubeFold.
+Projekt uruchamia się korzystając z wielu usług chmury AWS, a to wymaga przemyślanego połączenia każdego komponentu.
+Ustawienie odpowiednich ustawień subnetów, VPC czy driverów CSI wymagało poświęcenia sporej ilości czasu.
+
 
 \section{Conclusions}

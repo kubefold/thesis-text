@@ -3,9 +3,67 @@
 
 \section{Implementation of the KubeFold Project}
 
+W ramach projektu z sukcesem udało się:
+\begin{itemize}
+    \item Zaprojektowano i zaimplementowano architekturę operatora \textit{KubeFold} dla platformy Kubernetes.
+    \item Utworzono dwa niestandardowe zasoby (CRD):
+    \begin{itemize}
+        \item \textit{ProteinDatabase} – zarządzanie bazami danych białek,
+        \item \textit{ProteinConformationPrediction} – uruchamianie obliczeń konformacyjnych.
+    \end{itemize}
+    \item Opracowano komponent do automatycznego pobierania i dekompresji baz danych białek.
+    \item Przygotowano infrastrukturę jako kod (IaC) umożliwiającą uruchomienie operatora w chmurze AWS (EKS + FSx for Lustre).
+    \item Stworzono dokumentację oraz instrukcje instalacji operatora w klastrze Kubernetes.
+    \item Przeprowadzono kilka obliczeń konformacji białek w celu przetestowania rozwiązania.
+\end{itemize}
 
-\section{Comparison of Other Methods for Running Protein Conformation Prediction}
 
+\section{Porównanie innych metod uruchamiania predykcji konformacji białek}
+
+Algorytm AlphaFold znacząco wpłynął na rozwój bioinformatyki, oferując przełomowe możliwości przewidywania struktury przestrzennej białek. Mimo to, jego praktyczne wykorzystanie wiąże się z istotnymi wymaganiami obliczeniowymi i technologicznymi. W odpowiedzi na te wyzwania powstały alternatywne rozwiązania, takie jak \textbf{OpenFold} oraz \textbf{ColabFold}, których celem było uproszczenie procesu predykcji i zwiększenie jego dostępności. Na tle tych narzędzi wyróżnia się jednak \textbf{KubeFold} – opracowany w ramach niniejszej pracy system, który zapewnia znacznie wyższy poziom automatyzacji, skalowalności oraz integracji z infrastrukturą chmurową.
+
+\subsection*{OpenFold}
+
+OpenFold to otwartoźródłowa reimplementacja AlphaFold2, napisana w języku Python z wykorzystaniem biblioteki PyTorch. Projekt ten adresowany jest przede wszystkim do zespołów badawczych i instytucji, które dysponują rozbudowaną infrastrukturą obliczeniową oraz potrzebą pełnej kontroli nad procesem predykcji. OpenFold umożliwia m.in. trenowanie modeli od podstaw, testowanie modyfikacji architektury oraz uruchamianie zadań w środowiskach rozproszonych (HPC, chmura).
+
+Z uwagi na zaawansowany charakter narzędzia, jego wdrożenie wymaga wysokich kompetencji z zakresu uczenia maszynowego, zarządzania kontenerami oraz konfiguracji środowisk chmurowych. Konieczne są również znaczące zasoby sprzętowe (np. karty GPU klasy A100), co może stanowić barierę wejścia dla mniejszych zespołów.
+
+\subsection*{ColabFold}
+
+ColabFold to uproszczona wersja AlphaFold2, dostępna poprzez interaktywne notebooki uruchamiane w środowisku Google Colaboratory. Dzięki integracji z narzędziem MMseqs2, proces dopasowywania sekwencji przebiega znacznie szybciej, a użytkownik nie musi samodzielnie konfigurować środowiska ani instalować oprogramowania.
+
+ColabFold skierowany jest przede wszystkim do osób indywidualnych oraz zespołów, które nie dysponują zaawansowaną infrastrukturą obliczeniową. Mimo niskiego progu wejścia, rozwiązanie to posiada liczne ograniczenia: nie umożliwia trenowania modeli, jest zależne od ograniczeń platformy Colab (czas sesji, dostępność GPU), a jego zastosowanie ogranicza się głównie do prostych, jednostkowych zadań predykcyjnych.
+
+\subsection*{Zalety podejścia KubeFold}
+
+Opracowana w ramach niniejszej pracy platforma \textbf{KubeFold} stanowi nowoczesną i elastyczną alternatywę dla powyższych rozwiązań. Dzięki wykorzystaniu technologii Kubernetes oraz integracji z usługami Amazon Web Services (takimi jak FSx for Lustre czy S3), KubeFold automatyzuje cały proces uruchamiania predykcji konformacji białek – od pobierania baz danych, przez uruchamianie obliczeń, aż po archiwizację wyników i wysyłanie powiadomień.
+
+W przeciwieństwie do OpenFold, KubeFold nie wymaga ręcznej konfiguracji zadań ani zarządzania infrastrukturą – wszystkie komponenty uruchamiane są automatycznie na podstawie zasobów YAML, co znacząco upraszcza proces.
+W porównaniu z ColabFold, platforma KubeFold oferuje znacznie większą skalowalność i kontrolę nad zasobami obliczeniowymi – pozwalając na jednoczesne uruchamianie wielu zadań oraz przydzielanie im odpowiednich zasobów (CPU, GPU, pamięć, przestrzeń dyskowa).
+
+Podejście to łączy zalety elastyczności i mocy obliczeniowej z łatwością użycia, co czyni KubeFold rozwiązaniem bardziej kompleksowym i przystosowanym do rzeczywistych potrzeb środowisk badawczych oraz zastosowań produkcyjnych.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|p{4cm}|p{3.7cm}|p{3.7cm}|p{3.7cm}|}
+        \hline
+        \textbf{Cechy}                              & \textbf{OpenFold}                      & \textbf{ColabFold}                           & \textbf{KubeFold (proponowane)}                       \\
+        \hline
+        \textbf{Platforma}                          & Klastery HPC, chmura (AWS, GCP)        & Google Colab, środowiska lokalne & Kubernetes + AWS EKS \\
+        \hline
+        \textbf{Wymagania sprzętowe}                & Wysokie (GPU A100, RAM 64GB+)          & Niskie (darmowe GPU w Colab) & Średnie-wysokie, dynamicznie skalowalne \\
+        \hline
+        \textbf{Automatyzacja}                      & Ręczna konfiguracja zadań i środowiska & Brak, obsługa ręczna przez użytkownika & Pełna automatyzacja przez operatora Kubernetes \\
+        \hline
+        \textbf{Skalowalność}                       & Wysoka, ale trudna w konfiguracji      & Ograniczona do pojedynczych predykcji & Bardzo wysoka, wspiera przetwarzanie równoległe \\
+        \hline
+        \textbf{Łatwość wdrożenia}                  & Wysoki próg wejścia (DevOps, ML)       & Bardzo łatwa, odpowiednia dla początkujących & Średni próg, wymaga podstawowej znajomości Kubernetes \\
+        \hline
+        \textbf{Integracja z usługami zewnętrznymi} & Wymaga implementacji własnej           & Brak                                         & Tak – AWS S3, FSx, SNS, IAM                           \\
+        \hline
+    \end{tabular}
+    \caption{Porównanie infrastruktury obliczeniowej: OpenFold, ColabFold i KubeFold}
+\end{table}
 
 \section{Challenges}
 

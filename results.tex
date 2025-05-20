@@ -1,68 +1,78 @@
 \chapter{Results}
 
-
 \section{Implementation of the KubeFold Project}
 
-W ramach projektu z sukcesem udało się:
+Within the project, the following goals were successfully accomplished:
 \begin{itemize}
-    \item Zaprojektowano i zaimplementowano architekturę operatora \textit{KubeFold} dla platformy Kubernetes.
-    \item Utworzono dwa niestandardowe zasoby (CRD):
+    \item Designed and implemented the \textit{KubeFold} operator for the Kubernetes platform.
+    \item Created two custom resources (CRDs):
     \begin{itemize}
-        \item \textit{ProteinDatabase} – zarządzanie bazami danych białek,
-        \item \textit{ProteinConformationPrediction} – uruchamianie obliczeń konformacyjnych.
+        \item \textit{ProteinDatabase} – managing protein databases,
+        \item \textit{ProteinConformationPrediction} – running protein conformation prediction computations.
     \end{itemize}
-    \item Opracowano komponent do automatycznego pobierania i dekompresji baz danych białek.
-    \item Przygotowano infrastrukturę jako kod (IaC) umożliwiającą uruchomienie operatora w chmurze AWS (EKS + FSx for Lustre).
-    \item Stworzono dokumentację oraz instrukcje instalacji operatora w klastrze Kubernetes.
-    \item Przeprowadzono kilka obliczeń konformacji białek w celu przetestowania rozwiązania.
+    \item Developed a component for automatic downloading and decompression of protein databases.
+    \item Prepared infrastructure as code (IaC) allowing for quick operator deployment in AWS cloud (EKS + FSx for Lustre).
+    \item Created documentation and installation instructions for the Kubernetes operator.
+    \item Conducted several protein conformation computations to test the solution.
 \end{itemize}
 
 
-\section{Porównanie innych metod uruchamiania predykcji konformacji białek}
+\section{Comparison of Other Solutions}
 
-Algorytm AlphaFold znacząco wpłynął na rozwój bioinformatyki, oferując przełomowe możliwości przewidywania struktury przestrzennej białek. Mimo to, jego praktyczne wykorzystanie wiąże się z istotnymi wymaganiami obliczeniowymi i technologicznymi. W odpowiedzi na te wyzwania powstały alternatywne rozwiązania, takie jak \textbf{OpenFold} oraz \textbf{ColabFold}, których celem było uproszczenie procesu predykcji i zwiększenie jego dostępności. Na tle tych narzędzi wyróżnia się jednak \textbf{KubeFold} – opracowany w ramach niniejszej pracy system, który zapewnia znacznie wyższy poziom automatyzacji, skalowalności oraz integracji z infrastrukturą chmurową.
+The AlphaFold algorithm has significantly influenced the development of bioinformatics, offering breakthrough capabilities in predicting protein spatial structures.
+However, its practical use comes with significant computational and technological requirements.
+In response to these challenges, alternative solutions have emerged, such as \textbf{OpenFold} and \textbf{ColabFold}, which aimed to simplify the prediction process and increase its accessibility.
+However, \textbf{KubeFold} – the system developed as part of this work – stands out among these tools, providing a much higher level of automation, scalability, and cloud infrastructure integration.
 
 \subsection*{OpenFold}
 
-OpenFold to otwartoźródłowa reimplementacja AlphaFold2, napisana w języku Python z wykorzystaniem biblioteki PyTorch. Projekt ten adresowany jest przede wszystkim do zespołów badawczych i instytucji, które dysponują rozbudowaną infrastrukturą obliczeniową oraz potrzebą pełnej kontroli nad procesem predykcji. OpenFold umożliwia m.in. trenowanie modeli od podstaw, testowanie modyfikacji architektury oraz uruchamianie zadań w środowiskach rozproszonych (HPC, chmura).
+OpenFold is an open-source reimplementation of AlphaFold2, written in Python using the PyTorch library.
+This project is primarily targeted at research teams and institutions that have extensive computational infrastructure and need full control over the prediction process.
+OpenFold enables, among other things, training models from scratch, testing architecture modifications, and running tasks in distributed environments (HPC, cloud).
 
-Z uwagi na zaawansowany charakter narzędzia, jego wdrożenie wymaga wysokich kompetencji z zakresu uczenia maszynowego, zarządzania kontenerami oraz konfiguracji środowisk chmurowych. Konieczne są również znaczące zasoby sprzętowe (np. karty GPU klasy A100), co może stanowić barierę wejścia dla mniejszych zespołów.
+Due to the advanced nature of the tool, its implementation requires high expertise in machine learning, container management, and cloud environment configuration.
+Significant hardware resources (e.g., A100-class GPU cards) are also necessary, which may be an entry barrier for smaller teams.
 
 \subsection*{ColabFold}
 
-ColabFold to uproszczona wersja AlphaFold2, dostępna poprzez interaktywne notebooki uruchamiane w środowisku Google Colaboratory. Dzięki integracji z narzędziem MMseqs2, proces dopasowywania sekwencji przebiega znacznie szybciej, a użytkownik nie musi samodzielnie konfigurować środowiska ani instalować oprogramowania.
+ColabFold is a simplified version of AlphaFold2, available through interactive notebooks running in the Google Colaboratory environment.
+Thanks to integration with the MMseqs2 tool, the sequence alignment process is much faster, and users don't need to configure the environment or install software themselves.
 
-ColabFold skierowany jest przede wszystkim do osób indywidualnych oraz zespołów, które nie dysponują zaawansowaną infrastrukturą obliczeniową. Mimo niskiego progu wejścia, rozwiązanie to posiada liczne ograniczenia: nie umożliwia trenowania modeli, jest zależne od ograniczeń platformy Colab (czas sesji, dostępność GPU), a jego zastosowanie ogranicza się głównie do prostych, jednostkowych zadań predykcyjnych.
+ColabFold is primarily aimed at individuals and teams that don't have advanced computational infrastructure.
+Despite the low entry threshold, this solution has numerous limitations: it doesn't allow model training, is dependent on Colab platform limitations (session time, GPU availability), and its application is mainly limited to simple, single predictive tasks.
 
-\subsection*{Zalety podejścia KubeFold}
+\subsection*{Advantages of the KubeFold Approach}
 
-Opracowana w ramach niniejszej pracy platforma \textbf{KubeFold} stanowi nowoczesną i elastyczną alternatywę dla powyższych rozwiązań. Dzięki wykorzystaniu technologii Kubernetes oraz integracji z usługami Amazon Web Services (takimi jak FSx for Lustre czy S3), KubeFold automatyzuje cały proces uruchamiania predykcji konformacji białek – od pobierania baz danych, przez uruchamianie obliczeń, aż po archiwizację wyników i wysyłanie powiadomień.
+The \textbf{KubeFold} platform developed as part of this work represents a modern and flexible alternative to the above solutions.
+By utilizing Kubernetes technology and integration with Amazon Web Services (such as FSx for Lustre and S3), KubeFold automates the entire process of running protein conformation predictions – from downloading databases, through running calculations, to archiving results and sending notifications.
 
-W przeciwieństwie do OpenFold, KubeFold nie wymaga ręcznej konfiguracji zadań ani zarządzania infrastrukturą – wszystkie komponenty uruchamiane są automatycznie na podstawie zasobów YAML, co znacząco upraszcza proces.
-W porównaniu z ColabFold, platforma KubeFold oferuje znacznie większą skalowalność i kontrolę nad zasobami obliczeniowymi – pozwalając na jednoczesne uruchamianie wielu zadań oraz przydzielanie im odpowiednich zasobów (CPU, GPU, pamięć, przestrzeń dyskowa).
+Unlike OpenFold, KubeFold doesn't require manual task configuration or infrastructure management – all components are automatically launched based on YAML resources, which significantly simplifies the process.
+Compared to ColabFold, the KubeFold platform offers much greater scalability and control over computational resources – allowing for simultaneous running of multiple tasks and allocating appropriate resources (CPU, GPU, memory, disk space).
 
-Podejście to łączy zalety elastyczności i mocy obliczeniowej z łatwością użycia, co czyni KubeFold rozwiązaniem bardziej kompleksowym i przystosowanym do rzeczywistych potrzeb środowisk badawczych oraz zastosowań produkcyjnych.
+This approach combines the advantages of flexibility and computational power with ease of use, making KubeFold a more comprehensive solution adapted to the real needs of research environments and production applications.
 
 \begin{table}[H]
     \centering
-    \begin{tabular}{|p{4cm}|p{3.7cm}|p{3.7cm}|p{3.7cm}|}
+    \resizebox{\textwidth}{!}{
+        \begin{tabular}{|p{3cm}|p{3cm}|p{3cm}|p{3cm}|}
         \hline
-        \textbf{Cechy}                              & \textbf{OpenFold}                      & \textbf{ColabFold}                           & \textbf{KubeFold (proponowane)}                       \\
+        \textbf{Features}                           & \textbf{OpenFold}                         & \textbf{ColabFold}                & \textbf{KubeFold}                                      \\
         \hline
-        \textbf{Platforma}                          & Klastery HPC, chmura (AWS, GCP)        & Google Colab, środowiska lokalne & Kubernetes + AWS EKS \\
+        \textbf{Platform}                           & HPC clusters, cloud (AWS, GCP)            & Google Colab, local environments & Kubernetes + AWS EKS \\
         \hline
-        \textbf{Wymagania sprzętowe}                & Wysokie (GPU A100, RAM 64GB+)          & Niskie (darmowe GPU w Colab) & Średnie-wysokie, dynamicznie skalowalne \\
+        \textbf{Hardware requirements}              & High (e.g. GPU A100, RAM 64GB+)           & Low (free GPU in Colab) & Medium-high, dynamically scalable \\
         \hline
-        \textbf{Automatyzacja}                      & Ręczna konfiguracja zadań i środowiska & Brak, obsługa ręczna przez użytkownika & Pełna automatyzacja przez operatora Kubernetes \\
+        \textbf{Automation}                         & Manual task and environment configuration & None, manual handling by user & Full automation through Kubernetes operator \\
         \hline
-        \textbf{Skalowalność}                       & Wysoka, ale trudna w konfiguracji      & Ograniczona do pojedynczych predykcji & Bardzo wysoka, wspiera przetwarzanie równoległe \\
+        \textbf{Scalability}                        & High, but difficult to configure          & Limited to single predictions & Very high, supports parallel processing \\
         \hline
-        \textbf{Łatwość wdrożenia}                  & Wysoki próg wejścia (DevOps, ML)       & Bardzo łatwa, odpowiednia dla początkujących & Średni próg, wymaga podstawowej znajomości Kubernetes \\
+        \textbf{Ease of deployment}                 & High difficulty (DevOps, ML)              & Very easy, suitable for beginners & Medium difficulty, requires basic Kubernetes knowledge \\
         \hline
-        \textbf{Integracja z usługami zewnętrznymi} & Wymaga implementacji własnej           & Brak                                         & Tak – AWS S3, FSx, SNS, IAM                           \\
+        \textbf{Integration with external services} & Requires own implementation               & None                              & Yes – AWS S3, FSx, SNS, IAM                            \\
         \hline
     \end{tabular}
-    \caption{Porównanie infrastruktury obliczeniowej: OpenFold, ColabFold i KubeFold}
+    }
+    \caption{Comparison of computational infrastructure solutions: OpenFold, ColabFold, and KubeFold}
 \end{table}
 
 \section{Challenges}

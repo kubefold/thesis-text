@@ -79,18 +79,17 @@ A detailed comparison of the computational infrastructure for OpenFold, ColabFol
 
 \section{Challenges}
 
-Głównym wyzwaniem było opracowanie odpowiedniej architektury platformy KubeFold, która jest w stanie działać na wielu węzłach klastra jednocześnie, optymalizując koszta i szybkość obliczeń.
-Dzięki podziale procesu pobierania na wiele podów udało się zwiększyć potencajną szybkość pobierania baz danych białek.
-Z kolei rozdział fazy \textit{Aligning} i \textit{Predicting} pozwolił optymalnie zutylizować zasoby obliczeniowe CPU i GPU.
-Taki setup pozwala na zaoszczędzenie wydatków w chmurze publicznej.
+The main challenge was developing an appropriate architecture for the KubeFold platform that can operate on multiple cluster nodes simultaneously, optimizing costs and computation speed.
+By dividing the download process into multiple pods, it was possible to increase the potential throughput of protein database downloads.
+Additionally, separating the \textit{Aligning} and \textit{Predicting} phases allowed for optimal utilization of CPU and GPU computational resources.
+This setup enables cost savings in the public cloud.
 
-Drugim wyzwaniem była odpowiednia implementacja komponentu \textit{downloader}.
-Komponent ten musi w tym samym czasie pobierać jak i dekompresować dane.
-Gdyby ten proces odbywał się sekwencyjnie, to chwilowo używana przestrzeń dyskowa byłaby dużo większa niż faktyczny rozmiar bazy danych.
+The second challenge was the proper implementation of the \textit{downloader} component.
+This component must simultaneously download and decompress data.
+If this process were to occur sequentially, the temporarily used disk space would be much larger than the actual size of the database.
 
-Trzecim wyzwaniem było odpowiednie utworzenie infrastruktury do testowania platformy KubeFold.
-Projekt uruchamia się korzystając z wielu usług chmury AWS, a to wymaga przemyślanego połączenia każdego komponentu.
-Ustawienie odpowiednich ustawień subnetów, VPC czy driverów CSI wymagało poświęcenia sporej ilości czasu.
-
+The third challenge was setting up appropriate infrastructure for testing the KubeFold platform.
+The project runs using multiple AWS cloud services, which requires thoughtful integration of each component.
+Setting up appropriate subnet configurations, VPC, and CSI drivers required a significant amount of time.
 
 \section{Conclusions}

@@ -203,7 +203,7 @@ The election system provided by the KubeBuilder tool determines which running in
 The first controller reconciles the \texttt{ProteinDatabase} resource.
 In case of a new resource of this type appearing, the following operations are performed:
 \begin{enumerate}
-    \item Creates a new \textt{PersistentVolumeClaim} and sets the \texttt{storageClassName} parameter.
+    \item Creates a new \textt{PersistentVolumeClaim} and sets the \texttt{storageClassName} parameter,
     \item When the \textt{PersistentVolumeClaim} is bound to a specific volume, it creates several jobs corresponding to downloading individual databases.
     Each pod has a mounted this \textt{PVC}.
     \item Starts a log observer-a separate goroutine constantly monitoring job states, pod states, and reading logs from them.
@@ -229,7 +229,7 @@ The second controller handles the \texttt{ProteinConformationPrediction} resourc
 It contains the logic responsible for the three prediction phases of the protein structure.
 The business logic (shown in figure~\ref{fig:proteinconformationprediction_controller}) after detecting a new resource performs the following steps:
 \begin{enumerate}
-    \item Creates a new \textit{PersistentVolumeClaim} for storing temporary program AlphaFold files.
+    \item Creates a new \textit{PersistentVolumeClaim} for storing temporary program AlphaFold files,
     \item Starts a \textit{Job} that performs Alignment of the sequence and saves the state to the temporary volume.
     Also mounts the volume containing the protein databases.
     The AlphaFold program expects initial settings (for example sequence amino acids) as a JSON file named \texttt{fold\_input.json}.

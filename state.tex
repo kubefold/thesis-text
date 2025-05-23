@@ -549,11 +549,11 @@ The core components of an operator architecture include:
 
 The reconciliation loop follows these main steps:
 \begin{enumerate}
-    \item Watch for changes to custom resources and related Kubernetes objects
-    \item Compare current state with desired state specified in the custom resource
-    \item Calculate what changes are needed to reach desired state
-    \item Apply the necessary changes through the Kubernetes API
-    \item Update status of the custom resource
+    \item Watch for changes to custom resources and related Kubernetes objects,
+    \item Compare current state with desired state specified in the custom resource,
+    \item Calculate what changes are needed to reach desired state,
+    \item Apply the necessary changes through the Kubernetes API,
+    \item Update status of the custom resource.
 \end{enumerate}
 
 Figure \ref{fig:kubernetes-operator-flow} illustrates the typical interaction flow between components in a Kubernetes operator:

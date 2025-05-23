@@ -21,17 +21,17 @@ KubeFold aims to overcome these challenges by providing an automated, scalable, 
 By leveraging containerization technology and Kubernetes orchestration ~\cite{kubernetes, container_orchestration}, the system provides automated resource management and flexible scaling, allowing scientists to focus on biological research rather than technical aspects.
 
 
-\section{Goals and Scope of Work}
+\section{Goals and scope of work}
 
 The main goal of this work is to design and implement the KubeFold operator for the Kubernetes platform ~\cite{kubernetes}, which automates the process of running protein conformational structure prediction calculations using the AlphaFold algorithm ~\cite{alphafold3}.
 The implementation of this goal includes the following tasks:
 
 \begin{itemize}
     \item Developing the architecture of a Kubernetes operator ~\cite{k8s_operators}, which primarily:
-    \subitem introduces the \textit{ProteinDatabase} resource abstracting the management of protein databases
-    \subitem introduces the \textit{ProteinConformationPrediction} resource managing the actual protein conformation calculation
-    \item Designing and implementing a component for managing protein databases, enabling automatic downloading and decompression of data files
-    \item Preparing example infrastructure code (infrastructure as code), which enables running the operator in the Amazon Web Services (AWS) cloud with the connection of \textit{FSx for Lustre} volumes
+    \subitem introduces the \textit{ProteinDatabase} resource abstracting the management of protein databases,
+    \subitem introduces the \textit{ProteinConformationPrediction} resource managing the actual protein conformation calculation,
+    \item Designing and implementing a component for managing protein databases, enabling automatic downloading and decompression of data files,
+    \item Preparing example infrastructure code (infrastructure as code), which enables running the operator in the Amazon Web Services (AWS) cloud with the connection of \textit{FSx for Lustre} volumes,
     \item Creating documentation and installation instructions for the operator in a cluster.
 \end{itemize}
 

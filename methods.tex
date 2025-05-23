@@ -1,13 +1,3 @@
-%1. Describe EKS cluster
-%2. Describe how was operator installed (screenshots etc)
-%3. Describe prepared CRD
-%4. Describe execution (screenshots)
-%4.1 Aligning
-%4.2 Prediction
-%4.3 Post Processing
-%5. Describe artifacts
-%6. Show SMS
-
 \chapter{Methods and Experiments}
 
 This chapter aims to describe the evaluation methods of the KubeFold platform on the AWS cloud and discuss the computation results.
@@ -269,12 +259,12 @@ The directory contents are shown in screenshot~\ref{fig:bucket}.
 The output directory contains several types of files that provide different aspects of the protein structure prediction:
 
 \begin{itemize}
-    \item \texttt{TERMS\_OF\_USE.md} - A markdown file containing the terms of use for AlphaFold predictions
-    \item \texttt{*\_model.cif} - The main output file containing the predicted 3D structure of the protein in CIF format, which can be visualized using molecular visualization software
-    \item \texttt{*\_confidences.json} - Detailed confidence scores for each residue in the predicted structure
-    \item \texttt{*\_summary\_confidences.json} - A condensed version of the confidence scores providing an overview of prediction reliability
-    \item \texttt{*\_ranking\_scores.csv} - A CSV file containing ranking scores for different model variants
-    \item \texttt{*\_data.json} - Additional metadata about the prediction run
+    \item \texttt{TERMS\_OF\_USE.md} - A markdown file containing the terms of use for AlphaFold predictions,
+    \item \texttt{*\_model.cif} - The main output file containing the predicted 3D structure of the protein in CIF format, which can be visualized using molecular visualization software,
+    \item \texttt{*\_confidences.json} - Detailed confidence scores for each residue in the predicted structure,
+    \item \texttt{*\_summary\_confidences.json} - A condensed version of the confidence scores providing an overview of prediction reliability,
+    \item \texttt{*\_ranking\_scores.csv} - A CSV file containing ranking scores for different model variants,
+    \item \texttt{*\_data.json} - Additional metadata about the prediction run.
 \end{itemize}
 
 For each prediction run, AlphaFold generates multiple samples (in this case, 5 samples) to account for the stochastic nature of the prediction process.

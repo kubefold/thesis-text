@@ -2,7 +2,7 @@
 This chapter discusses the architecture and implementation of the KubeFold project.
 
 
-\section{KubeFold Platform Concept}
+\section{KubeFold platform concept}
 KubeFold is software that operates on the Kubernetes platform in Operator manner.
 The project consists of the following components:
 \begin{itemize}
@@ -57,9 +57,9 @@ It represents a single protein conformation computation based on a provided amin
 An example definition is shown in listing~\ref{lst:protein_conformation_prediction}.
 Users can specify task settings such as:
 \begin{itemize}
-    \item the protein database that the AlphaFold algorithm should use for searching
-    \item the amino acid sequence as a string of letters
-    \item settings for the volume storing temporary computation files
+    \item the protein database that the AlphaFold algorithm should use for searching,
+    \item the amino acid sequence as a string of letters,
+    \item settings for the volume storing temporary computation files,
     \item specification of the AlphaFold model weights source.
     In the example code, the source is set as a remote HTTP server.
     \item target location for artifacts.
@@ -104,7 +104,7 @@ spec:
 \end{lstlisting}
 
 
-\section{Technologies}
+\section{Technology stack}
 All three components were written in Go version 1.24 (more about it in a section~\ref{subsec:go-programming-language}).
 This was a natural choice, as Go is the de facto standard for cloud software development.
 The source code of the components was archived in the Git repository~\cite{git} on GitHub\cite{github}.
@@ -126,15 +126,15 @@ The Kubernetes Operator component (described in more detail in~\ref{subsec:compo
 KubeBuilder is a framework that facilitates writing native Kubernetes operators.
 It creates project directory structure and immediately provides management of elements such as:
 \begin{itemize}
-    \item Leader election-some operator instances can run on multiple cluster nodes simultaneously, but if there is a need to select a single distinguished instance, the leader election selects it.
-    \item Generation of installation scripts-KubeBuilder has the ability to generate ready-to-use installation scripts that can later be used for automatic operator installation and all its dependencies in the cluster with a single \texttt{kubectl apply} command.
+    \item Leader election-some operator instances can run on multiple cluster nodes simultaneously, but if there is a need to select a single distinguished instance, the leader election selects it,
+    \item Generation of installation scripts-KubeBuilder has the ability to generate ready-to-use installation scripts that can later be used for automatic operator installation and all its dependencies in the cluster with a single \texttt{kubectl apply} command,
     \item Role and permission definitions.
     Kubernetes uses an authorization model called \textit{RBAC} (Role-Based Access Control)~\cite{k8s_rbac}.
     KubeBuilder checks what permissions an operator instance should have and ensures that the appropriate permissions are granted to it.
 \end{itemize}
 
 
-\section{Architecture}
+\section{System architecture}
 
 Both introduced CRD resources manage certain subordinate resources.
 
@@ -186,7 +186,7 @@ Similarly to the \texttt{ProteinDatabase} resource, the resources are connected 
 The resource dependency architecture is shown in figure~\ref{fig:proteinconformationprediction}.
 
 
-\section{Components Overview}
+\section{Components overview}
 
 \subsection{Kubernetes Operator}\label{subsec:component-operator}
 \textit{Code repository: \url{https://github.com/kubefold/operator}}
@@ -255,16 +255,16 @@ The container expects the following environment variables to be configured:
     \item \texttt{DATASET} - the name of the dataset.
     The acceptable values of this variable are predefined.
     They are:
-    \subitem \texttt{mgy\_clusters\_2022\_05.fa} - MGY Clusters
-    \subitem \texttt{bfd-first\_non\_consensus\_sequences.fasta} - BFD non-consensus sequences
-    \subitem \texttt{uniref90\_2022\_05.fa} - UniRef90
-    \subitem \texttt{uniprot\_all\_2021\_04.fa} - UniProt
-    \subitem \texttt{pdb\_2022\_09\_28\_mmcif\_files.tar} - PDB mmCIF files
-    \subitem \texttt{pdb\_seqres\_2022\_09\_28.fasta} - PDB sequence resources
-    \subitem \texttt{rnacentral\_active\_seq\_id\_90\_cov\_80\_linclust.fasta} - RNACentral
-    \subitem \texttt{nt\_rna\_2023\_02\_23\_clust\_seq\_id\_90\_cov\_80\_rep\_seq.fasta} - NT RNA
-    \subitem \texttt{rfam\_14\_9\_clust\_seq\_id\_90\_cov\_80\_rep\_seq.fasta} - RFam
-    \item \texttt{DESTINATION} - the path to the output directory.
+    \subitem \texttt{mgy\_clusters\_2022\_05.fa} - MGY Clusters,
+    \subitem \texttt{bfd-first\_non\_consensus\_sequences.fasta} - BFD non-consensus sequences,
+    \subitem \texttt{uniref90\_2022\_05.fa} - UniRef90,
+    \subitem \texttt{uniprot\_all\_2021\_04.fa} - UniProt,
+    \subitem \texttt{pdb\_2022\_09\_28\_mmcif\_files.tar} - PDB mmCIF files,
+    \subitem \texttt{pdb\_seqres\_2022\_09\_28.fasta} - PDB sequence resources,
+    \subitem \texttt{rnacentral\_active\_seq\_id\_90\_cov\_80\_linclust.fasta} - RNACentral,
+    \subitem \texttt{nt\_rna\_2023\_02\_23\_clust\_seq\_id\_90\_cov\_80\_rep\_seq.fasta} - NT RNA,
+    \subitem \texttt{rfam\_14\_9\_clust\_seq\_id\_90\_cov\_80\_rep\_seq.fasta} - RFam,
+    \item \texttt{DESTINATION} - the path to the output directory,
     \item \texttt{RATE} (optional) - the download speed limit expressed in kilobytes per second.
     The default process download does not have an upper limit set.
 \end{itemize}.
@@ -288,16 +288,16 @@ After successful completion or interrupted download, the process exits logging t
 
 The \textit{manager} component is responsible for three independent tasks:
 \begin{itemize}
-    \item configuring the \textt{fold\_input.json} file for the AlphaFold program.
-    \item sending computation artifacts to the AWS S3 service (more about it in section~\ref{subsec:amazon-s3-object-storage}).
-    \item queuing notifications using the AWS SNS / AWS End User Messaging service (more about it in section~\ref{subsec:amazon-sns})
+    \item configuring the \textt{fold\_input.json} file for the AlphaFold program,
+    \item sending computation artifacts to the AWS S3 service (more about it in section~\ref{subsec:amazon-s3-object-storage}),
+    \item queuing notifications using the AWS SNS / AWS End User Messaging service (more about it in section~\ref{subsec:amazon-sns}).
 \end{itemize}
 
 The selected operation depends on which environment variables are configured in the container.
 For each operation, two environment variables are mandatory:
 \begin{itemize}
-    \item \texttt{INPUT\_PATH} - the path to the AlphaFold data input directory
-    \item \texttt{OUTPUT\_PATH} - the path to the AlphaFold data output directory
+    \item \texttt{INPUT\_PATH} - the path to the AlphaFold data input directory,
+    \item \texttt{OUTPUT\_PATH} - the path to the AlphaFold data output directory.
 \end{itemize}
 
 To save the \textt{fold\_input.json} file, the \texttt{ENCODED\_INPUT} variable should be set, which should contain the encoded in \texttt{base64} JSON configuration.

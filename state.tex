@@ -1,47 +1,48 @@
+%! suppress = MissingLabel
 \chapter{State of the art}
 
 \section{Protein structure prediction problem}
-Protein structure prediction is a key problem in computational biology~\cite{alphafold3}, which involves determining the three-dimensional structure of a protein based on its amino acid sequence.
+Protein structure prediction is a key problem in computational biology~\cite{alphafold3}, which involves determining the three--dimensional structure of a protein based on its amino acid sequence.
 The spatial structure of a protein directly affects its biological function, and accurate conformation prediction allows understanding protein mechanisms and designing new drugs.
 This is a difficult task due to the enormous number of possible conformations and complex interactions between atoms.
 This problem becomes particularly important for proteins whose structures could not be determined by experimental methods due to technical difficulties.
 The application of predicted structures in personalized medicine and pharmacy represents one of the most promising directions in modern biotechnology.
 
-\subsection{Encoding three-dimensional protein structure}
+\subsection{Encoding three--dimensional protein structure}
 Amino acids in the polypeptide chain encode the spatial structure of the protein through their sequence and physicochemical properties~\cite{protein_folding}.
 Each amino acid has specific features, such as hydrophobicity, electrical charge, or size, which determine possible interactions and arrangement in space.
-The arrangement of amino acids in space is encoded in the so-called conformational code, which describes different levels of protein structure organization.
+The arrangement of amino acids in space is encoded in the so--called conformational code, which describes different levels of protein structure organization.
 
-Figure \ref{fig:protein-folding} illustrates how proteins fold into their three-dimensional structures, a process essential for their biological function~\cite{dill2012protein}.
+Figure~\ref{fig:protein-folding} illustrates how proteins fold into their three--dimensional structures, a process essential for their biological function~\cite{dill2012protein}.
 The folding process transforms a linear chain of amino acids into a specific spatial conformation that determines the protein's functional capabilities.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.8\textwidth]{images/folded.jpg}
-    \caption{Protein folding process showing the transformation from a linear amino acid chain to a three-dimensional functional structure}
+    \includegraphics[width=0.8\textwidth]{images/folded}
+    \caption{Protein folding process showing the transformation from a linear amino acid chain to a three--dimensional functional structure}
     \label{fig:protein-folding}
 \end{figure}
 
 The spatial structure of a protein is described at several hierarchical levels of organization~\cite{protein_folding, dill2012protein}:
 
 \begin{itemize}
-    \item Primary structure-linear sequence of amino acids connected by peptide bonds, which contains all information necessary to form the native structure,
-    \item Secondary structure-local structural motifs formed by hydrogen bonds between peptide groups, such as alpha helices and beta sheets,
-    \item Tertiary structure-global arrangement of the entire polypeptide chain stabilized by various interactions between amino acids,
-    \item Quaternary structure-the way multiple polypeptide chains associate into a functional protein complex.
+    \item Primary structure--linear sequence of amino acids connected by peptide bonds, which contains all information necessary to form the native structure,
+    \item Secondary structure--local structural motifs formed by hydrogen bonds between peptide groups, such as alpha helices and beta sheets,
+    \item Tertiary structure--global arrangement of the entire polypeptide chain stabilized by various interactions between amino acids,
+    \item Quaternary structure--the way multiple polypeptide chains associate into a functional protein complex.
 \end{itemize}
 
-\subsection{X-ray crystallography}
-X-ray crystallography is the fundamental experimental method for determining protein structures~\cite{xray_crystallography}, which involves analyzing the diffraction of X-rays on a protein crystal.
-X-rays scatter on the electrons of atoms forming the protein, and the diffraction pattern is recorded and mathematically analyzed.
+\subsection{X--ray crystallography}
+X--ray crystallography is the fundamental experimental method for determining protein structures~\cite{xray_crystallography}, which involves analyzing the diffraction of X--rays on a protein crystal.
+X--rays scatter on the electrons of atoms forming the protein, and the diffraction pattern is recorded and mathematically analyzed.
 Based on this, an electron density map is created, the analysis of which requires complex mathematical algorithms and knowledge of crystallography.
-Interpretation of electron density maps is a challenge often requiring manual fitting of the protein model by experienced researchers.
+Interpretation of electron density maps is a challenge, often requiring manual fitting of the protein model by experienced researchers.
 
 The process of protein crystallization is often the most difficult stage, requiring significant financial investments and advanced laboratory infrastructure.
 
 \subsection{Computational methods for protein structure prediction}
-Computational methods for protein structure prediction are divided into several main categories, among which homology-based methods use sequence similarity to proteins with known structures~\cite{baek2023overview}.
-Ab initio methods attempt to predict structure solely based on sequence and laws of physics~\cite{ab_initio_protein_folding}, while fold recognition methods match the sequence to known structural motifs.
+Computational methods for protein structure prediction are divided into several main categories, among which homology--based methods use sequence similarity to proteins with known structures~\cite{baek2023overview}.
+Ab initio methods attempt to predict structure solely based on a sequence and laws of physics~\cite{ab_initio_protein_folding}, while fold recognition methods match the sequence to known structural motifs.
 Each of these methods has its limitations and works best under specific conditions, depending on the availability of reference data.
 Hybrids of these methods often give better results than single approaches, combining advantages of different prediction techniques.
 
@@ -53,26 +54,26 @@ The development of cloud infrastructure has enabled democratization of access to
 A breakthrough in the field was the development of the AlphaFold algorithm by Google DeepMind, which uses neural networks to predict protein structures with accuracy comparable to experimental methods.
 AlphaFold2 revolutionized the field by winning the CASP14~\cite{casp} (Critical Assessment of protein Structure Prediction) competition in 2020~\cite{alphafold2, tunyasuvunakool2021casp14}.
 Deep learning methods have significantly accelerated the pace of scientific discoveries in structural biology, and the public release of the AlphaFold model has enabled researchers worldwide to use this technology in research and medical projects.
-Integration of AlphaFold results with other bioinformatics techniques has opened new possibilities in protein-protein interaction analysis and drug design.
-The latest version of the algorithm-AlphaFold 3-achieves protein structure prediction accuracy at the level of 90-95\% for single polypeptide chains, and for protein complexes, the accuracy reaches 80-85\%, which represents significant progress compared to previous versions~\cite{alphafold3}.
+Integration of AlphaFold results with other bioinformatics techniques has opened new possibilities in protein--protein interaction analysis and drug design.
+The latest version of the algorithm--AlphaFold 3--achieves protein structure prediction accuracy at the level of 90--95\% for single polypeptide chains, and for protein complexes, the accuracy reaches 80--85\%, which represents significant progress compared to previous versions~\cite{alphafold3}.
 
 
 \section{AlphaFold by Google Deepmind}
 
-AlphaFold represents a breakthrough in computational biology, developed by Google DeepMind to predict three-dimensional protein structures with unprecedented accuracy.
-This AI system revolutionized the field by achieving near-experimental accuracy in protein structure prediction.
+AlphaFold represents a breakthrough in computational biology, developed by Google DeepMind to predict three--dimensional protein structures with unprecedented accuracy.
+This AI system revolutionized the field by achieving near--experimental accuracy in protein structure prediction.
 
 \subsection{Preliminary information}
 
 AlphaFold emerged as the winner of the CASP14 competition in 2020, demonstrating remarkable accuracy in protein structure prediction.
 The system leverages deep learning techniques to predict protein structures from amino acid sequences.
 AlphaFold 2 represents a significant improvement over previous methods, with a median GDT score exceeding 90 for many targets.
-Later, AlphaFold 3 extended capabilities to predict protein-protein, protein-nucleic acid, and protein-ligand interactions.
+Later AlphaFold 3 extended capabilities to predict protein--protein, protein--nucleic acid, and protein--ligand interactions.
 The scientific impact includes accelerating drug discovery, understanding disease mechanisms, and designing novel proteins with specific functions.
 
 \subsection{Algorithm implementation}
 
-AlphaFold implements a novel neural network architecture combining attention mechanisms with structure-based learning.
+AlphaFold implements a novel neural network architecture combining attention mechanisms with structure--based learning.
 The algorithm processes protein sequences through multiple specialized neural network blocks.
 First, an evolutionary MSA transformer analyzes multiple sequence alignments to capture evolutionary patterns.
 Then, a structure module with invariant point attention integrates geometric constraints.
@@ -82,7 +83,7 @@ The implementation balances computational efficiency with prediction accuracy th
 
 \subsection{Program operation overview}
 
-AlphaFold operates in several distinct stages during protein structure prediction, as shown in Figure \ref{fig:alphafold}.
+AlphaFold operates in several distinct stages during protein structure prediction, as shown in Figure~\ref{fig:alphafold}.
 Initially, it searches sequence databases to build multiple sequence alignments for the target protein.
 This first stage requires only CPU resources and involves sequence similarity searches against large databases.
 Next, the system processes this data through its neural network architecture to generate initial structure predictions, a stage that exclusively requires GPU resources for efficient tensor operations.
@@ -92,7 +93,7 @@ Output formats include PDB files for 3D coordinates and additional files contain
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{images/alphafold.png}
+    \includegraphics[width=\textwidth]{images/alphafold}
     \caption{AlphaFold 3 computation stages}
     \label{fig:alphafold}
 \end{figure}
@@ -100,27 +101,27 @@ Output formats include PDB files for 3D coordinates and additional files contain
 \subsection{Required computational resources}
 
 AlphaFold demands substantial computational resources for effective operation.
-The system requires high-performance GPUs, preferably NVIDIA A100 or similar, with at least 16GB VRAM. Memory requirements range from 16GB for small proteins to 64GB+ for large complexes.
+The system requires high--performance GPUs, preferably NVIDIA A100 or similar, with at least 16GB VRAM. Memory requirements range from 16GB for small proteins to 64GB+ for large complexes.
 Storage needs include approximately 2TB for reference databases and additional space for output models.
 Prediction time varies significantly with protein size and complexity, ranging from 30 minutes for small proteins to several hours for complex structures.
-Cloud-based deployments typically costs between $10-$100 per prediction depending on computational requirements.
+Cloud--based deployments typically cost between $10--$100 per prediction depending on computational requirements.
 The high resource demands make AlphaFold particularly suitable for execution in specialized computing environments with access to dedicated hardware accelerators.
 
 
-\section{Computational clusters in cloud environment}
+\section{Computational clusters in a cloud environment}
 
 \subsection{Kubernetes Platform}
 
-Kubernetes is an open-source container orchestration software that automates the deployment, scaling, and management of applications~\cite{kubernetes, container_orchestration}.
+Kubernetes is an open--source container orchestration software that automates the deployment, scaling, and management of applications~\cite{kubernetes, container_orchestration}.
 It is currently the main solution in the area of computational cluster management.
-Kubernetes originates from Google's internal project called Borg, which was released as an open-source project in 2014.
+Kubernetes originates from Google's internal project called Borg, which was released as an open--source project in 2014.
 
 The main goal of Kubernetes is to provide a platform for running applications in a distributed environment.
 The system enables automatic management of computational resources in a heterogeneous hardware environment, encompassing different processor architectures and dedicated computational accelerators.
 Kubernetes eliminates many manual processes related to deploying and scaling containerized applications.
 All cluster components are controlled declaratively.
 
-The Kubernetes architecture is based on a master-worker node model.
+The Kubernetes architecture is based on a master--worker node model.
 The main control component (control plane) manages worker nodes, on which actual applications are run in containers.
 Each Kubernetes cluster consists of at least one master node and many worker nodes.
 This architecture provides high availability and fault tolerance.
@@ -167,7 +168,7 @@ Key capabilities of Kubernetes include:
 \begin{itemize}
     \item Automatic application recovery in case of failure,
     \item Load balancing and network traffic distribution,
-    \item Automatic horizontal scaling of applications based on load,
+    \item Automatic horizontal scaling of applications based on a load,
     \item Configuration and secrets management,
     \item Persistent storage management,
     \item Batch execution for batch jobs and computation scheduling.
@@ -184,22 +185,22 @@ This architecture provides the foundation for running containerized applications
 
 The Control Plane contains components that manage the entire cluster and store its state:
 \begin{itemize}
-    \item \textbf{kube-api-server} - the access point to the cluster, handling all API requests and providing the interface for communication,
-    \item \textbf{etcd} - a key-value database storing the entire cluster state, serving as the persistent storage for all cluster configuration,
-    \item \textbf{kube-scheduler} - responsible for assigning workloads to nodes based on resource requirements and constraints,
-    \item \textbf{kube-controller-manager} - supervises the cluster state, ensuring it matches the declared configuration by running controller processes,
-    \item \textbf{cloud-controller-manager} - integrates the cluster with cloud provider infrastructure, managing cloud-specific resources.
+    \item \textbf{kube--api--server} -- the access point to the cluster, handling all API requests and providing the interface for communication,
+    \item \textbf{etcd} -- a key--value database storing the entire cluster state, serving as the persistent storage for all cluster configuration,
+    \item \textbf{kube--scheduler} -- responsible for assigning workloads to nodes based on resource requirements and constraints,
+    \item \textbf{kube--controller--manager} -- supervises the cluster state, ensuring it matches the declared configuration by running controller processes,
+    \item \textbf{cloud--controller--manager} -- integrates the cluster with cloud provider infrastructure, managing cloud--specific resources.
 \end{itemize}
 
 Worker Nodes run actual workloads in the form of containers.
 Each worker node contains:
 \begin{itemize}
-    \item \textbf{kubelet} - an agent managing containers on the node, ensuring they are running and healthy,
-    \item \textbf{kube-proxy} - handling network traffic and ensuring routing between services across the cluster,
-    \item \textbf{Pods} - the basic deployment units containing one or more containers that share networking and storage resources.
+    \item \textbf{kubelet—}an agent managing containers on the node, ensuring they are running and healthy,
+    \item \textbf{kube--proxy——}handling network traffic and ensuring routing between services across the cluster,
+    \item \textbf{Pods——}the basic deployment units containing one or more containers that share networking and storage resources.
 \end{itemize}
 
-As described earlier in the Kubernetes Platform section, the system defines higher-level abstractions such as \texttt{Deployment} or \texttt{StatefulSet}.
+As described earlier in the Kubernetes Platform section, the system defines higher--level abstractions such as \texttt{Deployment} or \texttt{StatefulSet}.
 These enable declarative application management through configuration files in YAML format.
 The Service resource provides a stable access point to a group of Pods, abstracting the underlying infrastructure changes.
 
@@ -213,8 +214,8 @@ The system automatically responds to failures by restarting and relocating appli
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{images/kubernetes.png}
-    \caption{Kubernetes cluster architecture showing Control Plane components (kube-api-server, etcd, scheduler, controller manager, cloud-controller-manager) and Worker Nodes containing kubelet, kube-proxy, and pods. The diagram illustrates the communication between the control plane and worker nodes, with the cloud provider API interface for external resource management.}
+    \includegraphics[width=\textwidth]{images/kubernetes}
+    \caption{Kubernetes cluster architecture showing Control Plane components (kube--api--server, etcd, scheduler, controller manager, cloud--controller--manager) and Worker Nodes containing kubelet, kube--proxy, and pods. The diagram illustrates the communication between the control plane and worker nodes, with the cloud provider API interface for external resource management.}
     \label{fig:kubernetes-architecture}
 \end{figure}
 
@@ -341,7 +342,7 @@ Based on this, it activates the appropriate driver that creates a physical volum
 The newly created PersistentVolume is then automatically linked to the claim.
 Thanks to this mechanism, a cluster administrator can define different storage classes, and users can use them without knowing the technical details of the infrastructure.
 The system guarantees that the volume will exist as long as the claim associated with it exists.
-After deleting a PersistentVolumeClaim, the fate of the volume depends on the defined reclaim policy - it can be automatically deleted or preserved for reuse.
+After deleting a PersistentVolumeClaim, the fate of the volume depends on the defined reclaim policy—it can be automatically deleted or preserved for reuse.
 
 \subsection{Kubernetes clusters in the cloud}
 
@@ -366,27 +367,27 @@ EKS enables automatic scaling of the node group depending on demand, which trans
 Using Kubernetes clusters in the cloud brings significant benefits for computational projects.
 Elimination of costs for maintaining own infrastructure and access to specialized hardware without the need to purchase allow for flexible budget management.
 The billing model based on actual resource consumption works particularly well in the case of computations with varying intensity, such as protein conformation prediction.
-Automatic recovery mechanisms after failure and global availability ensure reliability and high-quality services.
+Automatic recovery mechanisms after failure and global availability ensure reliability and high--quality services.
 This combination of features makes cloud Kubernetes clusters an optimal environment for modern scientific applications.
 
 \subsection{Lustre volumes}\label{subsec:lustre-volumes}
 
 Lustre is a distributed file system, created by Cluster File Systems in 2003~\cite{lustre_fs}.
-This system was designed for high-performance computing clusters.
+This system was designed for high--performance computing clusters.
 Currently, the development of Lustre is managed by the OpenSFS (Open Scalable File Systems) organization.
 
 The Lustre file system consists of several main components, as shown in Figure~\ref{fig:lustre-arch}:
 \begin{itemize}
-    \item Metadata servers (MDS) - store information about the file system structure, directories, and permissions,
-    \item Object storage servers (OSS) - responsible for storing actual data and handling input/output operations,
-    \item Clients - nodes that mount the file system and use it,
-    \item Metadata target devices (MDT) - store metadata on block devices,
-    \item Object storage targets (OST) - store file data on block devices.
+    \item Metadata servers (MDS) -- store information about the file system structure, directories, and permissions,
+    \item Object storage servers (OSS) -- responsible for storing actual data and handling input/output operations,
+    \item Clients—nodes that mount the file system and use it,
+    \item Metadata target devices (MDT) -- store metadata on block devices,
+    \item Object storage targets (OST) -- store file data on block devices.
 \end{itemize}
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{images/lustre.png}
+    \includegraphics[width=\textwidth]{images/lustre}
     \caption{Lustre distributed file system architecture showing the relationships between metadata servers, object storage servers, and clients.}
     \label{fig:lustre-arch}
 \end{figure}
@@ -403,11 +404,11 @@ The system's throughput scales linearly with the addition of more object servers
 
 Main features of the Lustre file system:
 \begin{itemize}
-    \item High scalability - ability to handle petabytes of data and thousands of nodes,
-    \item High throughput - ability to achieve throughput in the terabit per second range,
-    \item Cache coherence - guarantee of data consistency between all clients,
-    \item Fault tolerance - ability to work despite failure of individual components,
-    \item Support for multiple access protocols - POSIX, MPI-IO, HDFS.
+    \item High scalability—ability to handle petabytes of data and thousands of nodes,
+    \item High throughput—ability to achieve throughput in the terabit per second range,
+    \item Cache coherence—guarantee of data consistency between all clients,
+    \item Fault tolerance—ability to work despite failure of individual components,
+    \item Support for multiple access protocols—POSIX, MPI--IO, HDFS\@.
 \end{itemize}
 
 In the KubeFold project, Lustre is a key component for storing protein databases.
@@ -422,12 +423,12 @@ Examples of applications include physical simulations, climate modeling, and gen
 
 \subsection{Amazon FSx for Lustre}\label{subsec:amazon-fsx-for-lustre}
 
-Amazon FSx for Lustre is a fully managed service that provides high-performance Lustre file systems in the AWS cloud~\cite{amazon_fsx}.
+Amazon FSx for Lustre is a fully managed service that provides high--performance Lustre file systems in the AWS cloud~\cite{aws_fsx}.
 The service automatically handles all the complexity of setting up and managing Lustre infrastructure, including server provisioning, software configuration, and system maintenance.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{images/fsx.png}
+    \includegraphics[width=\textwidth]{images/fsx}
     \caption{Architecture diagram showing EKS cluster connection to FSx for Lustre volume}
     \label{fig:fsx-architecture}
 \end{figure}
@@ -435,7 +436,7 @@ The service automatically handles all the complexity of setting up and managing 
 Key features of FSx for Lustre include:
 \begin{itemize}
     \item Automatic scaling of storage capacity and performance,
-    \item Built-in data protection with automatic backups,
+    \item Built--in data protection with automatic backups,
     \item Native integration with AWS services like EC2 and EKS,
     \item Support for multiple storage deployment options (scratch, persistent),
     \item Throughput capacity up to hundreds of GB per second.
@@ -443,11 +444,11 @@ Key features of FSx for Lustre include:
 
 The service offers two deployment types:
 \begin{itemize}
-    \item Scratch - optimized for temporary storage and shorter-term processing, with higher performance,
-    \item Persistent - designed for longer-term storage with data replication and backup support.
+    \item Scratch—optimized for temporary storage and shorter--term processing, with higher performance,
+    \item Persistent—designed for longer--term storage with data replication and backup support.
 \end{itemize}
 
-In the context of the KubeFold project, FSx for Lustre provides high-performance storage for AlphaFold databases and computation results, as shown in Figure \ref{fig:fsx-architecture}.
+In the context of the KubeFold project, FSx for Lustre provides high--performance storage for AlphaFold databases and computation results, as shown in Figure~\ref{fig:fsx-architecture}.
 The automatic management and scaling capabilities simplify operations while maintaining the performance required for protein structure predictions.
 
 \subsection{Amazon S3 object storage}\label{subsec:amazon-s3-object-storage}
@@ -489,8 +490,8 @@ The service offers the following capabilities:
 
 The system handles two types of SMS messages:
 \begin{itemize}
-    \item Promotional - optimized for cost,
-    \item Transactional - optimized for delivery reliability.
+    \item Promotional—optimized for cost,
+    \item Transactional—optimized for delivery reliability.
 \end{itemize}
 
 The service provides global reach through cooperation with multiple mobile operators.
@@ -540,11 +541,11 @@ The operator consists of several key components working together to manage custo
 The core components of an operator architecture include:
 
 \begin{itemize}
-    \item Custom Resource Definition (CRD) - Defines the schema and validation rules for custom resources,
-    \item Controller - Implements the business logic and reconciliation loop,
-    \item Client - Interfaces with the Kubernetes API to read and modify resources,
-    \item Cache - Maintains an in-memory copy of watched resources for efficiency,
-    \item Work Queue - Buffers reconciliation requests to handle them sequentially.
+    \item Custom Resource Definition (CRD)—Defines the schema and validation rules for custom resources,
+    \item Controller -- Implements the business logic and reconciliation loop,
+    \item Client -- Interfaces with the Kubernetes API to read and modify resources,
+    \item Cache -- Maintains an in--memory copy of watched resources for efficiency,
+    \item Work Queue -- Buffers reconciliation requests to handle them sequentially.
 \end{itemize}
 
 The reconciliation loop follows these main steps:
@@ -556,28 +557,28 @@ The reconciliation loop follows these main steps:
     \item Update status of the custom resource.
 \end{enumerate}
 
-Figure \ref{fig:kubernetes-operator-flow} illustrates the typical interaction flow between components in a Kubernetes operator:
+Figure~\ref{fig:kubernetes-operator-flow} illustrates the typical interaction flow between components in a Kubernetes operator:
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=\textwidth]{images/kubernetes_operator_flow.png}
+    \includegraphics[width=\textwidth]{images/kubernetes_operator_flow}
     \caption{Kubernetes Operator Sequence Diagram demonstrating a reconciliation loop}
     \label{fig:kubernetes-operator-flow}
 \end{figure}
 
-The operator pattern enables domain-specific knowledge to be encoded into software that can automatically manage complex applications.
+The operator pattern enables domain--specific knowledge to be encoded into software that can automatically manage complex applications.
 This automation reduces operational overhead and helps maintain consistency across deployments.
 
 \subsection{Go programming language}\label{subsec:go-programming-language}
 
 Go was created in 2007 by a Google team consisting of Robert Griesemer, Rob Pike, and Ken Thompson~\cite{golang}.
-Google needed a language that would streamline the creation of large-scale server systems and simplify the software development process in large programming teams.
+Google needed a language that would streamline the creation of large--scale server systems and simplify the software development process in large programming teams.
 
 The first public version of the language was released in 2009.
 The language was created with the intention of building scalable server systems that could handle Google's growing infrastructure.
-The creators wanted to combine the simplicity of Python with the efficiency of C.
+The creators wanted to combine the simplicity of Python with the efficiency of C\@.
 
-The main features of Go are simple syntax, built-in concurrency support, and efficient compilation.
+The main features of Go are simple syntax, built--in concurrency support, and efficient compilation.
 The language offers static typing and automatic memory management.
 The Go standard library provides rich support for network operations and concurrent processing.
 

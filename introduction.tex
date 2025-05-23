@@ -1,3 +1,6 @@
+%! suppress = MissingLabel
+
+
 \chapter{Introduction}
 
 
@@ -7,17 +10,17 @@
 \section{Motivation}
 
 Predicting the conformational structure of proteins represents a fundamental challenge in biological sciences, with crucial significance in areas such as the pharmaceutical industry.
-Understanding the three-dimensional structure of proteins is essential for designing new drugs.
-Knowledge of the spatial structure of a protein allows us to understand its biological function, mechanism of action, and potential interactions with other molecules.
+Understanding the three--dimensional structure of proteins is essential for designing new drugs.
+Knowledge of the protein spatial structure allows us to understand its biological function, mechanism of action, and potential interactions with other molecules.
 This is particularly important in the process of discovering new therapeutic substances.
 
 The main motivation for creating the KubeFold project was recognizing a significant technological gap in the infrastructure for protein structure prediction.
 Although algorithms such as AlphaFold ~\cite{alphafold3} have achieved unprecedented success in modeling protein conformations, their practical application often requires specialized knowledge in IT infrastructure, which creates a barrier for many researchers in the fields of molecular biology or bioinformatics.
 
 Previous approaches to running AlphaFold were often based on manual configuration of the computational environment, which involved many challenges: from downloading and managing gigantic protein databases (on the order of terabytes), through configuring hardware resources (including specialized GPU accelerators), to optimizing workflow and managing computational artifacts.
-This process was time-consuming, error-prone, and required competencies across multiple disciplines simultaneously.
+This process was time--consuming, error--prone, and required competencies across multiple disciplines simultaneously.
 
-KubeFold aims to overcome these challenges by providing an automated, scalable, and easy-to-use platform that hides the infrastructure layer from the end user.
+KubeFold aims to overcome these challenges by providing an automated, scalable, and easy--to--use platform that hides the infrastructure layer from the end user.
 By leveraging containerization technology and Kubernetes orchestration ~\cite{kubernetes, container_orchestration}, the system provides automated resource management and flexible scaling, allowing scientists to focus on biological research rather than technical aspects.
 
 
@@ -37,4 +40,4 @@ The implementation of this goal includes the following tasks:
 
 The scope of work encompasses the full software development lifecycle: from analyzing problems in existing solutions, through architecture design, component implementation, to verification of system operation in a Kubernetes environment.
 
-The project does not include modifications to the AlphaFold algorithm, but focuses on automating its execution in a cloud environment using containerization technology.
+The project does not include modifications to the AlphaFold algorithm but focuses on automating its execution in a cloud environment using containerization technology.

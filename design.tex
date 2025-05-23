@@ -1,3 +1,6 @@
+%! suppress = MissingLabel
+
+
 \chapter{System design and implementation}
 This chapter discusses the architecture and implementation of the KubeFold project.
 
@@ -6,12 +9,12 @@ This chapter discusses the architecture and implementation of the KubeFold proje
 KubeFold is software that operates on the Kubernetes platform in Operator manner.
 The project consists of the following components:
 \begin{itemize}
-    \item Kubernetes Operator - a component that manages business logic.
+    \item Kubernetes Operator -- a component that manages business logic.
     It ensures proper deployment and management of pods responsible for downloading protein databases and performing computations.
     This component is described in detail in section~\ref{subsec:component-operator}.
-    \item Downloader Component - controls the process of downloading and decompressing protein databases.
+    \item Downloader Component -- controls the process of downloading and decompressing protein databases.
     A detailed description can be found in section~\ref{subsec:component-downloader}.
-    \item Manager Component - handles additional operations around computations such as artifact delivery or sending notifications.
+    \item Manager Component -- handles additional operations around computations such as artifact delivery or sending notifications.
     It is described in section~\ref{subsec:component-manager}.
 \end{itemize}
 
@@ -26,6 +29,7 @@ In the example code, the class named \texttt{fsx-sc} is specified, which connect
 From the user's perspective, this resource can be managed using \texttt{kubectl} as shown in figure~\ref{fig:proteindatabase_terminal}.
 
 \begin{lstlisting}[language=yaml,caption={Example \texttt{ProteinDatabase} resource definition},label={lst:protein_database}]
+#file: noinspection KubernetesUnknownResourcesInspection
 apiVersion: data.kubefold.io/v1
 kind: ProteinDatabase
 metadata:
@@ -77,6 +81,7 @@ Management can be done using \texttt{kubectl} as shown in figure~\ref{fig:protei
 \end{figure}
 
 \begin{lstlisting}[language=yaml,caption={Example \texttt{ProteinConformationPrediction} resource definition},label={lst:protein_conformation_prediction}]
+#file: noinspection KubernetesUnknownResourcesInspection
 apiVersion: data.kubefold.io/v1
 kind: ProteinConformationPrediction
 metadata:
@@ -126,10 +131,10 @@ The Kubernetes Operator component (described in more detail in~\ref{subsec:compo
 KubeBuilder is a framework that facilitates writing native Kubernetes operators.
 It creates project directory structure and immediately provides management of elements such as:
 \begin{itemize}
-    \item Leader election-some operator instances can run on multiple cluster nodes simultaneously, but if there is a need to select a single distinguished instance, the leader election selects it,
-    \item Generation of installation scripts-KubeBuilder has the ability to generate ready-to-use installation scripts that can later be used for automatic operator installation and all its dependencies in the cluster with a single \texttt{kubectl apply} command,
+    \item Leader election--some operator instances can run on multiple cluster nodes simultaneously, but if there is a need to select a single distinguished instance, the leader election selects it,
+    \item Generation of installation scripts--KubeBuilder has the ability to generate ready--to--use installation scripts that can later be used for automatic operator installation and all its dependencies in the cluster with a single \texttt{kubectl apply} command,
     \item Role and permission definitions.
-    Kubernetes uses an authorization model called \textit{RBAC} (Role-Based Access Control)~\cite{k8s_rbac}.
+    Kubernetes uses an authorization model called \textit{RBAC} (Role--Based Access Control)~\cite{k8s_rbac}.
     KubeBuilder checks what permissions an operator instance should have and ensures that the appropriate permissions are granted to it.
 \end{itemize}
 
@@ -170,7 +175,7 @@ On the other hand, the \texttt{ProteinConformationPrediction} resource manages t
     In this phase, AlphaFold searches existing protein databases to find matches.
     This phase takes place on scheduled instances optimized for CPU. The pod uses the AlphaFold image.
     \item Prediction Phase.
-    This phase is when the algorithm performs the actual prediction of the three-dimensional structure of the protein.
+    This phase is when the algorithm performs the actual prediction of the three--dimensional structure of the protein.
     In this phase, pods are scheduled on instances equipped with tensor computing accelerators.
     The pod also uses the AlphaFold image.
     \item Post Processing Phase.
@@ -206,7 +211,7 @@ In case of a new resource of this type appearing, the following operations are p
     \item Creates a new \textt{PersistentVolumeClaim} and sets the \texttt{storageClassName} parameter,
     \item When the \textt{PersistentVolumeClaim} is bound to a specific volume, it creates several jobs corresponding to downloading individual databases.
     Each pod has a mounted this \textt{PVC}.
-    \item Starts a log observer-a separate goroutine constantly monitoring job states, pod states, and reading logs from them.
+    \item Starts a log observer--a separate goroutine constantly monitoring job states, pod states, and reading logs from them.
     Thanks to the logs, it is able to dynamically update the \texttt{ProteinDatabase} status informing the user about the progress of downloading and also monitor the connection throughput.
 \end{enumerate}
 These operations are shown in figure~\ref{fig:proteindatabase_controller}.
@@ -236,12 +241,11 @@ The business logic (shown in figure~\ref{fig:proteinconformationprediction_contr
     This file is created in this step using a special \textit{initContainer} ~\cite{k8s_init_containers}.
     The file content is prepared in the operator, then it is encoded to \texttt{base64} and injected into the init container via environment variables.
     The init container uses the \textit{manager} component image (described in~\ref{subsec:component-manager}).
-    \item Starts a \textit{Job} corresponding to predicting the three-dimensional structure of the protein.
+    \item Starts a \textit{Job} corresponding to predicting the three--dimensional structure of the protein.
     The controller mounts the previously used volume, which contains the state from the alignment phase.
-    This \textit{Job} has \textit{nodeAffinity} set so it can be scheduled on high-performance GPU nodes.
+    This \textit{Job} has \textit{nodeAffinity} set so it can be scheduled on high--performance GPU nodes.
     \item Starts a \textit{Job} for post processing.
-    This step loads computation artifacts and sends them to AWS S3. It also handles queuing notifications (e.g.
-    SMS) for individual research team members.
+    This step loads computation artifacts and sends them to AWS S3. It also handles queuing notifications (e.g.\     SMS) for individual research team members.
 \end{enumerate}
 
 \subsection{Downloader Component}\label{subsec:component-downloader}
@@ -252,20 +256,20 @@ Running this component in a container automatically starts download process.
 The container expects the following environment variables to be configured:
 
 \begin{itemize}
-    \item \texttt{DATASET} - the name of the dataset.
+    \item \texttt{DATASET} -- the name of the dataset.
     The acceptable values of this variable are predefined.
     They are:
-    \subitem \texttt{mgy\_clusters\_2022\_05.fa} - MGY Clusters,
-    \subitem \texttt{bfd-first\_non\_consensus\_sequences.fasta} - BFD non-consensus sequences,
-    \subitem \texttt{uniref90\_2022\_05.fa} - UniRef90,
-    \subitem \texttt{uniprot\_all\_2021\_04.fa} - UniProt,
-    \subitem \texttt{pdb\_2022\_09\_28\_mmcif\_files.tar} - PDB mmCIF files,
-    \subitem \texttt{pdb\_seqres\_2022\_09\_28.fasta} - PDB sequence resources,
-    \subitem \texttt{rnacentral\_active\_seq\_id\_90\_cov\_80\_linclust.fasta} - RNACentral,
-    \subitem \texttt{nt\_rna\_2023\_02\_23\_clust\_seq\_id\_90\_cov\_80\_rep\_seq.fasta} - NT RNA,
-    \subitem \texttt{rfam\_14\_9\_clust\_seq\_id\_90\_cov\_80\_rep\_seq.fasta} - RFam,
-    \item \texttt{DESTINATION} - the path to the output directory,
-    \item \texttt{RATE} (optional) - the download speed limit expressed in kilobytes per second.
+    \subitem \texttt{mgy\_clusters\_2022\_05.fa} -- MGY Clusters,
+    \subitem \texttt{bfd-first\_non\_consensus\_sequences.fasta} -- BFD non--consensus sequences,
+    \subitem \texttt{uniref90\_2022\_05.fa} -- UniRef90,
+    \subitem \texttt{uniprot\_all\_2021\_04.fa} -- UniProt,
+    \subitem \texttt{pdb\_2022\_09\_28\_mmcif\_files.tar} -- PDB mmCIF files,
+    \subitem \texttt{pdb\_seqres\_2022\_09\_28.fasta} -- PDB sequence resources,
+    \subitem \texttt{rnacentral\_active\_seq\_id\_90\_cov\_80\_linclust.fasta} -- RNACentral,
+    \subitem \texttt{nt\_rna\_2023\_02\_23\_clust\_seq\_id\_90\_cov\_80\_rep\_seq.fasta} -- NT RNA,
+    \subitem \texttt{rfam\_14\_9\_clust\_seq\_id\_90\_cov\_80\_rep\_seq.fasta} -- RFam,
+    \item \texttt{DESTINATION} -- the path to the output directory,
+    \item \texttt{RATE} (optional) -- the download speed limit expressed in kilobytes per second.
     The default process download does not have an upper limit set.
 \end{itemize}.
 
@@ -296,15 +300,15 @@ The \textit{manager} component is responsible for three independent tasks:
 The selected operation depends on which environment variables are configured in the container.
 For each operation, two environment variables are mandatory:
 \begin{itemize}
-    \item \texttt{INPUT\_PATH} - the path to the AlphaFold data input directory,
-    \item \texttt{OUTPUT\_PATH} - the path to the AlphaFold data output directory.
+    \item \texttt{INPUT\_PATH} -- the path to the AlphaFold data input directory,
+    \item \texttt{OUTPUT\_PATH} -- the path to the AlphaFold data output directory.
 \end{itemize}
 
 To save the \textt{fold\_input.json} file, the \texttt{ENCODED\_INPUT} variable should be set, which should contain the encoded in \texttt{base64} JSON configuration.
 
 To send artifacts, the \texttt{BUCKET} environment variable should be set to the S3 bucket path (full URL, including \textt{s3:\/\/}).
 To send a notification using the AWS End User Messaging service, the container must have the \texttt{NOTIFICATION\_PHONES} and \texttt{NOTIFICATION\_MESSAGE} variables set.
-The variable with phone numbers can contain more than one recipient-in such a case, phone numbers should be provided as a comma-separated list.
+The variable with phone numbers can contain more than one recipient--in such a case, phone numbers should be provided as a comma--separated list.
 
 If using AWS services, the AWS client variables should be configured.
 This can be done using environment variables such as \texttt{AWS\_ACCESS\_KEY\_ID} and \texttt{AWS\_SECRET\_ACCESS\_KEY}.

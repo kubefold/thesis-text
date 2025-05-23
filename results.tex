@@ -1,3 +1,4 @@
+%! suppress = MissingLabel
 \chapter{Results}
 %
 %\section{Implementation of the KubeFold Project}
@@ -16,7 +17,7 @@
 %    \item Conducted several protein conformation computations to test the solution.
 %\end{itemize}
 
-
+%This is correct english statement
 \section{Comparison of alternative solutions}
 
 The AlphaFold algorithm has significantly influenced the development of bioinformatics, offering breakthrough capabilities in predicting protein spatial structures.
@@ -26,12 +27,12 @@ However, \textbf{KubeFold} – the system developed as part of this work – sta
 
 \subsection*{OpenFold}
 
-OpenFold is an open-source reimplementation of AlphaFold2, written in Python using the PyTorch library.
+OpenFold is an open--source reimplementation of AlphaFold2, written in Python using the PyTorch library.
 This project is primarily targeted at research teams and institutions that have extensive computational infrastructure and need full control over the prediction process.
 OpenFold enables, among other things, training models from scratch, testing architecture modifications, and running tasks in distributed environments (HPC, cloud).
 
 Due to the advanced nature of the tool, its implementation requires high expertise in machine learning, container management, and cloud environment configuration.
-Significant hardware resources (e.g., A100-class GPU cards) are also necessary, which may be an entry barrier for smaller teams.
+Significant hardware resources (e.g., A100--class GPU cards) are also necessary, which may be an entry barrier for smaller teams.
 
 \subsection*{ColabFold}
 
@@ -62,7 +63,7 @@ A detailed comparison of the computational infrastructure for OpenFold, ColabFol
         \hline
         \textbf{Platform}                           & HPC clusters, cloud (AWS, GCP)            & Google Colab, local environments & Kubernetes + AWS EKS \\
         \hline
-        \textbf{Hardware requirements}              & High (GPU A100, RAM 64GB+)                & Low (free GPU in Colab) & Medium-high, dynamically scalable \\
+        \textbf{Hardware requirements}              & High (GPU A100, RAM 64GB+)                & Low (free GPU in Colab) & Medium--high, dynamically scalable \\
         \hline
         \textbf{Automation}                         & Manual task and environment configuration & None, manual handling by user & Full automation through Kubernetes operator \\
         \hline
@@ -95,7 +96,7 @@ Setting up appropriate subnet configurations, VPC, and CSI drivers required a si
 \section{Conclusions}
 
 The KubeFold project successfully addresses the challenges of protein structure prediction by leveraging modern cloud technologies and Kubernetes orchestration.
-The implementation demonstrates that complex scientific computations can be effectively managed through a declarative, operator-based approach, significantly reducing operational overhead.
-The platform's architecture, combining AWS services like FSx for Lustre and S3 with Kubernetes orchestration, provides a scalable and cost-effective solution for running AlphaFold predictions.
-The separation of database management and computation phases, along with automated resource provisioning and cleanup, makes the system particularly suitable for research environments requiring high-throughput protein structure predictions.
-This work demonstrates how cloud-native technologies can transform complex scientific workflows into manageable, automated processes, potentially accelerating discoveries in structural biology and drug development.
+The implementation demonstrates that complex scientific computations can be effectively managed through a declarative, operator--based approach, significantly reducing operational overhead.
+The platform's architecture, combining AWS services like FSx for Lustre and S3 with Kubernetes orchestration, provides a scalable and cost--effective solution for running AlphaFold predictions.
+The separation of database management and computation phases, along with automated resource provisioning and cleanup, makes the system particularly suitable for research environments requiring high--throughput protein structure predictions.
+This work demonstrates how cloud--native technologies can transform complex scientific workflows into manageable, automated processes, potentially accelerating discoveries in structural biology and drug development.

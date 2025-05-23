@@ -14,8 +14,8 @@
 
 !comparison of other solutions - sprawdzic czy tekst jest w porzadku
 
-why scalability?
-automation - mniejszaz wiedza ekspercka
+!why scalability?
+!automation - mniejszaz wiedza ekspercka
 
 !summary - że done,
 

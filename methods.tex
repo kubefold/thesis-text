@@ -4,6 +4,7 @@ This chapter aims to describe the evaluation methods of the KubeFold platform on
 
 \section{Runtime environment}
 
+%TODO jakis opis kontekstu zanim sie powie o tym, e trzeba uruchomic eksctl - co wyporodukowalismy w poprzednim rozdziale, co nam daje AWS, co i po co uruchamiamy, jak instalujemy, gdzie i jak ladujey dane wsadowe etc.
 The project was run on the AWS EKS platform~\ref{subsec:aws-eks}.
 The \texttt{eksctl} tool was used to quickly launch the cluster, with the cluster configured in the \texttt{eu-central-1} region with two node groups - CPU and GPU.
 The configuration is shown in listing~\ref{lst:eksctl}.
@@ -125,12 +126,15 @@ echo 'Done'
 
 A \texttt{up.sh} script was prepared for quickly setting up the environment with all necessary dependencies, which is shown in listing~\ref{lst:up-script}.
 After executing the script, you can directly proceed to start working with KubeFold.
-If the setup was installed correctly, running the command \texttt{kubectl get pods -A} should show output similar to that in screenshot~\ref{fig:eks_pods_terminal}.
+%To trzeba lepoej omowic co jest na screenie - jak sprawdzic, ze jest ok etc.
+If the setup was installed correctly, running the command:\newline
+\texttt{kubectl get pods -A} \newline
+should show output similar to that in screenshot~\ref{fig:eks_pods_terminal}.
 
 \begin{figure}[htbp]
     \centering
     \includegraphics[width=\textwidth]{images/eks_pods_terminal}
-    \caption{\texttt{kubectl get pods} output after successful cluster installation}
+    \caption{Command \texttt{kubectl get pods} output after successful cluster installation}
     \label{fig:eks_pods_terminal}
 \end{figure}
 

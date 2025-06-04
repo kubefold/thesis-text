@@ -4,8 +4,15 @@ This chapter aims to describe the evaluation methods of the KubeFold platform on
 
 \section{Runtime environment}
 
+The previous chapter described the architecture and implementation of the KubeFold project.
+The final result is a set of three executable files that must be run in a cluster.
+Each of them was placed in a container image, and the images were pushed to the GitHub Container Registry (\textit{ghcr.io})~\cite{ghcr}.
+To run the project, a temporary Kubernetes cluster was set up, on which the operator was installed along with its components.
+
 %TODO jakis opis kontekstu zanim sie powie o tym, e trzeba uruchomic eksctl - co wyporodukowalismy w poprzednim rozdziale, co nam daje AWS, co i po co uruchamiamy, jak instalujemy, gdzie i jak ladujey dane wsadowe etc.
 The project was run on the AWS EKS platform~\ref{subsec:aws-eks}.
+AWS EKS is a managed service for running Kubernetes clusters without the need to configure key Kubernetes platform components such as Control Plane, which are difficult to install.
+This is one of the options for running a cluster, but it would also be possible to set up a cluster locally or on a bare-metal server.
 The \texttt{eksctl} tool was used to quickly launch the cluster, with the cluster configured in the \texttt{eu-central-1} region with two node groups - CPU and GPU.
 The configuration is shown in listing~\ref{lst:eksctl}.
 It's worth noting the attached AWS IAM policies that grant permissions for node groups to services such as AWS S3, AWS SNS, and AWS FSx.

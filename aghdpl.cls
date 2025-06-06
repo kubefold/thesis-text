@@ -170,7 +170,7 @@
 
     {\sffamily\Large\itshape
     \IfStrEqCase{\ThesisLanguage}{%
-%            {pl}{\@titlePL}
+            {pl}{\@titlePL}
             {en}{\@titleEN}
     }
     }
@@ -179,7 +179,7 @@
     {\sffamily\Large\itshape
     \IfStrEqCase{\ThesisLanguage}{%
             {pl}{\@titleEN}
-%            {en}{\@titlePL}
+            {en}{\@titlePL}
     }
     }
     \vspace{\fill}

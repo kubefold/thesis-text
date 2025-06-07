@@ -1,0 +1,43 @@
+Polish:
+Title:
+
+Operator Kubernetes do harmonogramowania zadań przewidywania konformacji białek na klastrach obliczeniowych w chmurze
+
+Description:
+
+Celem pracy jest zaprojektowanie i zaimplementowanie operatora Kubernetes, który automatyzuje uruchamianie algorytmu AlphaFold w klastrach obliczeniowych w chmurze. Projekt obejmuje trzy główne komponenty odpowiedzialne za instalację i aktualizację baz danych białek oraz za harmonogramowanie zadań przewidywania trójwymiarowej struktury białka na podstawie zadanej sekwencji aminokwasów. Dzięki temu zespoły badawcze mogą skupić się na analizie wyników, zamiast na zarządzaniu infrastrukturą.
+
+W pracy przedstawiono szczegółową architekturę operatora Kubernetes oraz opisano zależności i przepływ danych pomiędzy poszczególnymi modułami. System zweryfikowano na rzeczywistym klastrze Kubernetes w środowisku AWS, demonstrując pełną automatyzację przygotowania infrastruktury niezbędnej do obliczeń konformacyjnych.
+
+Keywords:
+Operator Kubernetes
+AlphaFold
+Automatyzacja
+Chmura obliczeniowa
+Konformacja białka
+Aminokwasy
+Infrastruktura
+Orkiestracja
+Harmonogramowanie
+
+English:
+Title:
+
+Kubernetes Operator for scheduling protein conformation prediction workloads on cloud computing clusters
+
+Description:
+
+The aim of this thesis is to design and implement a Kubernetes operator that automates the execution of the AlphaFold algorithm in cloud-based compute clusters. The project comprises three main components responsible for installing and updating protein databases, as well as scheduling tasks to predict a protein’s three-dimensional structure from a given amino acid sequence. This allows research teams to focus on result analysis rather than infrastructure management.
+
+The thesis details the operator’s system architecture and describes the dependencies and data flow between its modules. The solution was validated on a real AWS Kubernetes cluster, demonstrating full automation of the infrastructure setup required for conformational predictions.
+
+Keywords:
+Kubernetes operator
+AlphaFold
+Automation
+Cloud computing
+Protein conformation
+Amino acids
+Infrastructure
+Orchestration
+Scheduling

@@ -4,57 +4,55 @@
 \chapter{State of the art}
 
 
-\section{Machine Learning Infrastructure}
+\section{Infrastructure for Machine Learning}
 
-The scientific literature proposes various patterns and tools for managing the infrastructure necessary for machine learning computations, with particular emphasis on cloud solutions and container orchestration.
-Below are two selected articles that discuss the implementation of a bioinformatics application on a computing cluster along with key architectural elements.
+The scientific literature proposes a range of patterns and tools for managing the infrastructure required for machine learning computations, with particular emphasis on cloud-based solutions and container orchestration.
+Below are two selected articles discussing the deployment of bioinformatics applications on a computational cluster, as well as a project that automates these approaches.
 
 \subsection{Foldy}
 
-In the paper \textit{Foldy: a web application for interactive protein structure analysis}, the authors propose a complete deployment of the \textit{Foldy} application on a Kubernetes cluster, using the Helm tool for automating installation and configuration~\cite{foldy,helm}.
-The main components of the architecture are:
+In the paper \textit{Foldy: a web application for interactive protein structure analysis}, the authors propose a complete deployment of the \textit{Foldy} application on a Kubernetes cluster, using Helm for automated installation and configuration~\cite{foldy,helm}.
+The application allows users without advanced bioinformatics knowledge to predict protein structures (AlphaFold), dock ligands (DiffDock, AutoDock Vina), and visualize domains (Pfam).
+
+The application deployment process assumes:
 \begin{itemize}
-    \item \textbf{Frontend} – a single React page providing the user interface, wrapped in a Docker image;
-    \item \textbf{Backend/API} – a server written in Python (Flask/FastAPI), responsible for communication with the database and workers;
-    \item \textbf{Computational workers} – containers performing protein structure analysis tasks (e.g., calling AlphaFold modules), run as separate Jobs in Kubernetes;
-    \item \textbf{Data storage} – protein databases managed by a server service and mounted as PersistentVolumeClaims (lacking a fully cloud-native solution like object storage)~\cite{foldy};
-    \item \textbf{Helm orchestration} – a single chart defining Deployments, Services, Ingress, and ConfigMaps, with configuration values (including CPU/RAM limits, number of replicas) passed through \texttt{values.yaml}~\cite{helm}.
+    \item manual provisioning of infrastructure resources: domain name, static IP address, Kubernetes cluster, and database;
+    \item automatic deployment of the frontend, backend, and computational workers with a single \texttt{helm install} command;
+    \item the ability to run workers locally (on private resources) using a Docker image or bash scripts if Docker is not supported.
 \end{itemize}
-Additionally, the authors describe:
-\begin{itemize}
-    \item \emph{Scaling} of workers through HorizontalPodAutoscaler, based on CPU usage;
-    \item \emph{Monitoring} of cluster state using Prometheus and Grafana;
-    \item \emph{Logging} using Fluentd and ELK, though this configuration is not provided "out-of-the-box";
-    \item \emph{Security} – communication secured with TLS certificates, authorization using OAuth2.
-\end{itemize}
-The authors emphasize that although the architecture is coherent and portable, the model of managing the protein database as part of the server limits the flexibility of scaling the data layer and complicates integration with native cloud mechanisms (e.g., Amazon S3 or Google Cloud Storage).
+
+Foldy uses a task queue mechanism (RedisQueue), and computational workers are scaled dynamically using KEDA and Prometheus.
+This approach allows prediction of large protein structures (up to 3000 amino acids) and supports thousands of users~\cite{foldy}.
+
+\textbf{Limitation:} While Foldy provides a powerful and user-friendly platform, its deployment still requires significant manual configuration and integration effort.
+Deployment still involves some infrastructure setup, including configuring DNS, cluster resources, and databases, which can be complex for teams without DevOps experience.
+Additionally, monitoring and logging are not provided out-of-the-box and require further setup.
+Although some operational tasks can be partially automated, there is no centralized layer managing the full lifecycle of jobs, storage, and infrastructure after deployment.
 
 \subsection{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}
 
-In the paper \textit{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}, the authors present a reference pattern for research projects based on machine learning, utilizing cloud services and Kubernetes in environments such as AWS EKS or GCP GKE~\cite{cloud_architecture_for_research}.
-Key elements of this architecture include:
+In the paper \textit{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}~\cite{cloud_architecture_for_research}, the authors present a comprehensive architecture deployed at the Texas Advanced Computing Center.
+The proposed infrastructure includes:
 \begin{itemize}
-    \item \textbf{Infrastructure as Code (IaC)} – using Terraform to define VPC networks, Kubernetes clusters, database instances (RDS), and storage resources (S3/GCS);
-    \item \textbf{Microservice containerization} – each system component (data processing services, API, frontend, task queues) wrapped in a separate Docker image;
-    \item \textbf{Orchestration and CI/CD} – using Helm/Kustomize to manage manifests and GitOps (Argo CD or Flux) for automatic deployment of changes from the code repository;
-    \item \textbf{ML pipelines} – integration of Kubeflow Pipelines for defining and orchestrating complex training and model evaluation workflows;
-    \item \textbf{Resource scaling} – both horizontal (HPA on CPU/GPU) and vertical (Vertical Pod Autoscaler), with the possibility of using spot instances for cost optimization;
-    \item \textbf{Monitoring and logging} – centralization of metrics in Prometheus, dashboards in Grafana, and log aggregation in ELK Stack;
-    \item \textbf{Secret management} – using HashiCorp Vault or native cloud mechanisms (AWS KMS, GCP Secret Manager) for securely storing keys and passwords.
+    \item virtualization using OpenStack (with GPU support via PCI passthrough);
+    \item container orchestration using Kubernetes (deployed via Kubespray);
+    \item access to GPU-enabled JupyterHub as an interactive interface for researchers;
+    \item ability to run long-term services (e.g., inference) via the Tapis Pods API;
+    \item orchestration of complex workflows via Tapis Workflows.
 \end{itemize}
-The authors note that this approach ensures:
-\begin{itemize}
-    \item complete repeatability and versioning of environments thanks to IaC and containerization,
-    \item flexibility in accessing advanced GPU resources,
-    \item easy integration of new tools (e.g., TensorBoard, MLflow),
-    \item isolation of research environments (dev/staging/prod) with minimal risk of configuration collisions.
-\end{itemize}
-At the same time, they highlight the high operational complexity: cluster management, costs of maintaining managed services, the need for a dedicated DevOps team, and possible overhead associated with an excess of components (etcd, controllers, service mesh).
+
+The architecture enables the execution of machine learning models, data management, and training of models on HPC clusters via an HTTP interface.
+Thanks to integration with the Tapis ML Hub, users can search for, deploy, and use pre-trained models from Hugging Face without the need to build them from scratch.
+
+\textbf{Limitation:} Although highly capable, the proposed architecture requires coordination across multiple layers of the stack—OpenStack, Kubernetes, Tapis services—which demands specialized knowledge and operational overhead.
+GPU provisioning, workflow orchestration, and model deployment are fragmented across various APIs and services, making end-to-end automation challenging for small teams or institutions without dedicated infrastructure engineers.
+While powerful in production settings, the architecture lacks a unified interface for researchers to independently manage job submissions, monitoring, and data without DevOps support.
 
 \subsection{Kubefold}
 
-The \textit{Kubefold} project aims to introduce an automation layer for the entire deployment and operational process, integrating IaC tools, CI/CD, and ML workflow orchestration into a single coherent platform.
-The main advantages include:
+The \textit{Kubefold} project serves as a layer that automates the processes described in the approaches above.
+Its goal is to simplify the configuration, deployment, and maintenance of bioinformatics applications operating on containers and Kubernetes.
+Kubefold automates:
 \begin{itemize}
     \item high level of abstraction of the infrastructure layer;
     \item automatic installation of protein databases;
@@ -63,68 +61,13 @@ The main advantages include:
     \item monitoring and logging;
     \item integration with cloud providers.
 \end{itemize}
-With Kubefold, organizations can significantly reduce operational overhead, decrease the number of configuration errors, and accelerate the deployment cycle, while ensuring repeatability and consistency of research environments.
+
+The main benefit of this solution lies in the automation of operational overhead after installation.
+While DevOps engineers are needed in the early stages of setup, once the environment is prepared, AI researchers and bioinformaticians can independently manage workflows, monitor jobs, and access results through the automated platform, without requiring continuous DevOps involvement.
 
 \bigskip
-Both articles clearly indicate the growing trend of using Kubernetes and cloud-native tools in bioinformatics projects.
-The differences mainly come down to the approach to data management (server database vs. cloud object storage), the degree of CI/CD process automation, and ML workflow integration.
-
-
-\section{Protein structure prediction problem}
-Protein structure prediction is a key problem in computational biology~\cite{alphafold3}, which involves determining the three--dimensional structure of a protein based on its amino acid sequence.
-The spatial structure of a protein directly affects its biological function, and accurate conformation prediction allows understanding protein mechanisms and designing new drugs.
-This is a difficult task due to the enormous number of possible conformations and complex interactions between atoms.
-This problem becomes particularly important for proteins whose structures could not be determined by experimental methods due to technical difficulties.
-The application of predicted structures in personalized medicine and pharmacy represents one of the most promising directions in modern biotechnology.
-
-\subsection{Encoding three--dimensional protein structure}
-Amino acids in the polypeptide chain encode the spatial structure of the protein through their sequence and physicochemical properties~\cite{protein_folding}.
-Each amino acid has specific features, such as hydrophobicity, electrical charge, or size, which determine possible interactions and arrangement in space.
-The arrangement of amino acids in space is encoded in the so--called conformational code, which describes different levels of protein structure organization.
-
-Figure~\ref{fig:protein-folding} illustrates how proteins fold into their three--dimensional structures, a process essential for their biological function~\cite{dill2012protein}.
-The folding process transforms a linear chain of amino acids into a specific spatial conformation that determines the protein's functional capabilities.
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/folded}
-    \caption{Protein folding process showing the transformation from a linear amino acid chain to a three--dimensional functional structure}
-    \label{fig:protein-folding}
-\end{figure}
-
-The spatial structure of a protein is described at several hierarchical levels of organization~\cite{protein_folding, dill2012protein}:
-
-\begin{itemize}
-    \item Primary structure--linear sequence of amino acids connected by peptide bonds, which contains all information necessary to form the native structure,
-    \item Secondary structure--local structural motifs formed by hydrogen bonds between peptide groups, such as alpha helices and beta sheets,
-    \item Tertiary structure--global arrangement of the entire polypeptide chain stabilized by various interactions between amino acids,
-    \item Quaternary structure--the way multiple polypeptide chains associate into a functional protein complex.
-\end{itemize}
-
-\subsection{X--ray crystallography}
-X--ray crystallography is the fundamental experimental method for determining protein structures~\cite{xray_crystallography}, which involves analyzing the diffraction of X--rays on a protein crystal.
-X--rays scatter on the electrons of atoms forming the protein, and the diffraction pattern is recorded and mathematically analyzed.
-Based on this, an electron density map is created, the analysis of which requires complex mathematical algorithms and knowledge of crystallography.
-Interpretation of electron density maps is a challenge, often requiring manual fitting of the protein model by experienced researchers.
-
-The process of protein crystallization is often the most difficult stage, requiring significant financial investments and advanced laboratory infrastructure.
-
-\subsection{Computational methods for protein structure prediction}
-Computational methods for protein structure prediction are divided into several main categories, among which homology--based methods use sequence similarity to proteins with known structures~\cite{baek2023overview}.
-Ab initio methods attempt to predict structure solely based on a sequence and laws of physics~\cite{ab_initio_protein_folding}, while fold recognition methods match the sequence to known structural motifs.
-Each of these methods has its limitations and works best under specific conditions, depending on the availability of reference data.
-Hybrids of these methods often give better results than single approaches, combining advantages of different prediction techniques.
-
-Traditional computational approaches include molecular dynamics simulations and Monte Carlo methods, which use force fields to describe interactions between atoms~\cite{zhang2008itasser}.
-These calculations are very computationally expensive and often limited to small proteins, but in recent years, machine learning and deep learning methods have achieved significant success in this area~\cite{senior2020deep}.
-Advances in computational hardware, particularly in the area of GPU accelerators and specialized tensor processors, have significantly accelerated protein structure calculations.
-The development of cloud infrastructure has enabled democratization of access to advanced bioinformatics tools.
-
-A breakthrough in the field was the development of the AlphaFold algorithm by Google DeepMind, which uses neural networks to predict protein structures with accuracy comparable to experimental methods.
-AlphaFold2 revolutionized the field by winning the CASP14~\cite{casp} (Critical Assessment of protein Structure Prediction) competition in 2020~\cite{alphafold2, tunyasuvunakool2021casp14}.
-Deep learning methods have significantly accelerated the pace of scientific discoveries in structural biology, and the public release of the AlphaFold model has enabled researchers worldwide to use this technology in research and medical projects.
-Integration of AlphaFold results with other bioinformatics techniques has opened new possibilities in protein--protein interaction analysis and drug design.
-The latest version of the algorithm--AlphaFold 3--achieves protein structure prediction accuracy at the level of 90--95\% for single polypeptide chains, and for protein complexes, the accuracy reaches 80--85\%, which represents significant progress compared to previous versions~\cite{alphafold3}.
+Both Foldy and the described cloud architecture confirm the growing importance of Kubernetes and cloud-native tools in bioinformatics research.
+Kubefold, on the other hand, offers a new quality—shifting the burden of deployment and configuration from the user to the system, thus democratizing access to advanced AI tools in science.
 
 
 \section{AlphaFold by Google Deepmind}

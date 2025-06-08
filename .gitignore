@@ -165,3 +165,5 @@ out/
 
 experiments/*/*.pth
 experiments/*/*.pt
+
+.DS_Store

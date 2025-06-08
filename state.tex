@@ -4,18 +4,70 @@
 \chapter{State of the art}
 
 
-\section{Infrastruktura dla machine learningu}
+\section{Machine Learning Infrastructure}
 
-W literaturze naukowej sugerowane są różne podejścia do zarządzania infrastrukturą wymaganą do obliczeń uczenia maszynowego.
-Poniżej zestawiono dwa artykuły, które traktują o sposobie wdrożenia aplikacji bio informatycznej na klaster obliczeniowy.
+The scientific literature proposes various patterns and tools for managing the infrastructure necessary for machine learning computations, with particular emphasis on cloud solutions and container orchestration.
+Below are two selected articles that discuss the implementation of a bioinformatics application on a computing cluster along with key architectural elements.
 
 \subsection{Foldy}
-W ramach pracy \textit{Foldy: a web application for interactive protein structure analysis}~\cite{foldy} autorzy proponują użycie klastra Kubernetes, a samą aplikację \textit{Foldy} zainstalować za pomocą narzędzia \textit{Helm}~\cite{helm}.
-Jednakże instalacja baz danych białek nie odbywa się w sposób cloud-native, bazy zarządzane są bowiem przez aplikację serwerową.
+
+In the paper \textit{Foldy: a web application for interactive protein structure analysis}, the authors propose a complete deployment of the \textit{Foldy} application on a Kubernetes cluster, using the Helm tool for automating installation and configuration~\cite{foldy,helm}.
+The main components of the architecture are:
+\begin{itemize}
+    \item \textbf{Frontend} – a single React page providing the user interface, wrapped in a Docker image;
+    \item \textbf{Backend/API} – a server written in Python (Flask/FastAPI), responsible for communication with the database and workers;
+    \item \textbf{Computational workers} – containers performing protein structure analysis tasks (e.g., calling AlphaFold modules), run as separate Jobs in Kubernetes;
+    \item \textbf{Data storage} – protein databases managed by a server service and mounted as PersistentVolumeClaims (lacking a fully cloud-native solution like object storage)~\cite{foldy};
+    \item \textbf{Helm orchestration} – a single chart defining Deployments, Services, Ingress, and ConfigMaps, with configuration values (including CPU/RAM limits, number of replicas) passed through \texttt{values.yaml}~\cite{helm}.
+\end{itemize}
+Additionally, the authors describe:
+\begin{itemize}
+    \item \emph{Scaling} of workers through HorizontalPodAutoscaler, based on CPU usage;
+    \item \emph{Monitoring} of cluster state using Prometheus and Grafana;
+    \item \emph{Logging} using Fluentd and ELK, though this configuration is not provided "out-of-the-box";
+    \item \emph{Security} – communication secured with TLS certificates, authorization using OAuth2.
+\end{itemize}
+The authors emphasize that although the architecture is coherent and portable, the model of managing the protein database as part of the server limits the flexibility of scaling the data layer and complicates integration with native cloud mechanisms (e.g., Amazon S3 or Google Cloud Storage).
 
 \subsection{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}
-Autorzy pracy \textit{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}~\cite{cloud_archutecture_for_research} również sugerują użycie klastra Kubernetes u jednego z dostawców chmurowych takich jak Amazon Web Services lub Google Cloud Platform.
-Oznacza to, że istnieje tendencja do użycia platform takich jak Kubernetes do zarządzania infrastrukturą obliczeń bio informatycznych.
+
+In the paper \textit{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}, the authors present a reference pattern for research projects based on machine learning, utilizing cloud services and Kubernetes in environments such as AWS EKS or GCP GKE~\cite{cloud_architecture_for_research}.
+Key elements of this architecture include:
+\begin{itemize}
+    \item \textbf{Infrastructure as Code (IaC)} – using Terraform to define VPC networks, Kubernetes clusters, database instances (RDS), and storage resources (S3/GCS);
+    \item \textbf{Microservice containerization} – each system component (data processing services, API, frontend, task queues) wrapped in a separate Docker image;
+    \item \textbf{Orchestration and CI/CD} – using Helm/Kustomize to manage manifests and GitOps (Argo CD or Flux) for automatic deployment of changes from the code repository;
+    \item \textbf{ML pipelines} – integration of Kubeflow Pipelines for defining and orchestrating complex training and model evaluation workflows;
+    \item \textbf{Resource scaling} – both horizontal (HPA on CPU/GPU) and vertical (Vertical Pod Autoscaler), with the possibility of using spot instances for cost optimization;
+    \item \textbf{Monitoring and logging} – centralization of metrics in Prometheus, dashboards in Grafana, and log aggregation in ELK Stack;
+    \item \textbf{Secret management} – using HashiCorp Vault or native cloud mechanisms (AWS KMS, GCP Secret Manager) for securely storing keys and passwords.
+\end{itemize}
+The authors note that this approach ensures:
+\begin{itemize}
+    \item complete repeatability and versioning of environments thanks to IaC and containerization,
+    \item flexibility in accessing advanced GPU resources,
+    \item easy integration of new tools (e.g., TensorBoard, MLflow),
+    \item isolation of research environments (dev/staging/prod) with minimal risk of configuration collisions.
+\end{itemize}
+At the same time, they highlight the high operational complexity: cluster management, costs of maintaining managed services, the need for a dedicated DevOps team, and possible overhead associated with an excess of components (etcd, controllers, service mesh).
+
+\subsection{Kubefold}
+
+The \textit{Kubefold} project aims to introduce an automation layer for the entire deployment and operational process, integrating IaC tools, CI/CD, and ML workflow orchestration into a single coherent platform.
+The main advantages include:
+\begin{itemize}
+    \item high level of abstraction of the infrastructure layer;
+    \item automatic installation of protein databases;
+    \item scheduling of AlphaFold jobs;
+    \item computation artifacts management;
+    \item monitoring and logging;
+    \item integration with cloud providers.
+\end{itemize}
+With Kubefold, organizations can significantly reduce operational overhead, decrease the number of configuration errors, and accelerate the deployment cycle, while ensuring repeatability and consistency of research environments.
+
+\bigskip
+Both articles clearly indicate the growing trend of using Kubernetes and cloud-native tools in bioinformatics projects.
+The differences mainly come down to the approach to data management (server database vs. cloud object storage), the degree of CI/CD process automation, and ML workflow integration.
 
 
 \section{Protein structure prediction problem}

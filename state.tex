@@ -1,5 +1,22 @@
 %! suppress = MissingLabel
+
+
 \chapter{State of the art}
+
+
+\section{Infrastruktura dla machine learningu}
+
+W literaturze naukowej sugerowane są różne podejścia do zarządzania infrastrukturą wymaganą do obliczeń uczenia maszynowego.
+Poniżej zestawiono dwa artykuły, które traktują o sposobie wdrożenia aplikacji bio informatycznej na klaster obliczeniowy.
+
+\subsection{Foldy}
+W ramach pracy \textit{Foldy: a web application for interactive protein structure analysis}~\cite{foldy} autorzy proponują użycie klastra Kubernetes, a samą aplikację \textit{Foldy} zainstalować za pomocą narzędzia \textit{Helm}~\cite{helm}.
+Jednakże instalacja baz danych białek nie odbywa się w sposób cloud-native, bazy zarządzane są bowiem przez aplikację serwerową.
+
+\subsection{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}
+Autorzy pracy \textit{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}~\cite{cloud_archutecture_for_research} również sugerują użycie klastra Kubernetes u jednego z dostawców chmurowych takich jak Amazon Web Services lub Google Cloud Platform.
+Oznacza to, że istnieje tendencja do użycia platform takich jak Kubernetes do zarządzania infrastrukturą obliczeń bio informatycznych.
+
 
 \section{Protein structure prediction problem}
 Protein structure prediction is a key problem in computational biology~\cite{alphafold3}, which involves determining the three--dimensional structure of a protein based on its amino acid sequence.

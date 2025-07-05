@@ -143,9 +143,9 @@ The Control Plane contains components that manage the entire cluster and store i
 Worker Nodes run actual workloads in the form of containers.
 Each worker node contains:
 \begin{itemize}
-    \item \textbf{kubelet—}an agent managing containers on the node, ensuring they are running and healthy,
-    \item \textbf{kube--proxy——}handling network traffic and ensuring routing between services across the cluster,
-    \item \textbf{Pods——}the basic deployment units containing one or more containers that share networking and storage resources.
+    \item \textbf{kubelet} -- an agent managing containers on the node, ensuring they are running and healthy,
+    \item \textbf{kube--proxy} -- handling network traffic and ensuring routing between services across the cluster,
+    \item \textbf{Pods} -- the basic deployment units containing one or more containers that share networking and storage resources.
 \end{itemize}
 
 As described earlier in the Kubernetes Platform section, the system defines higher--level abstractions such as \texttt{Deployment} or \texttt{StatefulSet}.
@@ -290,7 +290,7 @@ Based on this, it activates the appropriate driver that creates a physical volum
 The newly created PersistentVolume is then automatically linked to the claim.
 Thanks to this mechanism, a cluster administrator can define different storage classes, and users can use them without knowing the technical details of the infrastructure.
 The system guarantees that the volume will exist as long as the claim associated with it exists.
-After deleting a PersistentVolumeClaim, the fate of the volume depends on the defined reclaim policy—it can be automatically deleted or preserved for reuse.
+After deleting a PersistentVolumeClaim, the fate of the volume depends on the defined reclaim policy -- it can be automatically deleted or preserved for reuse.
 
 \subsection{Kubernetes clusters in the cloud}
 
@@ -328,7 +328,7 @@ The Lustre file system consists of several main components, as shown in Figure~\
 \begin{itemize}
     \item Metadata servers (MDS) -- store information about the file system structure, directories, and permissions,
     \item Object storage servers (OSS) -- responsible for storing actual data and handling input/output operations,
-    \item Clients—nodes that mount the file system and use it,
+    \item Clients -- nodes that mount the file system and use it,
     \item Metadata target devices (MDT) -- store metadata on block devices,
     \item Object storage targets (OST) -- store file data on block devices.
 \end{itemize}
@@ -352,11 +352,11 @@ The system's throughput scales linearly with the addition of more object servers
 
 Main features of the Lustre file system:
 \begin{itemize}
-    \item High scalability—ability to handle petabytes of data and thousands of nodes,
-    \item High throughput—ability to achieve throughput in the terabit per second range,
-    \item Cache coherence—guarantee of data consistency between all clients,
-    \item Fault tolerance—ability to work despite failure of individual components,
-    \item Support for multiple access protocols—POSIX, MPI--IO, HDFS\@.
+    \item High scalability -- ability to handle petabytes of data and thousands of nodes,
+    \item High throughput -- ability to achieve throughput in the terabit per second range,
+    \item Cache coherence -- guarantee of data consistency between all clients,
+    \item Fault tolerance -- ability to work despite failure of individual components,
+    \item Support for multiple access protocols -- POSIX, MPI--IO, HDFS\@.
 \end{itemize}
 
 In the KubeFold project, Lustre is a key component for storing protein databases.
@@ -392,8 +392,8 @@ Key features of FSx for Lustre include:
 
 The service offers two deployment types:
 \begin{itemize}
-    \item Scratch—optimized for temporary storage and shorter--term processing, with higher performance,
-    \item Persistent—designed for longer--term storage with data replication and backup support.
+    \item Scratch -- optimized for temporary storage and shorter--term processing, with higher performance,
+    \item Persistent -- designed for longer--term storage with data replication and backup support.
 \end{itemize}
 
 In the context of the KubeFold project, FSx for Lustre provides high--performance storage for AlphaFold databases and computation results, as shown in Figure~\ref{fig:fsx-architecture}.
@@ -438,8 +438,8 @@ The service offers the following capabilities:
 
 The system handles two types of SMS messages:
 \begin{itemize}
-    \item Promotional—optimized for cost,
-    \item Transactional—optimized for delivery reliability.
+    \item Promotional -- optimized for cost,
+    \item Transactional -- optimized for delivery reliability.
 \end{itemize}
 
 The service provides global reach through cooperation with multiple mobile operators.
@@ -489,7 +489,7 @@ The operator consists of several key components working together to manage custo
 The core components of an operator architecture include:
 
 \begin{itemize}
-    \item Custom Resource Definition (CRD)—Defines the schema and validation rules for custom resources,
+    \item Custom Resource Definition (CRD) -- Defines the schema and validation rules for custom resources,
     \item Controller -- Implements the business logic and reconciliation loop,
     \item Client -- Interfaces with the Kubernetes API to read and modify resources,
     \item Cache -- Maintains an in--memory copy of watched resources for efficiency,
@@ -673,7 +673,7 @@ The proposed infrastructure includes:
 The architecture enables the execution of machine learning models, data management, and training of models on HPC clusters via an HTTP interface.
 Thanks to integration with the Tapis ML Hub, users can search for, deploy, and use pre-trained models from Hugging Face without the need to build them from scratch.
 
-\textbf{Limitation:} Although highly capable, the proposed architecture requires coordination across multiple layers of the stack—OpenStack, Kubernetes, Tapis services—which demands specialized knowledge and operational overhead.
+\textbf{Limitation:} Although highly capable, the proposed architecture requires coordination across multiple layers of the stack -- OpenStack, Kubernetes, Tapis services -- which demands specialized knowledge and operational overhead.
 GPU provisioning, workflow orchestration, and model deployment are fragmented across various APIs and services, making end-to-end automation challenging for small teams or institutions without dedicated infrastructure engineers.
 While powerful in production settings, the architecture lacks a unified interface for researchers to independently manage job submissions, monitoring, and data without DevOps support.
 
@@ -681,9 +681,9 @@ While powerful in production settings, the architecture lacks a unified interfac
 \section{Summary and Identified Gaps}
 
 Both Foldy and the described cloud architecture confirm the growing importance of Kubernetes and cloud-native tools in bioinformatics research.
-Kubefold, on the other hand, offers a new quality—shifting the burden of deployment and configuration from the user to the system, thus democratizing access to advanced AI tools in science.
+Kubefold, on the other hand, offers a new quality -- shifting the burden of deployment and configuration from the user to the system, thus democratizing access to advanced AI tools in science.
 
-The key difference between these solutions lies in their level of automation and abstraction: while Foldy provides a ready-to-use web application requiring manual infrastructure setup, and the comprehensive cloud architecture offers powerful but complex multi-layered services, Kubefold focuses on complete automation of the entire lifecycle—from infrastructure provisioning to job monitoring—enabling researchers to focus on scientific work rather than operational tasks.
+The key difference between these solutions lies in their level of automation and abstraction: while Foldy provides a ready-to-use web application requiring manual infrastructure setup, and the comprehensive cloud architecture offers powerful but complex multi-layered services, Kubefold focuses on complete automation of the entire lifecycle -- from infrastructure provisioning to job monitoring -- enabling researchers to focus on scientific work rather than operational tasks.
 
 The review of existing solutions reveals a significant gap: while powerful cloud architectures and specialized bioinformatics platforms exist, there is a lack of solutions that seamlessly integrate automation, AI algorithms, Kubernetes orchestration, and cloud-native approaches into a unified platform.
 This gap represents the primary motivation for developing KubeFold as a comprehensive solution for automated protein structure prediction in cloud environments.

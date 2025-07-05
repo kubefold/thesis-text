@@ -17,7 +17,138 @@
 %    \item Conducted several protein conformation computations to test the solution.
 %\end{itemize}
 
-%This is correct english statement
+
+\section{Comparison of manual and automated AlphaFold installation}
+
+To fully understand the advantages of the KubeFold operator, it is essential to compare the time and effort required for manual installation versus automated deployment using Kubernetes.
+
+\subsection{Time requirements for manual AlphaFold setup}
+
+Manual installation of AlphaFold on an EC2 Ubuntu instance requires significant time investment across several stages:
+
+\begin{enumerate}
+    \item \textbf{Infrastructure setup} (30-60 minutes):
+    \begin{itemize}
+        \item Launching an appropriate EC2 instance (typically p3.2xlarge with NVIDIA GPU)
+        \item Configuring and attaching storage volumes (minimum 3TB)
+        \item Setting up network access and security groups
+    \end{itemize}
+    
+    \item \textbf{Environment configuration} (30-60 minutes):
+    \begin{itemize}
+        \item Installing NVIDIA drivers and CUDA toolkit
+        \item Setting up Docker and NVIDIA Container Toolkit
+        \item Configuring appropriate permissions and environment variables
+    \end{itemize}
+    
+    \item \textbf{Protein database acquisition} (70 minutes):
+    \begin{itemize}
+        \item Downloading multiple large databases (BFD, MGnify, PDB70, PDB mmCIF, UniRef30, UniProt, UniRef90)
+        \item Total download size approximately 415GB (2.62TB after extraction)
+    \end{itemize}
+    
+    \item \textbf{Software configuration} (60-180 minutes):
+    \begin{itemize}
+        \item Building the AlphaFold Docker image
+        \item Troubleshooting CUDA library compatibility issues
+        \item Testing GPU detection and functionality
+        \item Configuring input and output paths
+    \end{itemize}
+    
+    \item \textbf{Protein structure prediction} (25 minutes):
+    \begin{itemize}
+        \item Running the actual prediction process
+        \item Managing computational resources
+    \end{itemize}
+\end{enumerate}
+
+The total time required for manual setup ranges from 3-5 hours, excluding any troubleshooting that might be necessary. Most critically, this process requires continuous user interaction and technical expertise in Linux system administration, GPU configuration, and containerization.
+
+\subsection{KubeFold automated deployment process}
+
+In contrast, the KubeFold operator streamlines this entire process into a few simple steps:
+
+\begin{enumerate}
+    \item \textbf{Cluster creation} (50 minutes):
+    \begin{itemize}
+        \item Setting up a Kubernetes cluster in AWS (EKS)
+        \item This process is automated through infrastructure as code
+        \item Requires minimal user interaction
+    \end{itemize}
+    
+    \item \textbf{Operator installation} (5 minutes):
+    \begin{itemize}
+        \item Deploying the KubeFold operator to the cluster
+        \item Setting up necessary permissions and service accounts
+    \end{itemize}
+    
+    \item \textbf{Protein database acquisition} (70 minutes):
+    \begin{itemize}
+        \item Creating a \texttt{ProteinDatabase} custom resource
+        \item Automated downloading and processing of all required databases
+        \item Parallel downloading for optimal performance
+    \end{itemize}
+    
+    \item \textbf{Protein structure prediction} (25 minutes):
+    \begin{itemize}
+        \item Creating a \texttt{ProteinConformationPrediction} custom resource
+        \item Automated execution of the prediction process
+        \item Results storage and notification
+    \end{itemize}
+\end{enumerate}
+
+The total time for the KubeFold approach is approximately 150 minutes (2.5 hours), with the significant advantage that the entire process requires virtually no user intervention beyond the initial resource creation. The operator handles all complex tasks automatically, including resource provisioning, job scheduling, and result management.
+
+\subsection{Comparative analysis}
+
+Table~\ref{tab:installation_comparison} presents a direct comparison between manual and KubeFold-based AlphaFold installation approaches:
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabularx}{\textwidth}{|X|X|X|}
+        \hline
+        \textbf{Aspect} & \textbf{Manual Installation} & \textbf{KubeFold Approach} \\
+        \hline
+        \textbf{Total setup time} & 3-5 hours & 2.5 hours \\
+        \hline
+        \textbf{Required user interaction} & Continuous involvement throughout the process & Minimal (only initial resource creation) \\
+        \hline
+        \textbf{Technical expertise required} & High (Linux, Docker, CUDA, GPU configuration) & Basic Kubernetes knowledge only \\
+        \hline
+        \textbf{Error susceptibility} & High (many manual steps) & Low (automated processes) \\
+        \hline
+        \textbf{Scalability} & Limited to single machine & Highly scalable across cluster nodes \\
+        \hline
+        \textbf{Resource optimization} & Manual management & Automatic allocation and cleanup \\
+        \hline
+        \textbf{Reproducibility} & Challenging (environment variations) & Consistent (declarative approach) \\
+        \hline
+    \end{tabularx}
+    \caption{Comparison of manual and KubeFold-based AlphaFold installation}
+    \label{tab:installation_comparison}
+\end{table}
+
+\subsection{Key advantages of the KubeFold approach}
+
+The KubeFold operator provides several significant advantages over manual installation:
+
+\begin{itemize}
+    \item \textbf{Zero interaction requirement:} After initial resource creation, the entire process runs without user intervention, freeing researchers to focus on scientific work rather than infrastructure management.
+    
+    \item \textbf{Error reduction:} By automating complex setup procedures, KubeFold eliminates common errors in environment configuration and dependency management.
+    
+    \item \textbf{Resource optimization:} The operator intelligently allocates computational resources, separating CPU-intensive alignment tasks from GPU-intensive prediction tasks to optimize cost and performance.
+    
+    \item \textbf{Scalability:} Multiple predictions can be run in parallel across cluster nodes, significantly increasing throughput for large-scale studies.
+    
+    \item \textbf{Reproducibility:} The declarative, Kubernetes-based approach ensures consistent environments and results across different executions.
+    
+    \item \textbf{Integration with cloud services:} Native integration with AWS services like S3, FSx for Lustre, and SNS provides robust storage, high-performance file systems, and automated notifications.
+\end{itemize}
+
+These advantages make KubeFold particularly valuable for research teams that need to run multiple protein structure predictions without dedicating significant time and expertise to infrastructure management. The platform effectively bridges the gap between the computational complexity of AlphaFold and the practical needs of biological researchers.
+
 \section{Comparison of alternative solutions}
 
 The AlphaFold algorithm has significantly influenced the development of bioinformatics, offering breakthrough capabilities in predicting protein spatial structures.
@@ -82,18 +213,24 @@ A detailed comparison of the computational infrastructure for OpenFold, ColabFol
 
 \section{Challenges}
 
-The main challenge was developing an appropriate architecture for the KubeFold platform that can operate on multiple cluster nodes simultaneously, optimizing costs and computation speed.
+A significant architectural challenge involved designing the KubeFold platform to operate efficiently across multiple cluster nodes while optimizing costs and computation speed.
 By dividing the download process into multiple pods, it was possible to increase the potential throughput of protein database downloads.
 Additionally, separating the \textit{Aligning} and \textit{Predicting} phases allowed for optimal utilization of CPU and GPU computational resources.
-This setup enables cost savings in the public cloud.
+This approach enables substantial cost savings in the public cloud environment.
 
-The second challenge was the proper implementation of the \textit{downloader} component.
-This component must simultaneously download and decompress data.
-If this process were to occur sequentially, the temporarily used disk space would be much larger than the actual size of the database.
+Implementing the \textit{downloader} component presented another technical hurdle.
+This component needed to simultaneously download and decompress data to minimize storage requirements.
+If these processes were to occur sequentially, the temporarily used disk space would be much larger than the actual size of the database, creating potential resource constraints.
 
-The third challenge was setting up appropriate infrastructure for testing the KubeFold platform.
-The project runs using multiple AWS cloud services, which requires thoughtful integration of each component.
-Setting up appropriate subnet configurations, VPC, and CSI drivers required a significant amount of time.
+Setting up appropriate infrastructure for testing the KubeFold platform proved particularly demanding.
+The project relies on multiple AWS cloud services, requiring thoughtful integration of each component.
+Configuring appropriate subnet settings, VPC connections, and CSI drivers required significant time investment and troubleshooting.
+
+From a developer experience (DX) perspective, KubeFold represents a careful compromise between automation and customization. Each decision to automate a process inherently limits the flexibility available to end users. For example, the automated database download process optimizes for parallel throughput but restricts users from customizing download sources or prioritizing specific databases. Similarly, the separation of alignment and prediction phases improves resource utilization but reduces the ability to fine-tune the computational pipeline for specialized cases.
+
+The most conceptually challenging aspect was determining the appropriate level of abstraction for the Kubernetes operator. Making the system too generic would require extensive configuration from users, defeating the purpose of automation. Conversely, making it too specific would limit its applicability across different research scenarios. The final design represents a balance that favors automation for common workflows while still providing configuration options for essential parameters.
+
+Another significant trade-off was between cloud vendor integration and platform independence. While deep integration with AWS services like FSx for Lustre provided performance benefits, it created dependencies that limit deployment options. Considerable effort went into designing interfaces that could potentially support alternative storage solutions in future iterations without requiring major architectural changes.
 
 \section{Conclusions}
 

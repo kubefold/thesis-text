@@ -131,8 +131,8 @@ The Kubernetes Operator component (described in more detail in~\ref{subsec:compo
 KubeBuilder is a framework that facilitates writing native Kubernetes operators.
 It creates project directory structure and immediately provides management of elements such as:
 \begin{itemize}
-    \item Leader election--some operator instances can run on multiple cluster nodes simultaneously, but if there is a need to select a single distinguished instance, the leader election selects it,
-    \item Generation of installation scripts--KubeBuilder has the ability to generate ready--to--use installation scripts that can later be used for automatic operator installation and all its dependencies in the cluster with a single \texttt{kubectl apply} command,
+    \item Leader election -- some operator instances can run on multiple cluster nodes simultaneously, but if there is a need to select a single distinguished instance, the leader election selects it,
+    \item Generation of installation scripts -- KubeBuilder has the ability to generate ready--to--use installation scripts that can later be used for automatic operator installation and all its dependencies in the cluster with a single \texttt{kubectl apply} command,
     \item Role and permission definitions.
     Kubernetes uses an authorization model called \textit{RBAC} (Role--Based Access Control)~\cite{k8s_rbac}.
     KubeBuilder checks what permissions an operator instance should have and ensures that the appropriate permissions are granted to it.
@@ -211,7 +211,7 @@ In case of a new resource of this type appearing, the following operations are p
     \item Creates a new \textt{PersistentVolumeClaim} and sets the \texttt{storageClassName} parameter,
     \item When the \textt{PersistentVolumeClaim} is bound to a specific volume, it creates several jobs corresponding to downloading individual databases.
     Each pod has a mounted this \textt{PVC}.
-    \item Starts a log observer--a separate goroutine constantly monitoring job states, pod states, and reading logs from them.
+    \item Starts a log observer -- a separate goroutine constantly monitoring job states, pod states, and reading logs from them.
     Thanks to the logs, it is able to dynamically update the \texttt{ProteinDatabase} status informing the user about the progress of downloading and also monitor the connection throughput.
 \end{enumerate}
 These operations are shown in figure~\ref{fig:proteindatabase_controller}.
@@ -308,7 +308,7 @@ To save the \textt{fold\_input.json} file, the \texttt{ENCODED\_INPUT} variable 
 
 To send artifacts, the \texttt{BUCKET} environment variable should be set to the S3 bucket path (full URL, including \textt{s3:\/\/}).
 To send a notification using the AWS End User Messaging service, the container must have the \texttt{NOTIFICATION\_PHONES} and \texttt{NOTIFICATION\_MESSAGE} variables set.
-The variable with phone numbers can contain more than one recipient--in such a case, phone numbers should be provided as a comma--separated list.
+The variable with phone numbers can contain more than one recipient -- in such a case, phone numbers should be provided as a comma--separated list.
 
 If using AWS services, the AWS client variables should be configured.
 This can be done using environment variables such as \texttt{AWS\_ACCESS\_KEY\_ID} and \texttt{AWS\_SECRET\_ACCESS\_KEY}.

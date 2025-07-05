@@ -354,3 +354,23 @@ Additionally, an SMS message was sent to the user informing about the completed 
     \caption{SMS Notification sent to research team member when computation is done}
     \label{fig:sns_notification}
 \end{figure}
+
+\section{Testing approach}
+
+The KubeFold platform was tested using a manual testing approach. After implementing the operator and its components, the testing process involved creating a real Kubernetes cluster in AWS EKS, installing the operator, and running actual protein conformation predictions.
+
+This end-to-end testing approach was chosen to validate the entire workflow in a production-like environment. The testing process followed these steps:
+
+\begin{enumerate}
+    \item Creating an AWS EKS cluster using the \texttt{eksctl} configuration described in listing~\ref{lst:eksctl}
+    \item Installing the AWS FSx CSI Driver and configuring the \texttt{StorageClass}
+    \item Deploying the KubeFold operator using the installation file
+    \item Creating a \texttt{ProteinDatabase} custom resource and verifying the download process
+    \item Creating a \texttt{ProteinConformationPrediction} custom resource and monitoring the prediction workflow
+    \item Validating the output artifacts in AWS S3 storage
+    \item Confirming the delivery of notifications via AWS SNS
+\end{enumerate}
+
+During testing, the operator's behavior was observed through Kubernetes logs and resource status updates. This approach allowed for direct verification of the operator's functionality in handling real-world scenarios, including error conditions and resource constraints.
+
+The manual testing approach proved sufficient for validating the core functionality of the KubeFold platform. While unit tests and simulated cluster environments could provide additional validation layers, the end-to-end testing in a production environment offered the most comprehensive verification of the system's capabilities and integration with AWS services.

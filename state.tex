@@ -3,77 +3,10 @@
 
 \chapter{State of the art}
 
-
-\section{Infrastructure for Machine Learning}
-
-The scientific literature proposes a range of patterns and tools for managing the infrastructure required for machine learning computations, with particular emphasis on cloud-based solutions and container orchestration.
-Below are two selected articles discussing the deployment of bioinformatics applications on a computational cluster, as well as a project that automates these approaches.
-
-\subsection{Foldy}
-
-In the paper \textit{Foldy: a web application for interactive protein structure analysis}, the authors propose a complete deployment of the \textit{Foldy} application on a Kubernetes cluster, using Helm for automated installation and configuration~\cite{foldy,helm}.
-The application allows users without advanced bioinformatics knowledge to predict protein structures (AlphaFold), dock ligands (DiffDock, AutoDock Vina), and visualize domains (Pfam).
-
-The application deployment process assumes:
-\begin{itemize}
-    \item manual provisioning of infrastructure resources: domain name, static IP address, Kubernetes cluster, and database;
-    \item automatic deployment of the frontend, backend, and computational workers with a single \texttt{helm install} command;
-    \item the ability to run workers locally (on private resources) using a Docker image or bash scripts if Docker is not supported.
-\end{itemize}
-
-Foldy uses a task queue mechanism (RedisQueue), and computational workers are scaled dynamically using KEDA and Prometheus.
-This approach allows prediction of large protein structures (up to 3000 amino acids) and supports thousands of users~\cite{foldy}.
-
-\textbf{Limitation:} While Foldy provides a powerful and user-friendly platform, its deployment still requires significant manual configuration and integration effort.
-Deployment still involves some infrastructure setup, including configuring DNS, cluster resources, and databases, which can be complex for teams without DevOps experience.
-Additionally, monitoring and logging are not provided out-of-the-box and require further setup.
-Although some operational tasks can be partially automated, there is no centralized layer managing the full lifecycle of jobs, storage, and infrastructure after deployment.
-
-\subsection{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}
-
-In the paper \textit{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}~\cite{cloud_architecture_for_research}, the authors present a comprehensive architecture deployed at the Texas Advanced Computing Center.
-The proposed infrastructure includes:
-\begin{itemize}
-    \item virtualization using OpenStack (with GPU support via PCI passthrough);
-    \item container orchestration using Kubernetes (deployed via Kubespray);
-    \item access to GPU-enabled JupyterHub as an interactive interface for researchers;
-    \item ability to run long-term services (e.g., inference) via the Tapis Pods API;
-    \item orchestration of complex workflows via Tapis Workflows.
-\end{itemize}
-
-The architecture enables the execution of machine learning models, data management, and training of models on HPC clusters via an HTTP interface.
-Thanks to integration with the Tapis ML Hub, users can search for, deploy, and use pre-trained models from Hugging Face without the need to build them from scratch.
-
-\textbf{Limitation:} Although highly capable, the proposed architecture requires coordination across multiple layers of the stack—OpenStack, Kubernetes, Tapis services—which demands specialized knowledge and operational overhead.
-GPU provisioning, workflow orchestration, and model deployment are fragmented across various APIs and services, making end-to-end automation challenging for small teams or institutions without dedicated infrastructure engineers.
-While powerful in production settings, the architecture lacks a unified interface for researchers to independently manage job submissions, monitoring, and data without DevOps support.
-
-\subsection{Kubefold}
-
-The \textit{Kubefold} project serves as a layer that automates the processes described in the approaches above.
-Its goal is to simplify the configuration, deployment, and maintenance of bioinformatics applications operating on containers and Kubernetes.
-Kubefold automates:
-\begin{itemize}
-    \item high level of abstraction of the infrastructure layer;
-    \item automatic installation of protein databases;
-    \item scheduling of AlphaFold jobs;
-    \item computation artifacts management;
-    \item monitoring and logging;
-    \item integration with cloud providers.
-\end{itemize}
-
-The main benefit of this solution lies in the automation of operational overhead after installation.
-While DevOps engineers are needed in the early stages of setup, once the environment is prepared, AI researchers and bioinformaticians can independently manage workflows, monitor jobs, and access results through the automated platform, without requiring continuous DevOps involvement.
-
-\bigskip
-Both Foldy and the described cloud architecture confirm the growing importance of Kubernetes and cloud-native tools in bioinformatics research.
-Kubefold, on the other hand, offers a new quality—shifting the burden of deployment and configuration from the user to the system, thus democratizing access to advanced AI tools in science.
-
-\bigskip
-The key difference between these solutions lies in their level of automation and abstraction: while Foldy provides a ready-to-use web application requiring manual infrastructure setup, and the comprehensive cloud architecture offers powerful but complex multi-layered services, Kubefold focuses on complete automation of the entire lifecycle—from infrastructure provisioning to job monitoring—enabling researchers to focus on scientific work rather than operational tasks.
+While the primary focus of this work lies in infrastructure design rather than algorithmic innovation, a brief overview of key prediction algorithms (e.g., AlphaFold) is essential to understand the operational requirements and constraints that the infrastructure must support.
 
 
-\section{AlphaFold by Google Deepmind}
+\section{Machine Learning in Protein Structure Prediction}
 
 AlphaFold represents a breakthrough in computational biology, developed by Google DeepMind to predict three--dimensional protein structures with unprecedented accuracy.
 This AI system revolutionized the field by achieving near--experimental accuracy in protein structure prediction.
@@ -210,9 +143,9 @@ The Control Plane contains components that manage the entire cluster and store i
 Worker Nodes run actual workloads in the form of containers.
 Each worker node contains:
 \begin{itemize}
-    \item \textbf{kubelet—}an agent managing containers on the node, ensuring they are running and healthy,
-    \item \textbf{kube--proxy——}handling network traffic and ensuring routing between services across the cluster,
-    \item \textbf{Pods——}the basic deployment units containing one or more containers that share networking and storage resources.
+    \item \textbf{kubelet} -- an agent managing containers on the node, ensuring they are running and healthy,
+    \item \textbf{kube--proxy} -- handling network traffic and ensuring routing between services across the cluster,
+    \item \textbf{Pods} -- the basic deployment units containing one or more containers that share networking and storage resources.
 \end{itemize}
 
 As described earlier in the Kubernetes Platform section, the system defines higher--level abstractions such as \texttt{Deployment} or \texttt{StatefulSet}.
@@ -357,7 +290,7 @@ Based on this, it activates the appropriate driver that creates a physical volum
 The newly created PersistentVolume is then automatically linked to the claim.
 Thanks to this mechanism, a cluster administrator can define different storage classes, and users can use them without knowing the technical details of the infrastructure.
 The system guarantees that the volume will exist as long as the claim associated with it exists.
-After deleting a PersistentVolumeClaim, the fate of the volume depends on the defined reclaim policy—it can be automatically deleted or preserved for reuse.
+After deleting a PersistentVolumeClaim, the fate of the volume depends on the defined reclaim policy -- it can be automatically deleted or preserved for reuse.
 
 \subsection{Kubernetes clusters in the cloud}
 
@@ -395,7 +328,7 @@ The Lustre file system consists of several main components, as shown in Figure~\
 \begin{itemize}
     \item Metadata servers (MDS) -- store information about the file system structure, directories, and permissions,
     \item Object storage servers (OSS) -- responsible for storing actual data and handling input/output operations,
-    \item Clients—nodes that mount the file system and use it,
+    \item Clients -- nodes that mount the file system and use it,
     \item Metadata target devices (MDT) -- store metadata on block devices,
     \item Object storage targets (OST) -- store file data on block devices.
 \end{itemize}
@@ -419,11 +352,11 @@ The system's throughput scales linearly with the addition of more object servers
 
 Main features of the Lustre file system:
 \begin{itemize}
-    \item High scalability—ability to handle petabytes of data and thousands of nodes,
-    \item High throughput—ability to achieve throughput in the terabit per second range,
-    \item Cache coherence—guarantee of data consistency between all clients,
-    \item Fault tolerance—ability to work despite failure of individual components,
-    \item Support for multiple access protocols—POSIX, MPI--IO, HDFS\@.
+    \item High scalability -- ability to handle petabytes of data and thousands of nodes,
+    \item High throughput -- ability to achieve throughput in the terabit per second range,
+    \item Cache coherence -- guarantee of data consistency between all clients,
+    \item Fault tolerance -- ability to work despite failure of individual components,
+    \item Support for multiple access protocols -- POSIX, MPI--IO, HDFS\@.
 \end{itemize}
 
 In the KubeFold project, Lustre is a key component for storing protein databases.
@@ -459,8 +392,8 @@ Key features of FSx for Lustre include:
 
 The service offers two deployment types:
 \begin{itemize}
-    \item Scratch—optimized for temporary storage and shorter--term processing, with higher performance,
-    \item Persistent—designed for longer--term storage with data replication and backup support.
+    \item Scratch -- optimized for temporary storage and shorter--term processing, with higher performance,
+    \item Persistent -- designed for longer--term storage with data replication and backup support.
 \end{itemize}
 
 In the context of the KubeFold project, FSx for Lustre provides high--performance storage for AlphaFold databases and computation results, as shown in Figure~\ref{fig:fsx-architecture}.
@@ -505,8 +438,8 @@ The service offers the following capabilities:
 
 The system handles two types of SMS messages:
 \begin{itemize}
-    \item Promotional—optimized for cost,
-    \item Transactional—optimized for delivery reliability.
+    \item Promotional -- optimized for cost,
+    \item Transactional -- optimized for delivery reliability.
 \end{itemize}
 
 The service provides global reach through cooperation with multiple mobile operators.
@@ -556,7 +489,7 @@ The operator consists of several key components working together to manage custo
 The core components of an operator architecture include:
 
 \begin{itemize}
-    \item Custom Resource Definition (CRD)—Defines the schema and validation rules for custom resources,
+    \item Custom Resource Definition (CRD) -- Defines the schema and validation rules for custom resources,
     \item Controller -- Implements the business logic and reconciliation loop,
     \item Client -- Interfaces with the Kubernetes API to read and modify resources,
     \item Cache -- Maintains an in--memory copy of watched resources for efficiency,
@@ -607,3 +540,150 @@ The \texttt{go mod} tool automatically manages project dependencies.
 
 Go is a popular choice for creating DevOps tools and cloud systems.
 Kubernetes and Docker were written in Go. This language works well in projects requiring high performance and reliability.
+
+
+\section{Recent Advances in Protein Structure Prediction}
+
+\subsection{Core AlphaFold Developments}
+
+\subsubsection{Improved protein structure prediction using potentials from deep learning (2020)}
+
+Senior et al.
+presented AlphaFold (the first version) which uses a deep neural network to predict distances between residue pairs, constructing a potential of mean force that can be optimized by gradient descent to fold the protein~\cite{Senior2020AlphaFold}.
+In the CASP13 competition, this method produced high-accuracy structures for 24 out of 43 free-modeling targets, far outperforming other methods.
+
+\subsubsection{Highly accurate protein structure prediction with AlphaFold (2021)}
+
+Jumper et al.
+introduced \textbf{AlphaFold2}, a revolution in protein structure prediction.
+It regularly achieves atomic accuracy even when no homologous structure is known~\cite{Jumper2021AlphaFold2}.
+Validated at CASP14, AlphaFold2's novel architecture (with an attention-based "Evoformer" and end-to-end differentiable structure module) demonstrated accuracy on par with experimental structures in a majority of cases.
+This breakthrough showed that computational methods can predict protein 3D structure from sequence alone with unprecedented accuracy.
+
+\subsubsection{Accurate structure prediction of biomolecular interactions with AlphaFold 3 (2024)}
+
+Abramson et al.
+unveiled \textbf{AlphaFold 3 (AF3)}, a substantially updated model using a \textbf{diffusion-based architecture} to predict the \textbf{joint structure of complexes} including proteins, nucleic acids, small molecules, and ions~\cite{Abramson2024AlphaFold3}.
+AF3 shows markedly improved accuracy over specialized tools: it far outperforms traditional docking for protein–ligand complexes, achieves much higher accuracy on protein–DNA/RNA interactions than prior nucleic-acid-specific predictors, and greatly improves antibody–antigen complex prediction versus AlphaFold-Multimer.
+This work demonstrates that a single deep-learning framework can accurately model diverse biomolecular assemblies, heralding a new era of high-accuracy multi-component complex prediction.
+
+\subsection{Conformational Ensemble and Alternative State Prediction}
+
+\subsubsection{Sampling alternative conformational states of transporters and receptors with AlphaFold2 (2022)}
+
+del Alamo et al.
+demonstrated that by stochastically subsampling the MSA input, AlphaFold2 can be driven to generate multiple conformations for dynamic proteins~\cite{delAlamo2022AlternativeStates}.
+In tests on membrane transporters and GPCRs, this simple MSA-depth reduction yielded accurate models of distinct states (e.g. inward vs.
+outward facing), with extreme conformations matching experimental structures (average TM-score ≈0.94).
+This study highlighted an underexplored capability of AlphaFold2 to predict conformational ensembles and suggested the need for next-generation AI models that output biophysical state ensembles.
+
+\subsubsection{Structure prediction of alternative protein conformations (2024)}
+
+Bryant \& Noé developed Cfold, a neural network trained on a special "conformational split" of the PDB to predict alternative protein structures~\cite{Bryant2024Cfold}.
+By ensuring that conformational variants of the same protein are separated into training vs.
+test sets, Cfold can genuinely predict unseen alternative states rather than memorizing them.
+The method efficiently explores a protein's conformational landscape and achieved >50\% success in predicting known alternative conformations with high accuracy (TM-score > 0.8).
+Cfold demonstrates that neural networks can be adapted to generate biologically relevant conformers, addressing a gap left by AlphaFold2 which was uncertain in predicting truly novel conformations.
+
+\subsubsection{High-throughput prediction of protein conformational distributions with subsampled AlphaFold2 (2024)}
+
+Monteiro da Silva et al.
+introduced a method to directly predict the \textbf{relative populations} of protein conformations using AlphaFold2 by subsampling MSAs~\cite{MonteiroSilva2024SubsampledAF2}.
+AlphaFold2 typically predicts a single ground-state structure, but here multiple MSA subsets yield an ensemble of states.
+When tested against NMR data for two proteins (Abl1 kinase and GM-CSF), the method correctly predicted changes in state populations with >80\% accuracy.
+This subsampling strategy was especially effective for qualitatively predicting how mutations or evolution shift conformational landscapes, offering a fast, cost-effective way to estimate conformational distributions for applications in pharmacology and evolution.
+
+\subsection{Physics-Informed and Dynamics-Aware Models}
+
+\subsubsection{Protein Conformation Generation via Force-Guided SE(3) Diffusion Models (2024)}
+
+Wang et al.
+introduced ConfDiff, a deep generative model that integrates physical knowledge (forces) into the SE(3)-equivariant diffusion process for protein structure generation~\cite{Wang2024ConfDiff}.
+Traditional diffusion models sample protein conformations but can deviate from true equilibrium distributions due to lack of physics.
+ConfDiff addresses this by coupling a learned force field with score-based diffusion: the force-guided network steers sampling toward realistic basins, yielding diverse conformations that maintain high fidelity to the native ensemble.
+In experiments on 12 fast-folding proteins and BPTI, ConfDiff surpassed prior state-of-the-art methods in capturing native conformational variability. \textit{(Presented at ICML 2024)}
+
+\subsubsection{Simultaneous Modeling of Protein Conformation and Dynamics via Autoregression (2025)}
+
+Shen et al.
+proposed \textbf{ConfRover}, the first model to learn \textbf{protein conformational dynamics and structures simultaneously} from MD trajectories~\cite{Shen2025ConfRover}.
+ConfRover uses a modular autoregressive design: (i) an encoder adapted from folding models that embeds each time-frame conformation, (ii) a sequence model that captures temporal dependencies between frames, and (iii) an SE(3) diffusion decoder that generates 3D structures for each step.
+This enables both time-dependent (trajectory) generation and time-independent sampling of conformations within one framework.
+On the large ATLAS MD dataset, ConfRover successfully learned complex motions and could generate realistic trajectories, marking a significant step toward integrating \textit{dynamic behavior} into structure prediction. \textit{(Preprint, May 2025)}
+
+\subsection{Novel Architectural Approaches}
+
+\subsubsection{Structure Language Models for Protein Conformation Generation (2024)}
+
+Lu et al.
+proposed a novel framework called \textbf{Structure Language Modeling (SLM)} for efficient generative modeling of protein conformations~\cite{Lu2024SLM}.
+Instead of operating purely in 3D coordinate space, SLM first encodes protein structures into a compact latent representation via a discrete VAE, then applies \textbf{conditional language models} to capture sequence-conditioned conformation distributions.
+This approach enabled \textbf{20–100× faster} generation of diverse conformations compared to 3D diffusion methods, by exploring ensemble modes in a more tractable latent space.
+The authors instantiated SLM with transformer architectures (including a BERT-like model fine-tuned from ESM) and demonstrated its ability to model equilibrium dynamics (e.g. BPTI), conformational changes, and even disordered protein ensembles with high efficiency. \textit{(ICLR 2025 conference paper)}
+
+\subsection{Comprehensive Reviews and Surveys}
+
+\subsubsection{Protein structure prediction via deep learning: an in-depth review (2025)}
+
+Meng et al.
+provided a comprehensive review of deep learning techniques for protein structure prediction~\cite{Meng2025DeepLearningReview}.
+This article surveys how various architectures – from CNNs and RNNs to GNNs and large language models (LLMs) – have been applied to protein folding.
+It discusses advances in databases and resources, evaluates state-of-the-art methods (e.g. AlphaFold2, RoseTTAFold, ESMFold) and their impact on drug discovery, and highlights future challenges.
+Key issues identified include the need for improved interpretability of deep models, handling multi-domain and flexible regions, and incorporating dynamics and multi-molecule interactions into predictions.
+The review concludes that despite recent breakthroughs, there remains ample room for improving prediction of protein dynamics, complex assemblies, and functional annotations.
+
+
+\section{Automation of Bioinformatics Workflows}
+
+The scientific literature proposes a range of patterns and tools for managing the infrastructure required for machine learning computations, with particular emphasis on cloud-based solutions and container orchestration.
+Below are two selected articles discussing the deployment of bioinformatics applications on a computational cluster, as well as a project that automates these approaches.
+
+\subsection{Foldy}
+
+In the paper \textit{Foldy: a web application for interactive protein structure analysis}, the authors propose a complete deployment of the \textit{Foldy} application on a Kubernetes cluster, using Helm for automated installation and configuration~\cite{foldy,helm}.
+The application allows users without advanced bioinformatics knowledge to predict protein structures (AlphaFold), dock ligands (DiffDock, AutoDock Vina), and visualize domains (Pfam).
+
+The application deployment process assumes:
+\begin{itemize}
+    \item manual provisioning of infrastructure resources: domain name, static IP address, Kubernetes cluster, and database;
+    \item automatic deployment of the frontend, backend, and computational workers with a single \texttt{helm install} command;
+    \item the ability to run workers locally (on private resources) using a Docker image or bash scripts if Docker is not supported.
+\end{itemize}
+
+Foldy uses a task queue mechanism (RedisQueue), and computational workers are scaled dynamically using KEDA and Prometheus.
+This approach allows prediction of large protein structures (up to 3000 amino acids) and supports thousands of users~\cite{foldy}.
+
+\textbf{Limitation:} While Foldy provides a powerful and user-friendly platform, its deployment still requires significant manual configuration and integration effort.
+Deployment still involves some infrastructure setup, including configuring DNS, cluster resources, and databases, which can be complex for teams without DevOps experience.
+Additionally, monitoring and logging are not provided out-of-the-box and require further setup.
+Although some operational tasks can be partially automated, there is no centralized layer managing the full lifecycle of jobs, storage, and infrastructure after deployment.
+
+\subsection{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}
+
+In the paper \textit{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}~\cite{cloud_architecture_for_research}, the authors present a comprehensive architecture deployed at the Texas Advanced Computing Center.
+The proposed infrastructure includes:
+\begin{itemize}
+    \item virtualization using OpenStack (with GPU support via PCI passthrough);
+    \item container orchestration using Kubernetes (deployed via Kubespray);
+    \item access to GPU-enabled JupyterHub as an interactive interface for researchers;
+    \item ability to run long-term services (e.g., inference) via the Tapis Pods API;
+    \item orchestration of complex workflows via Tapis Workflows.
+\end{itemize}
+
+The architecture enables the execution of machine learning models, data management, and training of models on HPC clusters via an HTTP interface.
+Thanks to integration with the Tapis ML Hub, users can search for, deploy, and use pre-trained models from Hugging Face without the need to build them from scratch.
+
+\textbf{Limitation:} Although highly capable, the proposed architecture requires coordination across multiple layers of the stack -- OpenStack, Kubernetes, Tapis services -- which demands specialized knowledge and operational overhead.
+GPU provisioning, workflow orchestration, and model deployment are fragmented across various APIs and services, making end-to-end automation challenging for small teams or institutions without dedicated infrastructure engineers.
+While powerful in production settings, the architecture lacks a unified interface for researchers to independently manage job submissions, monitoring, and data without DevOps support.
+
+
+\section{Summary and Identified Gaps}
+
+Both Foldy and the described cloud architecture confirm the growing importance of Kubernetes and cloud-native tools in bioinformatics research.
+Kubefold, on the other hand, offers a new quality -- shifting the burden of deployment and configuration from the user to the system, thus democratizing access to advanced AI tools in science.
+
+The key difference between these solutions lies in their level of automation and abstraction: while Foldy provides a ready-to-use web application requiring manual infrastructure setup, and the comprehensive cloud architecture offers powerful but complex multi-layered services, Kubefold focuses on complete automation of the entire lifecycle -- from infrastructure provisioning to job monitoring -- enabling researchers to focus on scientific work rather than operational tasks.
+
+The review of existing solutions reveals a significant gap: while powerful cloud architectures and specialized bioinformatics platforms exist, there is a lack of solutions that seamlessly integrate automation, AI algorithms, Kubernetes orchestration, and cloud-native approaches into a unified platform.
+This gap represents the primary motivation for developing KubeFold as a comprehensive solution for automated protein structure prediction in cloud environments.

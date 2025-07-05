@@ -213,18 +213,24 @@ A detailed comparison of the computational infrastructure for OpenFold, ColabFol
 
 \section{Challenges}
 
-The main challenge was developing an appropriate architecture for the KubeFold platform that can operate on multiple cluster nodes simultaneously, optimizing costs and computation speed.
+A significant architectural challenge involved designing the KubeFold platform to operate efficiently across multiple cluster nodes while optimizing costs and computation speed.
 By dividing the download process into multiple pods, it was possible to increase the potential throughput of protein database downloads.
 Additionally, separating the \textit{Aligning} and \textit{Predicting} phases allowed for optimal utilization of CPU and GPU computational resources.
-This setup enables cost savings in the public cloud.
+This approach enables substantial cost savings in the public cloud environment.
 
-The second challenge was the proper implementation of the \textit{downloader} component.
-This component must simultaneously download and decompress data.
-If this process were to occur sequentially, the temporarily used disk space would be much larger than the actual size of the database.
+Implementing the \textit{downloader} component presented another technical hurdle.
+This component needed to simultaneously download and decompress data to minimize storage requirements.
+If these processes were to occur sequentially, the temporarily used disk space would be much larger than the actual size of the database, creating potential resource constraints.
 
-The third challenge was setting up appropriate infrastructure for testing the KubeFold platform.
-The project runs using multiple AWS cloud services, which requires thoughtful integration of each component.
-Setting up appropriate subnet configurations, VPC, and CSI drivers required a significant amount of time.
+Setting up appropriate infrastructure for testing the KubeFold platform proved particularly demanding.
+The project relies on multiple AWS cloud services, requiring thoughtful integration of each component.
+Configuring appropriate subnet settings, VPC connections, and CSI drivers required significant time investment and troubleshooting.
+
+From a developer experience (DX) perspective, KubeFold represents a careful compromise between automation and customization. Each decision to automate a process inherently limits the flexibility available to end users. For example, the automated database download process optimizes for parallel throughput but restricts users from customizing download sources or prioritizing specific databases. Similarly, the separation of alignment and prediction phases improves resource utilization but reduces the ability to fine-tune the computational pipeline for specialized cases.
+
+The most conceptually challenging aspect was determining the appropriate level of abstraction for the Kubernetes operator. Making the system too generic would require extensive configuration from users, defeating the purpose of automation. Conversely, making it too specific would limit its applicability across different research scenarios. The final design represents a balance that favors automation for common workflows while still providing configuration options for essential parameters.
+
+Another significant trade-off was between cloud vendor integration and platform independence. While deep integration with AWS services like FSx for Lustre provided performance benefits, it created dependencies that limit deployment options. Considerable effort went into designing interfaces that could potentially support alternative storage solutions in future iterations without requiring major architectural changes.
 
 \section{Conclusions}
 

@@ -544,7 +544,7 @@ Kubernetes and Docker were written in Go. This language works well in projects r
 
 \section{Recent Advances in Protein Structure Prediction}
 
-\subsection{Pre-2021 Milestones}
+\subsection{Core AlphaFold Developments}
 
 \subsubsection{Improved protein structure prediction using potentials from deep learning (2020)}
 
@@ -560,7 +560,14 @@ It regularly achieves atomic accuracy even when no homologous structure is known
 Validated at CASP14, AlphaFold2's novel architecture (with an attention-based "Evoformer" and end-to-end differentiable structure module) demonstrated accuracy on par with experimental structures in a majority of cases.
 This breakthrough showed that computational methods can predict protein 3D structure from sequence alone with unprecedented accuracy.
 
-\subsection{Advances in 2022–2023}
+\subsubsection{Accurate structure prediction of biomolecular interactions with AlphaFold 3 (2024)}
+
+Abramson et al.
+unveiled \textbf{AlphaFold 3 (AF3)}, a substantially updated model using a \textbf{diffusion-based architecture} to predict the \textbf{joint structure of complexes} including proteins, nucleic acids, small molecules, and ions~\cite{Abramson2024AlphaFold3}.
+AF3 shows markedly improved accuracy over specialized tools: it far outperforms traditional docking for protein–ligand complexes, achieves much higher accuracy on protein–DNA/RNA interactions than prior nucleic-acid-specific predictors, and greatly improves antibody–antigen complex prediction versus AlphaFold-Multimer.
+This work demonstrates that a single deep-learning framework can accurately model diverse biomolecular assemblies, heralding a new era of high-accuracy multi-component complex prediction.
+
+\subsection{Conformational Ensemble and Alternative State Prediction}
 
 \subsubsection{Sampling alternative conformational states of transporters and receptors with AlphaFold2 (2022)}
 
@@ -570,14 +577,13 @@ In tests on membrane transporters and GPCRs, this simple MSA-depth reduction yie
 outward facing), with extreme conformations matching experimental structures (average TM-score ≈0.94).
 This study highlighted an underexplored capability of AlphaFold2 to predict conformational ensembles and suggested the need for next-generation AI models that output biophysical state ensembles.
 
-\subsubsection{A Comprehensive Cloud Architecture for Machine Learning-enabled Research (2023)}
+\subsubsection{Structure prediction of alternative protein conformations (2024)}
 
-Packard et al.
-proposed a cloud-based architecture composed of open-source software layers to support modern machine-learning workloads in research settings~\cite{Packard2023CloudML}.
-The framework, presented at the PEARC 2024 conference, emphasizes portability and reproducibility of ML workflows on cloud and HPC resources.
-By integrating scalable computing, data management, and container orchestration, this architecture demonstrates how complex ML-enabled research (such as large-scale model training and deployment) can be made more efficient and automated across institutional cloud clusters.
-
-\subsection{Latest Developments (2024–2025)}
+Bryant \& Noé developed Cfold, a neural network trained on a special "conformational split" of the PDB to predict alternative protein structures~\cite{Bryant2024Cfold}.
+By ensuring that conformational variants of the same protein are separated into training vs.
+test sets, Cfold can genuinely predict unseen alternative states rather than memorizing them.
+The method efficiently explores a protein's conformational landscape and achieved >50\% success in predicting known alternative conformations with high accuracy (TM-score > 0.8).
+Cfold demonstrates that neural networks can be adapted to generate biologically relevant conformers, addressing a gap left by AlphaFold2 which was uncertain in predicting truly novel conformations.
 
 \subsubsection{High-throughput prediction of protein conformational distributions with subsampled AlphaFold2 (2024)}
 
@@ -587,37 +593,7 @@ AlphaFold2 typically predicts a single ground-state structure, but here multiple
 When tested against NMR data for two proteins (Abl1 kinase and GM-CSF), the method correctly predicted changes in state populations with >80\% accuracy.
 This subsampling strategy was especially effective for qualitatively predicting how mutations or evolution shift conformational landscapes, offering a fast, cost-effective way to estimate conformational distributions for applications in pharmacology and evolution.
 
-\subsubsection{Structure prediction of alternative protein conformations (2024)}
-
-Bryant \& Noé developed Cfold, a neural network trained on a special "conformational split" of the PDB to predict alternative protein structures~\cite{Bryant2024Cfold}.
-By ensuring that conformational variants of the same protein are separated into training vs.
-test sets, Cfold can genuinely predict unseen alternative states rather than memorizing them.
-The method efficiently explores a protein's conformational landscape and achieved >50\% success in predicting known alternative conformations with high accuracy (TM-score > 0.8).
-Cfold demonstrates that neural networks can be adapted to generate biologically relevant conformers, addressing a gap left by AlphaFold2 which was uncertain in predicting truly novel conformations.
-
-\subsubsection{Accurate structure prediction of biomolecular interactions with AlphaFold 3 (2024)}
-
-Abramson et al.
-unveiled \textbf{AlphaFold 3 (AF3)}, a substantially updated model using a \textbf{diffusion-based architecture} to predict the \textbf{joint structure of complexes} including proteins, nucleic acids, small molecules, and ions~\cite{Abramson2024AlphaFold3}.
-AF3 shows markedly improved accuracy over specialized tools: it far outperforms traditional docking for protein–ligand complexes, achieves much higher accuracy on protein–DNA/RNA interactions than prior nucleic-acid-specific predictors, and greatly improves antibody–antigen complex prediction versus AlphaFold-Multimer.
-This work demonstrates that a single deep-learning framework can accurately model diverse biomolecular assemblies, heralding a new era of high-accuracy multi-component complex prediction.
-
-\subsubsection{Protein structure prediction via deep learning: an in-depth review (2025)}
-
-Meng et al.
-provided a comprehensive review of deep learning techniques for protein structure prediction~\cite{Meng2025DeepLearningReview}.
-This article surveys how various architectures – from CNNs and RNNs to GNNs and large language models (LLMs) – have been applied to protein folding.
-It discusses advances in databases and resources, evaluates state-of-the-art methods (e.g. AlphaFold2, RoseTTAFold, ESMFold) and their impact on drug discovery, and highlights future challenges.
-Key issues identified include the need for improved interpretability of deep models, handling multi-domain and flexible regions, and incorporating dynamics and multi-molecule interactions into predictions.
-The review concludes that despite recent breakthroughs, there remains ample room for improving prediction of protein dynamics, complex assemblies, and functional annotations.
-
-\subsubsection{Structure Language Models for Protein Conformation Generation (2024)}
-
-Lu et al.
-proposed a novel framework called \textbf{Structure Language Modeling (SLM)} for efficient generative modeling of protein conformations~\cite{Lu2024SLM}.
-Instead of operating purely in 3D coordinate space, SLM first encodes protein structures into a compact latent representation via a discrete VAE, then applies \textbf{conditional language models} to capture sequence-conditioned conformation distributions.
-This approach enabled \textbf{20–100× faster} generation of diverse conformations compared to 3D diffusion methods, by exploring ensemble modes in a more tractable latent space.
-The authors instantiated SLM with transformer architectures (including a BERT-like model fine-tuned from ESM) and demonstrated its ability to model equilibrium dynamics (e.g. BPTI), conformational changes, and even disordered protein ensembles with high efficiency. \textit{(ICLR 2025 conference paper)}
+\subsection{Physics-Informed and Dynamics-Aware Models}
 
 \subsubsection{Protein Conformation Generation via Force-Guided SE(3) Diffusion Models (2024)}
 
@@ -634,6 +610,27 @@ proposed \textbf{ConfRover}, the first model to learn \textbf{protein conformati
 ConfRover uses a modular autoregressive design: (i) an encoder adapted from folding models that embeds each time-frame conformation, (ii) a sequence model that captures temporal dependencies between frames, and (iii) an SE(3) diffusion decoder that generates 3D structures for each step.
 This enables both time-dependent (trajectory) generation and time-independent sampling of conformations within one framework.
 On the large ATLAS MD dataset, ConfRover successfully learned complex motions and could generate realistic trajectories, marking a significant step toward integrating \textit{dynamic behavior} into structure prediction. \textit{(Preprint, May 2025)}
+
+\subsection{Novel Architectural Approaches}
+
+\subsubsection{Structure Language Models for Protein Conformation Generation (2024)}
+
+Lu et al.
+proposed a novel framework called \textbf{Structure Language Modeling (SLM)} for efficient generative modeling of protein conformations~\cite{Lu2024SLM}.
+Instead of operating purely in 3D coordinate space, SLM first encodes protein structures into a compact latent representation via a discrete VAE, then applies \textbf{conditional language models} to capture sequence-conditioned conformation distributions.
+This approach enabled \textbf{20–100× faster} generation of diverse conformations compared to 3D diffusion methods, by exploring ensemble modes in a more tractable latent space.
+The authors instantiated SLM with transformer architectures (including a BERT-like model fine-tuned from ESM) and demonstrated its ability to model equilibrium dynamics (e.g. BPTI), conformational changes, and even disordered protein ensembles with high efficiency. \textit{(ICLR 2025 conference paper)}
+
+\subsection{Comprehensive Reviews and Surveys}
+
+\subsubsection{Protein structure prediction via deep learning: an in-depth review (2025)}
+
+Meng et al.
+provided a comprehensive review of deep learning techniques for protein structure prediction~\cite{Meng2025DeepLearningReview}.
+This article surveys how various architectures – from CNNs and RNNs to GNNs and large language models (LLMs) – have been applied to protein folding.
+It discusses advances in databases and resources, evaluates state-of-the-art methods (e.g. AlphaFold2, RoseTTAFold, ESMFold) and their impact on drug discovery, and highlights future challenges.
+Key issues identified include the need for improved interpretability of deep models, handling multi-domain and flexible regions, and incorporating dynamics and multi-molecule interactions into predictions.
+The review concludes that despite recent breakthroughs, there remains ample room for improving prediction of protein dynamics, complex assemblies, and functional annotations.
 
 
 \section{Automation of Bioinformatics Workflows}

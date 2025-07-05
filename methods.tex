@@ -263,6 +263,51 @@ The final phase is the \texttt{UploadingArtifacts} phase, which is responsible f
     \label{fig:proteinconformationprediction_completed_terminal}
 \end{figure}
 
+
+\section{Comparison with manual AlphaFold installation}
+
+To highlight the advantages of using the KubeFold operator, it is worth comparing the installation and execution process with the traditional manual approach required for AlphaFold.
+
+\subsection{Traditional AlphaFold setup process}
+
+Setting up AlphaFold manually requires numerous steps that demand significant technical expertise:
+
+\begin{enumerate}
+    \item \textbf{Environment preparation:} Install CUDA, cuDNN, and other GPU dependencies on a compatible machine.
+    \item \textbf{Software installation:} Clone the AlphaFold repository, install Python dependencies, and configure the environment.
+    \item \textbf{Database download:} Manually download multiple large databases.
+    \item \textbf{Input preparation:} Format protein sequences according to AlphaFold requirements.
+    \item \textbf{Execution configuration:} Configure GPU settings, memory allocation, and other runtime parameters.
+    \item \textbf{Results management:} Manually collect, organize, and store prediction results.
+    \item \textbf{Results sharing:} Set up a system to share results with team members.
+\end{enumerate}
+
+The entire process can take several days to complete, requiring expertise in Linux system administration, GPU configuration, Python environment management, and bioinformatics data handling.
+Additionally, each step is prone to errors that can be difficult to troubleshoot.
+
+\subsection{KubeFold approach}
+
+In contrast, the KubeFold operator simplifies this process to just a few steps:
+
+\begin{enumerate}
+    \item Set up a Kubernetes cluster (can be automated using Cloud Infrastructure Formation software),
+    \item Install the KubeFold operator,
+    \item Create a \texttt{ProteinDatabase} resource,
+    \item Create a \texttt{ProteinConformationPrediction} resource with the desired protein sequence.
+\end{enumerate}
+
+The entire setup and execution process that previously required days of work and specialized knowledge can be completed in hours with minimal Kubernetes expertise.
+The operator handles all the complex tasks automatically:
+
+\begin{itemize}
+    \item Database provisioning and management
+    \item Job scheduling across appropriate nodes
+    \item Execution monitoring and status reporting
+    \item Results storage and notification
+\end{itemize}
+
+This simplification makes protein structure prediction accessible to researchers without extensive computational expertise, allowing them to focus on their scientific work rather than infrastructure management.
+
 \section{Computation artifacts overview}
 
 After the computations were completed, the artifacts were sent to AWS S3 storage.

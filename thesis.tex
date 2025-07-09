@@ -28,21 +28,35 @@ For understanding, inspiration, and help, I would like to express my sincere gra
 supervisor \textbf{dr inż. Paweł Skrzyński}. His dedication, professionalism, and valuable advice were invaluable during the implementation of this project.
 }}
 
-%TODO(x): W rozdziale "State of the Art", warto było umieścić jedno zdanie podsumowujące kluczowe różnice między opisywanymi narzędziami (np. Foldy vs. Kubefold) przed przejściem do kolejnego podrozdziału.
-
-%TODO(x): Sekcja 5.2. Challenges mogłaby zawierać więcej refleksji użytkownika – jakie kompromisy musiano podjąć? Jakie elementy sprawiły największy problem koncepcyjnie?
-
-%TODO(x): Brakuje benchmarków czasu trwania obliczeń w poszczególnych fazach (Aligning, Predicting, Uploading) i jakiejś analizy złożoności obliczeniowej
-
-%TODO(x): Dobrze byłoby pokazać porównanie „before/after” – ile kroków ręcznych wymagałaby instalacja i uruchomienie AlphaFold bez operatora?
-
-%TODO(x): Warto byłoby rozważyć minimalny rozdział nt. testów – czy komponenty były testowane jednostkowo? Czy działanie operatora było symulowane w testowym klastrze?
-
-%TODO: Przydałoby się więcej odniesień bibliograficznych do istniejących projektów operatorów K8s w naukach biologicznych - brakuje lepszego "osadzenia" prowadzonych badań i ustawienia kontekstu
-
-%TODO: Można by wspomnieć o BioContainers, BioBlend lub Galaxy jako przykładach narzędzi ułatwiających dostęp do bioinformatyki w chmurze.
-
-%TODO: Odniesienie do inicjatywy BioCommons lub ELIXIR mogłoby poszerzyć kontekst aplikacyjny.
+% Uwagi:
+% - Zwiększenie głębokości części 2.5 (Automation of Bioinformatics Workflows):
+%   - Warto byłoby dodać krótkie wzmianki o innych narzędziach do orkiestracji przepływów bioinformatycznych:
+%     - Nextflow, Snakemake, Galaxy, WDL – choć nie są to operatorowe rozwiązania, ich ograniczenia pokazują wartość podejścia KubeFold.
+%     - można wspomnieć o braku możliwości zarządzania infrastrukturą u tych narzędzi.
+ 
+% - W sekcji o Foldy można byłoby dodać tabelaryczne porównanie: instalacja, skala, automatyzacja, wymagania DevOps.
+%   Wydaje mi się, że jest drobna nieścisłość koncepcyjna:
+%   - w 2.5.2 pojawia się opis architektury Tapis, ale nie wspomniano, że brakuje warstwy typu Operator, czyli że kontrola nie jest declarative i nie obejmuje pełnego cyklu życia zasobów.
+%   - w 2.6 dobrze byłoby doprecyzować, co dokładnie znaczy „full lifecycle automation” – czy to dotyczy również tworzenia wolumenów? logowania? autoskalowania?
+ 
+% - Zabrakło wzmianki o:
+%   Kubeflow – nawet jeśli nie używane, warto wspomnieć, że to dominujący framework ML dla K8s, ale nie nadaje się dobrze do batchowych zadań o dużych wymaganiach dyskowych, jak AlphaFold.
+%   BioContainers – jako alternatywa „lekkiej” automatyzacji w środowisku K8s.
+ 
+% - Wstęp i cele (rozdz. 1)
+%   - wietnie uzasadniona potrzeba projektu – jasno wyodrębniono lukę infrastrukturalną, a nie algorytmiczną.
+%   - Może warto dodać 1–2 zdania o tym, dla jakiej skali użytkowników system mógłby być przydatny: czy to małe zespoły akademickie, czy np. duże centra bioinformatyczne?
+ 
+% - Projekt systemu (rozdz. 3)
+%   - Brakuje mi krótkiej tabeli lub listy, która by podsumowała: kolejność faz, wymagania sprzętowe, liczbę podów, wolumeny itp. dla jednej instancji predykcji.
+%   - Warto byłoby wspomnieć, jak wygląda error handling – np. co się dzieje, gdy nie powiedzie się upload do S3 lub pobranie bazy?
+ 
+% - Eksperymenty i wyniki (rozdz. 4–5)
+%   - Brakuje tabeli lub wykresu pokazującego czasy działania poszczególnych faz i ew. porównania kosztów (nawet orientacyjnie).
+%   - Warto dodać, czy system był testowany pod kątem:
+%     - równoczesnego uruchamiania wielu zadań,
+%     - awarii w trakcie pobierania,
+%     - braku zasobów GPU.
 
 \begin{document}
 

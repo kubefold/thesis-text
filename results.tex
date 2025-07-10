@@ -232,6 +232,40 @@ The most conceptually challenging aspect was determining the appropriate level o
 
 Another significant trade-off was between cloud vendor integration and platform independence. While deep integration with AWS services like FSx for Lustre provided performance benefits, it created dependencies that limit deployment options. Considerable effort went into designing interfaces that could potentially support alternative storage solutions in future iterations without requiring major architectural changes.
 
+\subsection{Fault tolerance and failure handling}
+
+During testing of the KubeFold platform, several scenarios involving job failures were encountered, providing valuable insights into the system's resilience and error handling capabilities. One particularly instructive case occurred during a protein conformation prediction where the prediction job failed due to insufficient GPU memory allocation.
+
+The failure manifested during the \textit{Predicting} phase when the AlphaFold container attempted to load the neural network model onto a GPU with insufficient VRAM. The Kubernetes job status showed \texttt{Failed > 0}, triggering the operator's automated failure handling mechanism. Upon detection of the failure, the system exhibited the following behavior:
+
+\begin{enumerate}
+    \item \textbf{Automatic failure detection:} The controller immediately detected the job failure through regular status polling of the Kubernetes Job resource.
+    
+    \item \textbf{Retry mechanism activation:} Since this was the first failure (retry count = 0), the system automatically incremented the retry counter and deleted the failed job to prepare for a retry attempt.
+    
+    \item \textbf{Resource cleanup and recreation:} The failed job pod was terminated and removed, while the persistent data (including MSA results from the previous aligning phase) remained intact on the shared storage volume.
+    
+    \item \textbf{Automatic retry execution:} A new prediction job was created with identical configuration, leveraging the preserved alignment data to avoid repeating the time-intensive MSA generation process.
+\end{enumerate}
+
+However, the second attempt also failed with the same GPU memory error, followed by a third failure. After reaching the maximum retry limit of 3 attempts, the system transitioned the \texttt{ProteinConformationPrediction} resource to the \texttt{Failed} status with the error message: \textit{"Prediction job failed after max retries"}.
+
+This failure scenario highlighted several important aspects of the KubeFold design:
+
+\begin{itemize}
+    \item \textbf{State preservation:} The alignment results were preserved between retry attempts, preventing unnecessary recomputation of the MSA which would have added significant overhead (approximately 15 minutes per retry).
+    
+    \item \textbf{Clear error reporting:} The system provided clear status information through both the Kubernetes resource status and operator logs, making it straightforward to diagnose the underlying cause.
+    
+    \item \textbf{Resource cleanup:} Failed jobs were automatically cleaned up to prevent cluster resource accumulation, while preserving data necessary for debugging.
+    
+    \item \textbf{Graceful degradation:} The system failed predictably without affecting other concurrent predictions or the overall cluster stability.
+\end{itemize}
+
+The resolution involved modifying the node selector configuration to target GPU nodes with higher memory capacity (32GB instead of 16GB VRAM), after which subsequent predictions completed successfully. This experience demonstrated that while the automated retry mechanism effectively handles transient failures (such as temporary resource unavailability), it appropriately stops retrying when encountering persistent configuration issues that require manual intervention.
+
+The fault tolerance mechanisms extend beyond prediction jobs to cover all phases of the workflow. Similar retry logic applies to the alignment phase (MSA generation) and artifact upload phase, ensuring that temporary network issues or storage problems do not result in complete workflow failures. This comprehensive approach to error handling significantly improves the platform's reliability in production environments where various transient failures are common.
+
 \section{Performance analysis and cost evaluation}
 
 To provide a comprehensive assessment of the KubeFold platform's efficiency, this section presents detailed timing analysis for each computational phase and cost evaluation compared to alternative approaches.

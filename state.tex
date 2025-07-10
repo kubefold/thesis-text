@@ -667,8 +667,8 @@ CWL workflows can be executed by multiple workflow runners, providing workflow p
 
 Despite their sophistication in workflow orchestration, these traditional tools exhibit significant limitations regarding infrastructure management that highlight the value of operator-based approaches:
 
-\textbf{Manual Infrastructure Provisioning}: All of these workflow systems require pre-existing computational infrastructure.
-Users must manually provision clusters, configure networking, set up storage systems, and manage resource allocation before executing workflows.
+\textbf{Manual Infrastructure Provisioning}: While these workflow systems generally require pre-existing computational infrastructure, some tools like Nextflow and Snakemake can integrate with cloud autoscaling services (e.g., AWS Batch, Google Life Sciences API).
+However, users must still manually provision core infrastructure, configure networking, set up storage systems, and manage resource allocation before executing workflows.
 This places a substantial operational burden on researchers and requires specialized DevOps knowledge.
 
 \textbf{Limited Cloud-Native Integration}: While these tools can execute on cloud platforms, they do not leverage cloud-native technologies like Kubernetes operators for automated infrastructure management.
@@ -696,7 +696,7 @@ The application deployment process assumes:
 \end{itemize}
 
 Foldy uses a task queue mechanism (RedisQueue), and computational workers are scaled dynamically using KEDA and Prometheus.
-This approach allows prediction of large protein structures (up to 3000 amino acids) and supports thousands of users~\cite{foldy}.
+This approach allows prediction of large protein structures (up to 6000 amino acids) and supports thousands of users~\cite{foldy}.
 
 Table~\ref{tab:foldy-kubefold-comparison} presents a comparison between Foldy and KubeFold across key operational dimensions:
 
@@ -778,7 +778,7 @@ Kubeflow addresses many challenges in machine learning operations by providing s
 The platform abstracts much of the complexity of Kubernetes while providing researchers with powerful tools for experiment tracking, model versioning, and automated ML.
 
 Pandey et al. conducted a comprehensive study of Kubeflow deployment across different cloud providers (Google Cloud Platform and IBM Cloud), evaluating its performance, ease of setup, and limitations~\cite{kubeflow_deployment_study}.
-Their research demonstrated that while Kubeflow significantly improves inference performance compared to bare-metal deployments, it requires substantial setup complexity and ongoing maintenance.
+Their research demonstrated that while Kubeflow provides effective orchestration for ML workflows across cloud environments, it requires substantial setup complexity and ongoing maintenance.
 
 \textbf{Limitations for Batch-Heavy Workloads}: Despite its strengths as the dominant ML framework for Kubernetes, Kubeflow presents several limitations for batch processing tasks with extensive storage requirements, such as AlphaFold:
 

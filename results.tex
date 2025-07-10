@@ -236,7 +236,7 @@ Another significant trade-off was between cloud vendor integration and platform 
 
 During testing of the KubeFold platform, several scenarios involving job failures were encountered, providing valuable insights into the system's resilience and error handling capabilities. One particularly instructive case occurred during a protein conformation prediction where the prediction job failed due to insufficient GPU memory allocation.
 
-The failure manifested during the \textit{Predicting} phase when the AlphaFold container attempted to load the neural network model onto a GPU with insufficient VRAM. The Kubernetes job status showed \texttt{Failed > 0}, triggering the operator's automated failure handling mechanism. Upon detection of the failure, the system exhibited the following behavior:
+The failure manifested during the \textit{Predicting} phase when the AlphaFold container attempted to load the neural network model onto a GPU with insufficient VRAM. The job was initially scheduled on a G4dn instance with an NVIDIA T4 GPU (16GB VRAM), which proved insufficient for the model requirements. The Kubernetes job status showed \texttt{Failed > 0}, triggering the operator's automated failure handling mechanism. Upon detection of the failure, the system exhibited the following behavior:
 
 \begin{enumerate}
     \item \textbf{Automatic failure detection:} The controller immediately detected the job failure through regular status polling of the Kubernetes Job resource.
@@ -262,7 +262,7 @@ This failure scenario highlighted several important aspects of the KubeFold desi
     \item \textbf{Graceful degradation:} The system failed predictably without affecting other concurrent predictions or the overall cluster stability.
 \end{itemize}
 
-The resolution involved modifying the node selector configuration to target GPU nodes with higher memory capacity (32GB instead of 16GB VRAM), after which subsequent predictions completed successfully. This experience demonstrated that while the automated retry mechanism effectively handles transient failures (such as temporary resource unavailability), it appropriately stops retrying when encountering persistent configuration issues that require manual intervention.
+The resolution involved modifying the node selector configuration to target G5 instances with NVIDIA A10G GPUs (24GB VRAM instead of the original 16GB T4), after which subsequent predictions completed successfully. This experience demonstrated that while the automated retry mechanism effectively handles transient failures (such as temporary resource unavailability), it appropriately stops retrying when encountering persistent configuration issues that require manual intervention.
 
 The fault tolerance mechanisms extend beyond prediction jobs to cover all phases of the workflow. Similar retry logic applies to the alignment phase (MSA generation) and artifact upload phase, ensuring that temporary network issues or storage problems do not result in complete workflow failures. This comprehensive approach to error handling significantly improves the platform's reliability in production environments where various transient failures are common.
 
@@ -311,19 +311,19 @@ Based on AWS pricing in the eu-central-1 region (as of January 2025)~\cite{aws-e
         \hline
         \textbf{Component} & \textbf{KubeFold Cost} & \textbf{Manual EC2 Cost} & \textbf{SageMaker Cost*} \\
         \hline
-        \textbf{Compute - CPU phases} & \$0.19/hour × 1.3h = \$0.25 & \$0.19/hour × 4h = \$0.76 & \$0.30/hour × 1.5h = \$0.45 \\
+        \textbf{Compute - CPU phases} & \$0.19/hour × 1.3h = \$0.25 & \$0.19/hour × 1.3h = \$0.25 & \$0.23/hour × 1.3h = \$0.30 \\
         \hline
         \textbf{Compute - GPU prediction} & \$1.00/hour × 0.42h = \$0.42 & \$1.00/hour × 0.42h = \$0.42 & \$1.20/hour × 0.42h = \$0.50 \\
         \hline
-        \textbf{Storage (FSx Lustre)} & \$0.13/GB-month × 3TB × 2h = \$0.04 & \$0.10/GB-month × 3TB × 4h = \$0.05 & \$0.20/GB-month × 3TB × 2h = \$0.05 \\
+        \textbf{Storage (FSx Lustre)} & \$0.13/GB-month × 3TB × 2h = \$1.08 & \$0.13/GB-month × 3TB × 4h = \$2.16 & \$0.20/GB-month × 3TB × 2h = \$1.67 \\
         \hline
         \textbf{Data Transfer (ingress)} & Free (downloading TO AWS) & Free (downloading TO AWS) & Free \\
         \hline
         \textbf{S3 Storage} & \$0.02/GB × 5GB = \$0.10 & \$0.02/GB × 5GB = \$0.10 & \$0.02/GB × 5GB = \$0.10 \\
         \hline
-        \textbf{Total per prediction} & \textbf{\$0.81} & \textbf{\$1.33} & \textbf{\$1.10} \\
+        \textbf{Total per prediction} & \textbf{\$1.85} & \textbf{\$2.93} & \textbf{\$2.57} \\
         \hline
-        \textbf{Total (database reuse)} & \textbf{\$0.81} & \textbf{\$1.33} & \textbf{\$1.10} \\
+        \textbf{Total (database reuse)} & \textbf{\$1.85} & \textbf{\$2.93} & \textbf{\$2.57} \\
         \hline
     \end{tabularx}
     \caption{Cost comparison for protein conformation prediction approaches}
@@ -332,7 +332,7 @@ Based on AWS pricing in the eu-central-1 region (as of January 2025)~\cite{aws-e
 
 *SageMaker costs are estimated based on the AWS blog reference~\cite{aws-sagemaker-protein-folding}, assuming optimized managed instances and included database storage.
 
-\textbf{Note:} All pricing data is based on official AWS pricing pages~\cite{aws-ec2-pricing,aws-fsx-pricing} accessed on January 9, 2025, for the EU Central (Frankfurt) region. Ingress data transfer (downloading databases TO AWS) is free when using public subnets with internet gateways~\cite{aws-ec2-pricing}. This analysis assumes no NAT Gateway usage, making database downloads completely free from a data transfer perspective.
+\textbf{Note:} All pricing data is based on official AWS pricing pages~\cite{aws-ec2-pricing,aws-fsx-pricing} accessed on January 9, 2025, for the EU Central (Frankfurt) region. FSx for Lustre costs are calculated by converting monthly pricing (\$0.13/GB-month) to hourly rates (\$0.00018/GB-hour) and multiplying by storage size and duration. Ingress data transfer (downloading databases TO AWS) is free when using public subnets with internet gateways~\cite{aws-ec2-pricing}. This analysis assumes no NAT Gateway usage, making database downloads completely free from a data transfer perspective.
 
 \subsection{Performance comparison with AWS SageMaker approach}
 
@@ -355,7 +355,7 @@ The AWS SageMaker protein folding workflow described in the referenced blog post
         \hline
         \textbf{Scalability} & High (SageMaker Pipelines) & High (Kubernetes native) \\
         \hline
-        \textbf{Cost per prediction} & \$1.10 & \$0.81 \\
+        \textbf{Cost per prediction} & \$2.57 & \$1.85 \\
         \hline
         \textbf{Vendor Lock-in} & High (AWS SageMaker specific) & Medium (Kubernetes portable, AWS services) \\
         \hline
@@ -373,14 +373,14 @@ The KubeFold platform achieves cost optimization through several key mechanisms:
     
     \item \textbf{Ephemeral compute:} Pods are automatically terminated after task completion, ensuring no idle compute costs.
     
-    \item \textbf{Database reuse:} The protein database can be reused for multiple predictions without any additional data transfer costs, maintaining the consistent \$0.81 per-prediction cost.
+    \item \textbf{Database reuse:} The protein database can be reused for multiple predictions without any additional data transfer costs, maintaining the consistent \$1.85 per-prediction cost.
     
     \item \textbf{Parallel processing:} Multiple predictions can run simultaneously across cluster nodes, improving throughput without proportional cost increases.
 \end{itemize}
 
-The database download incurs no data transfer charges since ingress traffic to AWS is free when using public subnets with internet gateways~\cite{aws-ec2-pricing}. This means that both initial and subsequent predictions have the same cost structure, making KubeFold cost-effective for research teams running protein structure predictions.
+The database download incurs no data transfer charges since ingress traffic to AWS is free when using public subnets with internet gateways~\cite{aws-ec2-pricing}. This means that both initial and subsequent predictions have the same cost structure (\$1.85 per prediction), making KubeFold cost-effective for research teams running protein structure predictions.
 
-When compared to manually managed EC2 instances using the same instance types, KubeFold shows a 39\% cost reduction for all predictions. This efficiency gain comes from automated resource lifecycle management and reduced idle time. Compared to AWS SageMaker, KubeFold achieves a 26\% cost reduction while providing greater flexibility and reduced vendor lock-in. This demonstrates the platform's economic viability for both occasional and high-throughput usage scenarios.
+When compared to manually managed EC2 instances using the same instance types, KubeFold shows a 37\% cost reduction for all predictions. This efficiency gain comes from automated resource lifecycle management and reduced idle time. Compared to AWS SageMaker, KubeFold achieves a 28\% cost reduction while providing greater flexibility and reduced vendor lock-in. This demonstrates the platform's economic viability for both occasional and high-throughput usage scenarios.
 
 \section{Conclusions}
 

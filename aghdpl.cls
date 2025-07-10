@@ -157,7 +157,7 @@
 
     \vspace*{2mm}
     {
-        \scalebox{0.95}{\sffamily{\large{\bfseries{\scshape AGH University of Science and Technology}}}}
+        \scalebox{0.95}{\sffamily{\large{\bfseries{\scshape Akademia Górniczo-Hutnicza im. Stanisława Staszica w Krakowie}}}}
 
         \vspace*{1mm}
 

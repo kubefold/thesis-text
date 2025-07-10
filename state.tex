@@ -636,7 +636,52 @@ The review concludes that despite recent breakthroughs, there remains ample room
 \section{Automation of Bioinformatics Workflows}
 
 The scientific literature proposes a range of patterns and tools for managing the infrastructure required for machine learning computations, with particular emphasis on cloud-based solutions and container orchestration.
-Below are two selected articles discussing the deployment of bioinformatics applications on a computational cluster, as well as a project that automates these approaches.
+To understand the current landscape, it is essential to examine both traditional workflow orchestration tools and specific deployment approaches that have emerged in recent years.
+
+\subsection{Traditional Workflow Orchestration Tools}
+
+While specialized bioinformatics platforms provide powerful capabilities, it is important to examine the broader landscape of workflow orchestration tools that have become standard in the field.
+These tools, while effective for workflow definition and execution, reveal critical limitations when it comes to infrastructure management -- a gap that operator-based solutions like KubeFold are designed to address.
+
+The bioinformatics community has adopted several workflow management systems, each with distinct characteristics and approaches~\cite{workflows_review_nature}.
+
+\textbf{Nextflow} is a dataflow-based workflow manager that has gained significant popularity in the bioinformatics community.
+It provides excellent documentation, supports both Conda environments and container technologies, and offers good integration with cloud platforms.
+Nextflow uses a dataflow programming model where processes are connected via their outputs and inputs, enabling automatic parallelization~\cite{nextflow}.
+The nf-core community has created a substantial collection of peer-reviewed bioinformatics pipelines, demonstrating the tool's adoption and utility.
+
+\textbf{Snakemake} follows a Make-like approach where users specify output files they want to build, and the system determines the necessary steps to create them.
+It is Python-based, making it accessible to researchers familiar with Python, and provides strong support for reproducibility through built-in environment management~\cite{snakemake}.
+Snakemake offers excellent support for incremental builds and re-entrancy, allowing workflows to resume from interruption points.
+
+\textbf{Galaxy} provides a web-based platform that abstracts workflow complexity behind a graphical user interface.
+It enables researchers without programming expertise to construct and execute complex bioinformatics workflows~\cite{galaxy}.
+Galaxy's strength lies in its accessibility and the extensive tool ecosystem, with thousands of pre-configured bioinformatics tools available through its interface.
+
+\textbf{Workflow Description Language (WDL)} and its execution engine \textbf{Cromwell} offer a declarative approach to workflow specification.
+WDL provides a standardized way to describe workflows that can be executed across different environments, promoting portability~\cite{wdl_cromwell}.
+The approach separates workflow logic from execution details, enabling the same workflow to run on various computing platforms.
+
+\textbf{Common Workflow Language (CWL)} represents an effort to standardize workflow descriptions across different execution engines.
+CWL workflows can be executed by multiple workflow runners, providing workflow portability across different computational environments~\cite{cwl}.
+
+Despite their sophistication in workflow orchestration, these traditional tools exhibit significant limitations regarding infrastructure management that highlight the value of operator-based approaches:
+
+\textbf{Manual Infrastructure Provisioning}: While these workflow systems generally require pre-existing computational infrastructure, some tools like Nextflow and Snakemake can integrate with cloud autoscaling services (e.g., AWS Batch, Google Life Sciences API).
+However, users must still manually provision core infrastructure, configure networking, set up storage systems, and manage resource allocation before executing workflows.
+This places a substantial operational burden on researchers and requires specialized DevOps knowledge.
+
+\textbf{Limited Cloud-Native Integration}: While these tools can execute on cloud platforms, they do not leverage cloud-native technologies like Kubernetes operators for automated infrastructure management.
+They treat cloud resources as static infrastructure rather than dynamically managed, declarative resources.
+
+\textbf{Lack of Automated Scaling}: Traditional workflow managers provide limited support for automatic infrastructure scaling in response to workload demands.
+Resource allocation is typically configured at deployment time rather than adjusted dynamically based on queue depth or resource utilization.
+
+\textbf{Complex Deployment Requirements}: Deploying these workflow systems in production environments requires significant configuration effort.
+Setting up proper cluster managers, configuring security policies, implementing backup strategies, and ensuring high availability demands extensive operational expertise.
+
+\textbf{Separation of Concerns}: These tools excel at workflow orchestration but delegate infrastructure concerns to external systems.
+This separation, while following good architectural principles, results in complex operational overhead when researchers need to manage both workflow logic and underlying infrastructure.
 
 \subsection{Foldy}
 
@@ -651,7 +696,44 @@ The application deployment process assumes:
 \end{itemize}
 
 Foldy uses a task queue mechanism (RedisQueue), and computational workers are scaled dynamically using KEDA and Prometheus.
-This approach allows prediction of large protein structures (up to 3000 amino acids) and supports thousands of users~\cite{foldy}.
+This approach allows prediction of large protein structures (up to 6000 amino acids) and supports thousands of users~\cite{foldy}.
+
+Table~\ref{tab:foldy-kubefold-comparison} presents a comparison between Foldy and KubeFold across key operational dimensions:
+
+\begin{table}[htbp]
+\centering
+\caption{Comparison of Foldy and KubeFold platforms}
+\label{tab:foldy-kubefold-comparison}
+\begin{tabular}{|l|p{5.5cm}|p{5.5cm}|}
+\hline
+\textbf{Aspect} & \textbf{Foldy} & \textbf{KubeFold} \\
+\hline
+\textbf{Installation} & 
+Requires manual infrastructure provisioning (DNS, cluster, databases), then single \texttt{helm install} command & 
+Complex initial setup with Kubernetes operator deployment, but automated resources management afterwards \\
+\hline
+\textbf{User Interface} & 
+Web--based graphical interface & 
+YAML configuration files providing declarative infrastructure management \\
+\hline
+\textbf{Scale} & 
+Supports hundreds of users with correctly configured scaling via KEDA & 
+Designed for large organizations--automatic resource management and cloud--native scaling \\
+\hline
+\textbf{Automation Level} & 
+Automated workflow execution and scaling, manual infrastructure setup & 
+Complete lifecycle automation including job management, artifacts archiving, notifications and cleanup \\
+\hline
+\textbf{DevOps Requirements} & 
+Moderate -- requires initial cluster setup, DNS configuration, and database management & 
+High initial setup complexity, minimal ongoing operational overhead due to operator--based automation \\
+\hline
+\textbf{Target Audience} & 
+Researchers and biologists without programming expertise & 
+Technical teams and institutions requiring enterprise--grade automation and cloud-native solution \\
+\hline
+\end{tabular}
+\end{table}
 
 \textbf{Limitation:} While Foldy provides a powerful and user-friendly platform, its deployment still requires significant manual configuration and integration effort.
 Deployment still involves some infrastructure setup, including configuring DNS, cluster resources, and databases, which can be complex for teams without DevOps experience.
@@ -677,13 +759,120 @@ Thanks to integration with the Tapis ML Hub, users can search for, deploy, and u
 GPU provisioning, workflow orchestration, and model deployment are fragmented across various APIs and services, making end-to-end automation challenging for small teams or institutions without dedicated infrastructure engineers.
 While powerful in production settings, the architecture lacks a unified interface for researchers to independently manage job submissions, monitoring, and data without DevOps support.
 
+Moreover, Tapis offers an imperative approach to infrastructure management. In contrast, KubeFold offers a declarative approach to infrastructure management, and therefore the user does not need to worry about how to manage infrastructure, only defines the desired state of the system. The KubeFold operator makes decisions on how to achieve that state.
+
+\subsection{Kubeflow: Machine Learning Workflows on Kubernetes}
+
+Kubeflow is an open-source machine learning platform designed to enable deployment, orchestration, and management of ML workflows on Kubernetes~\cite{kubeflow,kubeflow_deployment_study}.
+Originally developed by Google as an extension of TensorFlow, Kubeflow has evolved into a comprehensive MLOps platform that supports multiple machine learning frameworks and provides end-to-end ML pipeline capabilities.
+
+The platform consists of several core components:
+\begin{itemize}
+    \item \textbf{Kubeflow Pipelines} -- provide a platform for building and deploying portable, scalable machine learning workflows based on Docker containers;
+    \item \textbf{Notebooks} -- offer web-based development environments (JupyterLab, RStudio, VS Code) running inside Kubernetes pods;
+    \item \textbf{Katib} -- provides automated hyperparameter tuning and neural architecture search capabilities;
+    \item \textbf{KServe} -- enables model serving with advanced features like canary deployments, autoscaling, and multi-framework support.
+\end{itemize}
+
+Kubeflow addresses many challenges in machine learning operations by providing standardized, containerized ML workflows that can run consistently across different cloud providers.
+The platform abstracts much of the complexity of Kubernetes while providing researchers with powerful tools for experiment tracking, model versioning, and automated ML.
+
+Pandey et al. conducted a comprehensive study of Kubeflow deployment across different cloud providers (Google Cloud Platform and IBM Cloud), evaluating its performance, ease of setup, and limitations~\cite{kubeflow_deployment_study}.
+Their research demonstrated that while Kubeflow provides effective orchestration for ML workflows across cloud environments, it requires substantial setup complexity and ongoing maintenance.
+
+\textbf{Limitations for Batch-Heavy Workloads}: Despite its strengths as the dominant ML framework for Kubernetes, Kubeflow presents several limitations for batch processing tasks with extensive storage requirements, such as AlphaFold:
+
+\begin{itemize}
+    \item \textbf{Complex Storage Integration}: Kubeflow pipelines are primarily designed for ephemeral computations with limited persistent storage integration, making it challenging to manage large reference databases (terabytes) efficiently;
+    \item \textbf{Infrastructure Management Gap}: While Kubeflow automates ML workflows, it assumes pre-existing infrastructure and requires manual provisioning of storage systems, databases, and cluster resources;
+    \item \textbf{Batch Job Limitations}: The platform is optimized for interactive ML development and training rather than long-running batch jobs with complex dependency management;
+    \item \textbf{Operational Overhead}: Setup and maintenance require significant DevOps expertise, particularly for complex deployments involving multiple cloud services and storage systems.
+\end{itemize}
+
+These limitations highlight why specialized solutions like KubeFold are necessary for computational biology workloads that require comprehensive infrastructure automation, large-scale data management, and batch-oriented processing patterns.
+
+\subsection{BioContainers: Lightweight Automation Alternative}
+
+BioContainers is an open-source, community-driven framework that provides standardized containers for bioinformatics software~\cite{biocontainers}.
+Developed as a response to the reproducibility crisis in computational biology, BioContainers offers a lightweight alternative for software deployment and automation in Kubernetes environments.
+
+The framework addresses key challenges in bioinformatics software management:
+\begin{itemize}
+    \item \textbf{Software Standardization}: Provides consistent containerization guidelines and templates for bioinformatics tools;
+    \item \textbf{Reproducibility}: Ensures computational experiments can be reliably repeated across different environments;
+    \item \textbf{Dependency Management}: Eliminates conflicts between different software versions and system dependencies;
+    \item \textbf{Easy Deployment}: Enables researchers to quickly deploy complex software stacks without manual compilation.
+\end{itemize}
+
+The BioContainers architecture consists of:
+\begin{itemize}
+    \item \textbf{GitHub Organization}: Contains all Dockerfiles, specifications, and tools for container creation and management;
+    \item \textbf{Container Registries}: Automated build systems that create and distribute ready-to-use containers;
+    \item \textbf{Registry UI}: Web interface for searching, tagging, and accessing available containers;
+    \item \textbf{Integration with BioConda}: Automatic container generation from existing Conda packages through "mulled containers".
+\end{itemize}
+
+At the time of publication, BioContainers provided over 2,000 containers ready for use, with automatic generation capabilities that leverage existing BioConda recipes.
+The project has been integrated with major platforms including Galaxy and PhenoMeNal H2020, demonstrating its adoption in the bioinformatics community.
+
+\textbf{BioContainers as Kubernetes Alternative}: In Kubernetes environments, BioContainers offers several advantages for lightweight automation:
+
+\begin{itemize}
+    \item \textbf{Minimal Infrastructure Requirements}: Unlike complex platforms, BioContainers can be deployed with basic Kubernetes resources (Pods, Jobs, Deployments);
+    \item \textbf{Tool-Specific Focus}: Each container is optimized for specific bioinformatics tools rather than providing a comprehensive platform;
+    \item \textbf{Community Maintenance}: Distributed maintenance model reduces the burden on individual research teams;
+    \item \textbf{Standard Compliance}: Follows established containerization best practices and Docker ecosystem standards.
+\end{itemize}
+
+\textbf{Comparison with Comprehensive Solutions}: While BioContainers excels at software standardization and basic containerization, it operates at a different abstraction level compared to platforms like KubeFold:
+
+\begin{itemize}
+    \item BioContainers focuses on \textit{software packaging} while KubeFold addresses \textit{infrastructure orchestration};
+    \item BioContainers requires manual workflow composition while KubeFold provides automated lifecycle management;
+    \item BioContainers assumes existing Kubernetes knowledge while KubeFold abstracts infrastructure complexity;
+    \item BioContainers provides building blocks while KubeFold offers complete solutions.
+\end{itemize}
+
+The complementary nature of these approaches suggests that BioContainers could serve as the foundation for software packaging within more comprehensive automation platforms like KubeFold, combining standardized software containers with automated infrastructure management.
+
+\subsection{The Value of Operator-Based Approaches}
+
+The limitations of traditional workflow orchestration tools demonstrate the value proposition of operator-based solutions like KubeFold.
+By integrating workflow management with infrastructure automation through Kubernetes operators, KubeFold addresses the operational gap that exists between workflow definition and infrastructure management.
+
+Where existing solutions require DevOps expertise for proper deployment, KubeFold abstracts infrastructure complexity behind declarative resource definitions.
+Where conventional workflow managers treat infrastructure as static, KubeFold provides dynamic resource management that adapts to computational demands.
+
+This integration represents a fundamental shift from treating infrastructure as a prerequisite to treating it as an automatically managed component of the scientific computing platform.
 
 \section{Summary and Identified Gaps}
 
-Both Foldy and the described cloud architecture confirm the growing importance of Kubernetes and cloud-native tools in bioinformatics research.
-Kubefold, on the other hand, offers a new quality -- shifting the burden of deployment and configuration from the user to the system, thus democratizing access to advanced AI tools in science.
+The review of workflow automation solutions reveals a diverse landscape of tools and platforms, each addressing different aspects of the bioinformatics automation challenge.
+From traditional workflow managers like Nextflow and Snakemake, to comprehensive platforms like Kubeflow, to specialized deployments like Foldy, and lightweight alternatives like BioContainers, the field demonstrates growing maturity in addressing reproducibility and scalability concerns.
+
+However, these solutions exhibit different strengths and limitations that highlight distinct gaps in the current ecosystem:
+
+\textbf{Kubeflow}, while serving as the dominant ML framework for Kubernetes, excels at interactive machine learning workflows but struggles with batch-heavy workloads requiring extensive storage management.
+Its complexity and infrastructure requirements make it less suitable for computational biology applications like AlphaFold that demand seamless integration of large-scale data management with automated workflow execution.
+
+\textbf{BioContainers} provides excellent software standardization and lightweight deployment options, addressing the reproducibility crisis through consistent containerization.
+However, it operates primarily at the software packaging level and requires manual orchestration for complex workflows, leaving infrastructure management to external systems.
+
+\textbf{Foldy} demonstrates the feasibility of user-friendly web interfaces for protein structure prediction but still requires manual infrastructure provisioning and lacks comprehensive lifecycle automation.
+
+The comprehensive cloud architecture by Stubbs et al. showcases powerful multi-layered services but demands significant operational expertise and coordination across multiple technology stacks, making it challenging for smaller research teams.
 
 The key difference between these solutions lies in their level of automation and abstraction: while Foldy provides a ready-to-use web application requiring manual infrastructure setup, and the comprehensive cloud architecture offers powerful but complex multi-layered services, Kubefold focuses on complete automation of the entire lifecycle -- from infrastructure provisioning to job monitoring -- enabling researchers to focus on scientific work rather than operational tasks.
+
+By "Complete automation of the entire lifecycle" we mean managing aspects such as:
+\begin{itemize}
+  \item downloading databases
+  \item deleting databases when they are no longer needed
+  \item managing dependencies between different resources in the system (protein conformation prediction job and downloaded database)
+  \item notifying users about computation status
+  \item archiving artifacts
+  \item error handling
+\end{itemize} 
 
 The review of existing solutions reveals a significant gap: while powerful cloud architectures and specialized bioinformatics platforms exist, there is a lack of solutions that seamlessly integrate automation, AI algorithms, Kubernetes orchestration, and cloud-native approaches into a unified platform.
 This gap represents the primary motivation for developing KubeFold as a comprehensive solution for automated protein structure prediction in cloud environments.

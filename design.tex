@@ -187,6 +187,50 @@ Therefore, each \texttt{ProteinConformationPrediction} instance corresponds to e
 In addition, \texttt{ProteinConformationPrediction} creates a \texttt{PersistentVolumeClaim} for temporary data.
 In this volume, artifacts from the Alignment phase and potentially found protein structures are stored.
 
+Table~\ref{tab:protein_prediction_components} summarizes all components created for a single protein structure prediction instance:
+
+\begin{table}[htbp]
+\centering
+\caption{Components created for single protein structure prediction instance}
+\label{tab:protein_prediction_components}
+\small
+\begin{tabular}{|l|l|p{2.2cm}|c|p{2.8cm}|}
+\hline
+\textbf{Phase} & \textbf{Component} & \textbf{Hardware Req.} & \textbf{Pods} & \textbf{Volume Access} \\
+\hline
+\textbf{Setup} & 
+PVC & 
+Storage & 
+0 & 
+Temp data \\
+\hline
+\textbf{1. Alignment} & 
+Job + Pod + initContainer & 
+CPU optimized & 
+1 + init & 
+DB vol. (R), Temp vol. (W) \\
+\hline
+\textbf{2. Prediction} & 
+Job + Pod & 
+GPU nodes & 
+1 & 
+Temp vol. (R/W) \\
+\hline
+\textbf{3. Post-proc.} & 
+Job + Pod & 
+Standard & 
+1 & 
+Temp vol. (R), S3 (W) \\
+\hline
+\textbf{Total} & 
+1 PVC + 3 Jobs & 
+Mixed & 
+3 + init & 
+2 Volumes + Cloud \\
+\hline
+\end{tabular}
+\end{table}
+
 Similarly to the \texttt{ProteinDatabase} resource, the resources are connected using the \textit{ownerReferences} mechanism.
 The resource dependency architecture is shown in figure~\ref{fig:proteinconformationprediction}.
 
@@ -247,6 +291,31 @@ The business logic (shown in figure~\ref{fig:proteinconformationprediction_contr
     \item Starts a \textit{Job} for post processing.
     This step loads computation artifacts and sends them to AWS S3. It also handles queuing notifications (e.g.\     SMS) for individual research team members.
 \end{enumerate}
+
+\subsection{Error Handling and Resilience}
+
+The KubeFold operator implements comprehensive error handling mechanisms to ensure robustness and reliability of protein structure prediction workflows:
+
+\begin{itemize}
+    \item \textbf{Automatic Retry Mechanism} -- Each job phase (Alignment, Prediction, Post-processing) automatically retries up to 3 times in case of failure. 
+    The operator tracks retry counts in the resource status and implements exponential backoff between attempts.
+    
+    \item \textbf{Timeout Management} -- Jobs have configurable timeouts with a default of 24 hours per phase. 
+    If a job exceeds its timeout, the operator marks the prediction as failed and triggers cleanup procedures.
+    
+    \item \textbf{Failure Detection} -- The operator continuously monitors job status and immediately detects failures through Kubernetes job status indicators.
+    Failed jobs are automatically deleted and recreated for retry attempts.
+    
+    \item \textbf{Resource Cleanup} -- In case of failures or completion, the operator automatically cleans up temporary resources including PersistentVolumeClaims and completed jobs to prevent resource leaks.
+    
+    \item \textbf{Event Recording} -- All significant events (job creation, failures, retries) are recorded as Kubernetes events, providing detailed audit trails for troubleshooting and monitoring.
+    
+    \item \textbf{Graceful Degradation} -- If critical dependencies (like ProteinDatabase) are unavailable, the operator enters a waiting state with periodic reconciliation rather than failing permanently.
+    
+    \item \textbf{Validation Guards} -- Input validation prevents invalid configurations from entering the processing pipeline, with detailed error messages returned to users.
+\end{itemize}
+
+This error handling approach ensures that transient failures (network issues, temporary resource unavailability) are automatically resolved, while permanent failures are clearly identified and reported to users through status updates and events.
 
 \subsection{Downloader Component}\label{subsec:component-downloader}
 \textit{Code repository: \url{https://github.com/kubefold/downloader}}

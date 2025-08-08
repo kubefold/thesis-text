@@ -873,7 +873,30 @@ By "Complete automation of the entire lifecycle" we mean managing aspects such a
   \item notifying users about computation status
   \item archiving artifacts
   \item error handling
-\end{itemize} 
+\end{itemize}
+
+A concise overview of the tools and their primary focus is provided in Table~\ref{tab:tools-focus}.
+
+\begin{table}[htbp]
+    \centering
+    \caption{Tools and their primary focus}
+    \label{tab:tools-focus}
+    \begin{tabular}{|l|p{10cm}|}
+        \hline
+        \textbf{Tool} & \textbf{Primary focus}                                                                                                                                                 \\
+        \hline
+        Nextflow      & Dataflow-based workflow orchestration; implicit parallelism; cloud and HPC executors; nf-core curated pipelines                                                        \\
+        \hline
+        Kubeflow      & Kubernetes-native MLOps platform; interactive notebooks, pipelines, hyperparameter tuning, and model serving                                                           \\
+        \hline
+        Foldy         & Web application for protein structure prediction and analysis (AlphaFold, docking); installation via Helm; autoscaling with Kubernetes Event-Driven Autoscaling (KEDA) \\
+        \hline
+        BioContainers & Community-maintained standardized containers for bioinformatics tools; reproducible packaging building blocks                                                          \\
+        \hline
+        KubeFold      & Operator-driven, declarative automation of infrastructure, data, and batch job lifecycle for protein structure prediction on Kubernetes                                \\
+        \hline
+    \end{tabular}
+\end{table}
 
 The review of existing solutions reveals a significant gap: while powerful cloud architectures and specialized bioinformatics platforms exist, there is a lack of solutions that seamlessly integrate automation, AI algorithms, Kubernetes orchestration, and cloud-native approaches into a unified platform.
 This gap represents the primary motivation for developing KubeFold as a comprehensive solution for automated protein structure prediction in cloud environments.

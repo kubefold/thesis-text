@@ -15,6 +15,14 @@ Within the project, the following goals were successfully accomplished:
     \item Conducted several protein conformation computations to test the solution.
 \end{itemize}
 
+The evaluation of the implemented system leads to the following conclusions:
+\begin{itemize}
+    \item The operator pattern fully automates the preparation of the infrastructure required for AlphaFold, reducing the process from days of manual, expertise-heavy setup to the declarative creation of two Kubernetes resources.
+    \item Separating the database preparation, alignment, and prediction phases onto appropriately sized nodes allows CPU- and GPU-intensive work to be billed independently, yielding a measured cost of approximately \$1.69 per prediction --- about 39\% lower than an equivalent manual EC2 setup and 29\% lower than the AWS SageMaker pipeline.
+    \item Thanks to the declarative, Kubernetes-native design, multiple predictions run concurrently with no per-prediction penalty, achieving an aggregate throughput improvement of roughly 3$\times$ on three GPU nodes while sharing a single prepared database volume.
+    \item The automated retry and cleanup mechanisms make the system resilient to transient failures, while clearly reporting persistent errors that require manual intervention.
+\end{itemize}
+
 
 \section{Project development possibilities}
 

@@ -203,7 +203,7 @@ spec:
 
 When the \texttt{ProteinDatabase} resource was created, the FSx CSI Driver triggered the creation of an FSx for Lustre file system (see fig.~\ref{fig:fsx_fs}).
 As soon as the file system was created, the process of downloading protein databases began in multiple pods simultaneously.
-The user can monitor the download progress in real-time, as shown in screenshot~\ref{fig:used_proteindatabase_terminal}.
+The user can monitor the download progress in real-time, as shown in screenshot~\ref{fig:proteindatabase_terminal}.
 After the download is complete, the status will be changed to \textit{Completed} (see screenshot~\ref{fig:proteindatabase_completed_terminal}).
 
 \begin{figure}[htbp]
@@ -211,13 +211,6 @@ After the download is complete, the status will be changed to \textit{Completed}
     \includegraphics[width=\textwidth]{images/fsx_fs}
     \caption{Created FSx for Lustre file system in AWS Web Console}
     \label{fig:fsx_fs}
-\end{figure}
-
-\begin{figure}[htbp]
-    \centering
-    \includegraphics[width=\textwidth]{images/old_proteindatabase_terminal}
-    \caption{Terminal output presenting \texttt{ProteinDatabase} resource}
-    \label{fig:used_proteindatabase_terminal}
 \end{figure}
 
 \begin{figure}[htbp]
@@ -233,7 +226,7 @@ The initial phase is the \textit{Aligning} phase, which the user can check by ru
 The second phase is the \textit{Predicting} phase (terminal output is shown in screenshot~\ref{fig:proteinconformationprediction_predicting_terminal}), which runs on a node equipped with a tensor computation accelerator such as GPU or TPU.
 In this phase, the pod was created with the \texttt{-predict} suffix.
 
-The final phase is the \texttt{UploadingArtifacts} phase, which is responsible for sending computation artifacts to AWS S3 storage and queuing notifications to research team members (see screenshot~\ref{fig:proteinconformationprediction_uploading_terminal}). When this step is completed, the status will be changed to \texttt{Completed} (see screenshot~\ref{fig:proteindatabase_completed_terminal}).
+The final phase is the \texttt{UploadingArtifacts} phase, which is responsible for sending computation artifacts to AWS S3 storage and queuing notifications to research team members (see screenshot~\ref{fig:proteinconformationprediction_uploading_terminal}). When this step is completed, the status will be changed to \texttt{Completed} (see screenshot~\ref{fig:proteinconformationprediction_completed_terminal}).
 
 \begin{figure}[htbp]
     \centering

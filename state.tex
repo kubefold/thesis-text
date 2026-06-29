@@ -6,7 +6,7 @@
 While the primary focus of this work lies in infrastructure design rather than algorithmic innovation, a brief overview of key prediction algorithms (e.g., AlphaFold) is essential to understand the operational requirements and constraints that the infrastructure must support. The thesis does not aim to improve these algorithms or their predictive accuracy; it concentrates on the systems and automation layer enabling their reliable execution.
 
 
-\section{Machine Learning in Protein Structure Prediction}
+\section{Machine learning in protein structure prediction}
 
 AlphaFold represents a breakthrough in computational biology, developed by Google DeepMind to predict three--dimensional protein structures with unprecedented accuracy.
 This AI system revolutionized the field by achieving near--experimental accuracy in protein structure prediction.
@@ -542,9 +542,9 @@ Go is a popular choice for creating DevOps tools and cloud systems.
 Kubernetes and Docker were written in Go. This language works well in projects requiring high performance and reliability.
 
 
-\section{Recent Advances in Protein Structure Prediction}
+\section{Recent advances in protein structure prediction}
 
-\subsection{Core AlphaFold Developments}
+\subsection{Core AlphaFold developments}
 
 \subsubsection{Improved protein structure prediction using potentials from deep learning (2020)}
 
@@ -563,11 +563,11 @@ This breakthrough showed that computational methods can predict protein 3D struc
 \subsubsection{Accurate structure prediction of biomolecular interactions with AlphaFold 3 (2024)}
 
 Abramson et al.
-unveiled \textbf{AlphaFold 3 (AF3)}, a substantially updated model using a \textbf{diffusion-based architecture} to predict the \textbf{joint structure of complexes} including proteins, nucleic acids, small molecules, and ions~\cite{Abramson2024AlphaFold3}.
+unveiled \textbf{AlphaFold 3 (AF3)}, a substantially updated model using a \textbf{diffusion-based architecture} to predict the \textbf{joint structure of complexes} including proteins, nucleic acids, small molecules, and ions~\cite{alphafold3}.
 AF3 shows markedly improved accuracy over specialized tools: it far outperforms traditional docking for protein–ligand complexes, achieves much higher accuracy on protein–DNA/RNA interactions than prior nucleic-acid-specific predictors, and greatly improves antibody–antigen complex prediction versus AlphaFold-Multimer.
 This work demonstrates that a single deep-learning framework can accurately model diverse biomolecular assemblies, heralding a new era of high-accuracy multi-component complex prediction.
 
-\subsection{Conformational Ensemble and Alternative State Prediction}
+\subsection{Conformational ensemble and alternative state prediction}
 
 \subsubsection{Sampling alternative conformational states of transporters and receptors with AlphaFold2 (2022)}
 
@@ -593,7 +593,7 @@ AlphaFold2 typically predicts a single ground-state structure, but here multiple
 When tested against NMR data for two proteins (Abl1 kinase and GM-CSF), the method correctly predicted changes in state populations with >80\% accuracy.
 This subsampling strategy was especially effective for qualitatively predicting how mutations or evolution shift conformational landscapes, offering a fast, cost-effective way to estimate conformational distributions for applications in pharmacology and evolution.
 
-\subsection{Physics-Informed and Dynamics-Aware Models}
+\subsection{Physics-informed and dynamics-aware models}
 
 \subsubsection{Protein Conformation Generation via Force-Guided SE(3) Diffusion Models (2024)}
 
@@ -611,7 +611,7 @@ ConfRover uses a modular autoregressive design: (i) an encoder adapted from fold
 This enables both time-dependent (trajectory) generation and time-independent sampling of conformations within one framework.
 On the large ATLAS MD dataset, ConfRover successfully learned complex motions and could generate realistic trajectories, marking a significant step toward integrating \textit{dynamic behavior} into structure prediction. \textit{(Preprint, May 2025)}
 
-\subsection{Novel Architectural Approaches}
+\subsection{Novel architectural approaches}
 
 \subsubsection{Structure Language Models for Protein Conformation Generation (2024)}
 
@@ -621,7 +621,7 @@ Instead of operating purely in 3D coordinate space, SLM first encodes protein st
 This approach enabled \textbf{20–100× faster} generation of diverse conformations compared to 3D diffusion methods, by exploring ensemble modes in a more tractable latent space.
 The authors instantiated SLM with transformer architectures (including a BERT-like model fine-tuned from ESM) and demonstrated its ability to model equilibrium dynamics (e.g. BPTI), conformational changes, and even disordered protein ensembles with high efficiency. \textit{(ICLR 2025 conference paper)}
 
-\subsection{Comprehensive Reviews and Surveys}
+\subsection{Comprehensive reviews and surveys}
 
 \subsubsection{Protein structure prediction via deep learning: an in-depth review (2025)}
 
@@ -633,12 +633,12 @@ Key issues identified include the need for improved interpretability of deep mod
 The review concludes that despite recent breakthroughs, there remains ample room for improving prediction of protein dynamics, complex assemblies, and functional annotations.
 
 
-\section{Automation of Bioinformatics Workflows}
+\section{Automation of bioinformatics workflows}
 
 The scientific literature proposes a range of patterns and tools for managing the infrastructure required for machine learning computations, with particular emphasis on cloud-based solutions and container orchestration.
 To understand the current landscape, it is essential to examine both traditional workflow orchestration tools and specific deployment approaches that have emerged in recent years.
 
-\subsection{Traditional Workflow Orchestration Tools}
+\subsection{Traditional workflow orchestration tools}
 
 While specialized bioinformatics platforms provide powerful capabilities, it is important to examine the broader landscape of workflow orchestration tools that have become standard in the field.
 These tools, while effective for workflow definition and execution, reveal critical limitations when it comes to infrastructure management -- a gap that operator-based solutions like KubeFold are designed to address.
@@ -740,7 +740,7 @@ Deployment still involves some infrastructure setup, including configuring DNS, 
 Additionally, monitoring and logging are not provided out-of-the-box and require further setup.
 Although some operational tasks can be partially automated, there is no centralized layer managing the full lifecycle of jobs, storage, and infrastructure after deployment.
 
-\subsection{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}
+\subsection{A comprehensive cloud architecture for machine learning-enabled research}
 
 In the paper \textit{A Comprehensive Cloud Architecture for Machine Learning-enabled Research}~\cite{cloud_architecture_for_research}, the authors present a comprehensive architecture deployed at the Texas Advanced Computing Center.
 The proposed infrastructure includes:
@@ -762,7 +762,7 @@ While powerful in production settings, the architecture lacks a unified interfac
 Moreover, Tapis offers an imperative approach to infrastructure management. In contrast, KubeFold offers a declarative approach to infrastructure management, and therefore the user does not need to worry about how to manage infrastructure, only defines the desired state of the system. The KubeFold operator makes decisions on how to achieve that state.
 As such, they complement but do not replace infrastructure-level automation tools like Kubernetes Operators.
 
-\subsection{Kubeflow: Machine Learning Workflows on Kubernetes}
+\subsection{Kubeflow: machine learning workflows on Kubernetes}
 
 Kubeflow is an open-source machine learning platform designed to enable deployment, orchestration, and management of ML workflows on Kubernetes~\cite{kubeflow,kubeflow_deployment_study}.
 Originally developed by Google as an extension of TensorFlow, Kubeflow has evolved into a comprehensive MLOps platform that supports multiple machine learning frameworks and provides end-to-end ML pipeline capabilities.
@@ -792,7 +792,7 @@ Their research demonstrated that while Kubeflow provides effective orchestration
 
 These limitations highlight why specialized solutions like KubeFold are necessary for computational biology workloads that require comprehensive infrastructure automation, large-scale data management, and batch-oriented processing patterns.
 
-\subsection{BioContainers: Lightweight Automation Alternative}
+\subsection{BioContainers: lightweight automation alternative}
 
 BioContainers is an open-source, community-driven framework that provides standardized containers for bioinformatics software~\cite{biocontainers}.
 Developed as a response to the reproducibility crisis in computational biology, BioContainers offers a lightweight alternative for software deployment and automation in Kubernetes environments.
@@ -836,7 +836,7 @@ The project has been integrated with major platforms including Galaxy and PhenoM
 
 The complementary nature of these approaches suggests that BioContainers could serve as the foundation for software packaging within more comprehensive automation platforms like KubeFold, combining standardized software containers with automated infrastructure management.
 
-\subsection{The Value of Operator-Based Approaches}
+\subsection{The value of operator-based approaches}
 
 The limitations of traditional workflow orchestration tools demonstrate the value proposition of operator-based solutions like KubeFold.
 By integrating workflow management with infrastructure automation through Kubernetes operators, KubeFold addresses the operational gap that exists between workflow definition and infrastructure management.
@@ -846,7 +846,7 @@ Where conventional workflow managers treat infrastructure as static, KubeFold pr
 
 This integration represents a fundamental shift from treating infrastructure as a prerequisite to treating it as an automatically managed component of the scientific computing platform.
 
-\section{Summary and Identified Gaps}
+\section{Summary and identified gaps}
 
 The review of workflow automation solutions reveals a diverse landscape of tools and platforms, each addressing different aspects of the bioinformatics automation challenge.
 From traditional workflow managers like Nextflow and Snakemake, to comprehensive platforms like Kubeflow, to specialized deployments like Foldy, and lightweight alternatives like BioContainers, the field demonstrates growing maturity in addressing reproducibility and scalability concerns.

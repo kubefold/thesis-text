@@ -105,6 +105,8 @@ Table~\ref{tab:installation_comparison} presents a direct comparison between man
 
 \begin{table}[H]
     \centering
+    \caption{Comparison of manual and KubeFold-based AlphaFold installation}
+    \label{tab:installation_comparison}
     \small
     \begin{tabularx}{\textwidth}{|X|X|X|}
         \hline
@@ -125,8 +127,6 @@ Table~\ref{tab:installation_comparison} presents a direct comparison between man
         \textbf{Reproducibility} & Challenging (environment variations) & Consistent (declarative approach) \\
         \hline
     \end{tabularx}
-    \caption{Comparison of manual and KubeFold-based AlphaFold installation}
-    \label{tab:installation_comparison}
 \end{table}
 
 \subsection{Key advantages of the KubeFold approach}
@@ -188,6 +188,8 @@ A detailed comparison of the computational infrastructure for OpenFold, ColabFol
 
 \begin{table}[H]
     \centering
+    \caption{Comparison of computational infrastructure: OpenFold, ColabFold, and KubeFold}
+    \label{tab:comparison}
     \small
     \begin{tabularx}{\textwidth}{|X|X|X|X|}
         \hline
@@ -206,8 +208,6 @@ A detailed comparison of the computational infrastructure for OpenFold, ColabFol
         \textbf{Integration with external services} & Requires own implementation               & None                              & Yes – AWS S3, FSx, SNS, IAM                           \\
         \hline
     \end{tabularx}
-    \caption{Comparison of computational infrastructure: OpenFold, ColabFold, and KubeFold}
-    \label{tab:comparison}
 \end{table}
 
 \section{Challenges}
@@ -275,6 +275,8 @@ Table~\ref{tab:phase_timing} presents the execution times for individual phases 
 
 \begin{table}[H]
     \centering
+    \caption{Execution time breakdown for KubeFold protein conformation prediction phases (measured, two-chain workload, eu-central-1)}
+    \label{tab:phase_timing}
     \small
     \begin{tabularx}{\textwidth}{|X|X|X|X|}
         \hline
@@ -293,8 +295,6 @@ Table~\ref{tab:phase_timing} presents the execution times for individual phases 
         \textbf{Total Including DB Preparation} & - & \textbf{$\approx$85} & - \\
         \hline
     \end{tabularx}
-    \caption{Execution time breakdown for KubeFold protein conformation prediction phases (measured, two-chain workload, eu-central-1)}
-    \label{tab:phase_timing}
 \end{table}
 
 These durations are mean values measured across several independent runs (alignment $\approx$2{,}400\,s, prediction $\approx$575\,s, artifact upload $\approx$3\,s). The database preparation phase represents a one-time cost that can be amortized across multiple predictions. For subsequent predictions using the same prepared database, the total execution time reduces to approximately 51 minutes.
@@ -305,6 +305,8 @@ Based on AWS pricing in the eu-central-1 region~\cite{aws-ec2-pricing,aws-fsx-pr
 
 \begin{table}[H]
     \centering
+    \caption{Cost comparison for protein conformation prediction approaches (measured KubeFold runtimes; Manual EC2 and SageMaker modelled with the same unit prices)}
+    \label{tab:cost_analysis}
     \small
     \begin{tabularx}{\textwidth}{|X|X|X|X|}
         \hline
@@ -325,8 +327,6 @@ Based on AWS pricing in the eu-central-1 region~\cite{aws-ec2-pricing,aws-fsx-pr
         \textbf{Total (database reuse)} & \textbf{\$1.69} & \textbf{\$2.77} & \textbf{\$2.37} \\
         \hline
     \end{tabularx}
-    \caption{Cost comparison for protein conformation prediction approaches (measured KubeFold runtimes; Manual EC2 and SageMaker modelled with the same unit prices)}
-    \label{tab:cost_analysis}
 \end{table}
 
 *SageMaker costs are modelled with managed \texttt{ml.m5.xlarge} (CPU phases) and \texttt{ml.g5.xlarge} (GPU prediction) instances, whose on-demand rates correspond to the EC2 baseline plus the SageMaker managed-service overhead (approximately 20\% above the EC2 rates).
@@ -339,6 +339,8 @@ The AWS SageMaker protein folding workflow described in the referenced blog post
 
 \begin{table}[H]
     \centering
+    \caption{Performance comparison between AWS SageMaker and KubeFold approaches}
+    \label{tab:sagemaker_comparison}
     \small
     \begin{tabularx}{\textwidth}{|X|X|X|}
         \hline
@@ -359,8 +361,6 @@ The AWS SageMaker protein folding workflow described in the referenced blog post
         \textbf{Vendor Lock-in} & High (AWS SageMaker specific) & Medium (Kubernetes portable, AWS services) \\
         \hline
     \end{tabularx}
-    \caption{Performance comparison between AWS SageMaker and KubeFold approaches}
-    \label{tab:sagemaker_comparison}
 \end{table}
 
 \subsection{Cost optimization analysis}
@@ -387,6 +387,8 @@ To evaluate behaviour under concurrent load, three protein conformation predicti
 
 \begin{table}[H]
     \centering
+    \caption{Measured per-prediction time and aggregate throughput for sequential and concurrent execution}
+    \label{tab:concurrency_thesis}
     \small
     \begin{tabularx}{\textwidth}{|X|X|X|X|}
         \hline
@@ -397,8 +399,6 @@ To evaluate behaviour under concurrent load, three protein conformation predicti
         3 concurrent (3 CPU + 3 GPU nodes) & $\approx$2{,}400 s & $\approx$575 s & $\approx$3$\times$ \\
         \hline
     \end{tabularx}
-    \caption{Measured per-prediction time and aggregate throughput for sequential and concurrent execution}
-    \label{tab:concurrency_thesis}
 \end{table}
 
 Scaling to a larger number of parallel predictions requires only submitting additional \texttt{ProteinConformationPrediction} resources; the operator handles scheduling, shared-volume access, and lifecycle management without manual environment setup or per-job database staging. Throughput scales with the number of available CPU and GPU nodes; larger-scale characterisation across sequence lengths, database subsets, and higher concurrency levels remains future work.

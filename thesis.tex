@@ -22,7 +22,7 @@
 \titlePL{Projekt i implementacja operatora Kubernetes do harmonogramowania zadań przewidywania konformacji białek na klastrach obliczeniowych w chmurze}
 \titleEN{Design and development of Kubernetes Operator for Scheduling Protein Conformation Prediction Tasks on Cloud Computing Clusters}
 
-\thesistype{Praca dyplomowa}
+\thesistype{Praca dyplomowa magisterska}
 
 \supervisor{dr inż. Paweł Skrzyński}
 
@@ -71,6 +71,11 @@ supervisor \textbf{dr inż. Paweł Skrzyński}. His dedication, professionalism,
 %     - awarii w trakcie pobierania,
 %     - braku zasobów GPU.
 
+\AtBeginDocument{
+    \renewcommand{\tablename}{Table}
+    \renewcommand{\figurename}{Figure}
+}
+
 \begin{document}
 
     \titlepages
@@ -88,5 +93,8 @@ supervisor \textbf{dr inż. Paweł Skrzyński}. His dedication, professionalism,
     \include{summary}
 
     \printbibliography
+
+    \listoftables
+    \listoffigures
 
 \end{document}

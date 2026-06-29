@@ -252,9 +252,9 @@ The election system provided by the KubeBuilder tool determines which running in
 The first controller reconciles the \texttt{ProteinDatabase} resource.
 In case of a new resource of this type appearing, the following operations are performed:
 \begin{enumerate}
-    \item Creates a new \textt{PersistentVolumeClaim} and sets the \texttt{storageClassName} parameter,
-    \item When the \textt{PersistentVolumeClaim} is bound to a specific volume, it creates several jobs corresponding to downloading individual databases.
-    Each pod has a mounted this \textt{PVC}.
+    \item Creates a new \texttt{PersistentVolumeClaim} and sets the \texttt{storageClassName} parameter,
+    \item When the \texttt{PersistentVolumeClaim} is bound to a specific volume, it creates several jobs corresponding to downloading individual databases.
+    Each pod has a mounted this \texttt{PVC}.
     \item Starts a log observer -- a separate goroutine constantly monitoring job states, pod states, and reading logs from them.
     Thanks to the logs, it is able to dynamically update the \texttt{ProteinDatabase} status informing the user about the progress of downloading and also monitor the connection throughput.
 \end{enumerate}
@@ -361,7 +361,7 @@ After successful completion or interrupted download, the process exits logging t
 
 The \textit{manager} component is responsible for three independent tasks:
 \begin{itemize}
-    \item configuring the \textt{fold\_input.json} file for the AlphaFold program,
+    \item configuring the \texttt{fold\_input.json} file for the AlphaFold program,
     \item sending computation artifacts to the AWS S3 service (more about it in section~\ref{subsec:amazon-s3-object-storage}),
     \item queuing notifications using the AWS SNS / AWS End User Messaging service (more about it in section~\ref{subsec:amazon-sns}).
 \end{itemize}
@@ -373,9 +373,9 @@ For each operation, two environment variables are mandatory:
     \item \texttt{OUTPUT\_PATH} -- the path to the AlphaFold data output directory.
 \end{itemize}
 
-To save the \textt{fold\_input.json} file, the \texttt{ENCODED\_INPUT} variable should be set, which should contain the encoded in \texttt{base64} JSON configuration.
+To save the \texttt{fold\_input.json} file, the \texttt{ENCODED\_INPUT} variable should be set, which should contain the encoded in \texttt{base64} JSON configuration.
 
-To send artifacts, the \texttt{BUCKET} environment variable should be set to the S3 bucket path (full URL, including \textt{s3:\/\/}).
+To send artifacts, the \texttt{BUCKET} environment variable should be set to the S3 bucket path (full URL, including \texttt{s3:\/\/}).
 To send a notification using the AWS End User Messaging service, the container must have the \texttt{NOTIFICATION\_PHONES} and \texttt{NOTIFICATION\_MESSAGE} variables set.
 The variable with phone numbers can contain more than one recipient -- in such a case, phone numbers should be provided as a comma--separated list.
 

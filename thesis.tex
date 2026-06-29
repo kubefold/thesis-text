@@ -5,8 +5,19 @@
 \usepackage{tabularx}
 \usepackage{float}
 
+\lstdefinelanguage{yaml}{
+    keywords={true,false,null},
+    comment=[l]{\#},
+    morestring=[b]",
+    morestring=[b]',
+    sensitive=false
+}
+\lstdefinelanguage{txt}{}
+
 \author{Mateusz Woźniak}
 \shortauthor{M. Woźniak}
+\shorttitlePL{Operator Kubernetes do harmonogramowania predykcji konformacji białek}
+\shorttitleEN{Kubernetes Operator for Protein Conformation Prediction Scheduling}
 
 \titlePL{Projekt i implementacja operatora Kubernetes do harmonogramowania zadań przewidywania konformacji białek na klastrach obliczeniowych w chmurze}
 \titleEN{Design and development of Kubernetes Operator for Scheduling Protein Conformation Prediction Tasks on Cloud Computing Clusters}

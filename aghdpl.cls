@@ -47,7 +47,7 @@
 
 \RequirePackage{xstring}
 
-\show\aghdpl@language
+%\show\aghdpl@language
 
 \newcommand{\ThesisLanguage}{pl}
 \IfStrEqCase{\aghdpl@language}{%
@@ -55,7 +55,7 @@
         {pl}{\renewcommand{\ThesisLanguage}{pl}}%
 }[\PackageError{aghdpl}{Invalid thesis language.}{Available languages: Polish (pl), English (en)}]
 
-\show\ThesisLanguage
+%\show\ThesisLanguage
 
 \RequirePackage{times}
 \RequirePackage[T1]{fontenc}

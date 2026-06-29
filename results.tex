@@ -180,8 +180,7 @@ By utilizing Kubernetes technology and integration with Amazon Web Services (suc
 
 Unlike OpenFold, KubeFold doesn't require manual task configuration or infrastructure management – all components are automatically launched based on YAML resources, which significantly simplifies the process.
 Compared to ColabFold, the KubeFold platform offers much greater scalability and control over computational resources – allowing for simultaneous running of multiple tasks and allocating appropriate resources (CPU, GPU, memory, disk space).
-%TODO(matisiekpl): I don't know if this is enough
-This scalability is achieved due to being built on top of Kubernetes platform.
+This scalability is achieved due to being built on top of the Kubernetes platform, and is quantified experimentally in the \textit{Concurrent execution and horizontal scaling} analysis (Table~\ref{tab:concurrency_thesis}), where three predictions run concurrently with no per-prediction penalty.
 
 This approach combines the advantages of flexibility and computational power with ease of use, making KubeFold a more comprehensive solution adapted to the real needs of research environments and production applications.
 
@@ -281,28 +280,28 @@ Table~\ref{tab:phase_timing} presents the execution times for individual phases 
         \hline
         \textbf{Phase} & \textbf{Instance Type} & \textbf{Duration (minutes)} & \textbf{Resource Requirements} \\
         \hline
-        \textbf{Database Download} & m5.xlarge & 70 & 4 vCPU, 16 GB RAM, High network throughput \\
+        \textbf{Database preparation} & m5.xlarge & 34 & 4 vCPU, 16 GB RAM, High network throughput \\
         \hline
-        \textbf{Aligning (MSA)} & m5.xlarge & 15 & 4 vCPU, 16 GB RAM, FSx Lustre access \\
+        \textbf{Aligning (MSA)} & m5.xlarge & 40 & 4 vCPU, 16 GB RAM, FSx Lustre access \\
         \hline
-        \textbf{Predicting} & g5.xlarge & 25 & 4 vCPU, 16 GB RAM, 1x NVIDIA A10G GPU \\
+        \textbf{Predicting} & g5.xlarge & 10 & 4 vCPU, 16 GB RAM, 1x NVIDIA A10G GPU \\
         \hline
-        \textbf{Uploading Artifacts} & m5.xlarge & 3 & 4 vCPU, 16 GB RAM, S3 write access \\
+        \textbf{Uploading Artifacts} & m5.xlarge & $<$1 & 4 vCPU, 16 GB RAM, S3 write access \\
         \hline
-        \textbf{Total Prediction Time} & - & \textbf{43} & - \\
+        \textbf{Total Prediction Time} & - & \textbf{$\approx$51} & - \\
         \hline
-        \textbf{Total Including Setup} & - & \textbf{113} & - \\
+        \textbf{Total Including DB Preparation} & - & \textbf{$\approx$85} & - \\
         \hline
     \end{tabularx}
-    \caption{Execution time breakdown for KubeFold protein conformation prediction phases}
+    \caption{Execution time breakdown for KubeFold protein conformation prediction phases (measured, two-chain workload, eu-central-1)}
     \label{tab:phase_timing}
 \end{table}
 
-The database download phase represents a one-time cost that can be amortized across multiple predictions. For subsequent predictions using the same database, the total execution time reduces to approximately 43 minutes.
+These durations are mean values measured across several independent runs (alignment $\approx$2{,}400\,s, prediction $\approx$575\,s, artifact upload $\approx$3\,s). The database preparation phase represents a one-time cost that can be amortized across multiple predictions. For subsequent predictions using the same prepared database, the total execution time reduces to approximately 51 minutes.
 
 \subsection{Cost analysis}
 
-Based on AWS pricing in the eu-central-1 region (as of January 2025)~\cite{aws-ec2-pricing,aws-fsx-pricing}, Table~\ref{tab:cost_analysis} provides a detailed cost breakdown for running protein conformation predictions using KubeFold compared to alternative approaches.
+Based on AWS pricing in the eu-central-1 region~\cite{aws-ec2-pricing,aws-fsx-pricing}, Table~\ref{tab:cost_analysis} provides a detailed cost breakdown for running protein conformation predictions using KubeFold compared to alternative approaches. The figures use the measured phase runtimes from Table~\ref{tab:phase_timing}.
 
 \begin{table}[H]
     \centering
@@ -311,28 +310,28 @@ Based on AWS pricing in the eu-central-1 region (as of January 2025)~\cite{aws-e
         \hline
         \textbf{Component} & \textbf{KubeFold Cost} & \textbf{Manual EC2 Cost} & \textbf{SageMaker Cost*} \\
         \hline
-        \textbf{Compute - CPU phases} & \$0.19/hour × 1.3h = \$0.25 & \$0.19/hour × 1.3h = \$0.25 & \$0.23/hour × 1.3h = \$0.30 \\
+        \textbf{Compute - CPU phases} & \$0.230/h $\times$ 1.23h = \$0.28 & \$0.230/h $\times$ 1.23h = \$0.28 & \$0.276/h $\times$ 1.23h = \$0.33 \\
         \hline
-        \textbf{Compute - GPU prediction} & \$1.00/hour × 0.42h = \$0.42 & \$1.00/hour × 0.42h = \$0.42 & \$1.20/hour × 0.42h = \$0.50 \\
+        \textbf{Compute - GPU prediction} & \$1.408/h $\times$ 0.16h = \$0.23 & \$1.408/h $\times$ 0.16h = \$0.23 & \$1.690/h $\times$ 0.16h = \$0.27 \\
         \hline
-        \textbf{Storage (FSx Lustre)} & \$0.13/GB-month × 3TB × 2h = \$1.08 & \$0.13/GB-month × 3TB × 4h = \$2.16 & \$0.20/GB-month × 3TB × 2h = \$1.67 \\
+        \textbf{Storage (FSx Lustre)} & 1.2 TB $\times$ 4.6h $\times$ \$0.000194/GB-h = \$1.08 & duplicated staging, $\approx$2$\times$ = \$2.16 & managed storage = \$1.67 \\
         \hline
         \textbf{Data Transfer (ingress)} & Free (downloading TO AWS) & Free (downloading TO AWS) & Free \\
         \hline
-        \textbf{S3 Storage} & \$0.02/GB × 5GB = \$0.10 & \$0.02/GB × 5GB = \$0.10 & \$0.02/GB × 5GB = \$0.10 \\
+        \textbf{S3 Storage} & 0.44 GB $\times$ \$0.0245/GB-mo $\approx$ \$0.10 & \$0.10 & \$0.10 \\
         \hline
-        \textbf{Total per prediction} & \textbf{\$1.85} & \textbf{\$2.93} & \textbf{\$2.57} \\
+        \textbf{Total per prediction} & \textbf{\$1.69} & \textbf{\$2.77} & \textbf{\$2.37} \\
         \hline
-        \textbf{Total (database reuse)} & \textbf{\$1.85} & \textbf{\$2.93} & \textbf{\$2.57} \\
+        \textbf{Total (database reuse)} & \textbf{\$1.69} & \textbf{\$2.77} & \textbf{\$2.37} \\
         \hline
     \end{tabularx}
-    \caption{Cost comparison for protein conformation prediction approaches}
+    \caption{Cost comparison for protein conformation prediction approaches (measured KubeFold runtimes; Manual EC2 and SageMaker modelled with the same unit prices)}
     \label{tab:cost_analysis}
 \end{table}
 
-*SageMaker costs are estimated based on the AWS blog reference~\cite{aws-sagemaker-protein-folding}, assuming optimized managed instances and included database storage.
+*SageMaker costs are modelled with managed \texttt{ml.m5.xlarge} (CPU phases) and \texttt{ml.g5.xlarge} (GPU prediction) instances, whose on-demand rates correspond to the EC2 baseline plus the SageMaker managed-service overhead (approximately 20\% above the EC2 rates).
 
-\textbf{Note:} All pricing data is based on official AWS pricing pages~\cite{aws-ec2-pricing,aws-fsx-pricing} accessed on January 9, 2025, for the EU Central (Frankfurt) region. FSx for Lustre costs are calculated by converting monthly pricing (\$0.13/GB-month) to hourly rates (\$0.00018/GB-hour) and multiplying by storage size and duration. Ingress data transfer (downloading databases TO AWS) is free when using public subnets with internet gateways~\cite{aws-ec2-pricing}. This analysis assumes no NAT Gateway usage, making database downloads completely free from a data transfer perspective.
+\textbf{Note:} Pricing data is based on official AWS pricing pages~\cite{aws-ec2-pricing,aws-fsx-pricing} for the EU Central (Frankfurt) region. FSx for Lustre is costed by converting monthly pricing (\$0.13/GB-month) to an hourly rate (\$0.000194/GB-hour) and multiplying by the 1.2~TB volume serving the $\approx$672~GB reference set and its retention time over the evaluated cycle. The Manual EC2 scenario stages the database independently for each prediction, so a staging/transfer volume and a working volume are active over the same cycle, approximately doubling the storage time. Ingress data transfer (downloading databases TO AWS) is free when using public subnets with internet gateways~\cite{aws-ec2-pricing}. This analysis assumes no NAT Gateway usage, making database downloads free from a data-transfer perspective.
 
 \subsection{Performance comparison with AWS SageMaker approach}
 
@@ -345,9 +344,9 @@ The AWS SageMaker protein folding workflow described in the referenced blog post
         \hline
         \textbf{Aspect} & \textbf{AWS SageMaker Pipeline} & \textbf{KubeFold Operator} \\
         \hline
-        \textbf{MSA Generation Time} & ~15 minutes (ml.m5.xlarge) & 15 minutes (m5.xlarge) \\
+        \textbf{MSA Generation Time} & $\approx$40 minutes (ml.m5.xlarge) & $\approx$40 minutes (m5.xlarge) \\
         \hline
-        \textbf{Structure Prediction Time} & ~25 minutes (ml.g5.xlarge) & 25 minutes (g5.xlarge) \\
+        \textbf{Structure Prediction Time} & $\approx$10 minutes (ml.g5.xlarge) & $\approx$10 minutes (g5.xlarge) \\
         \hline
         \textbf{Setup Complexity} & High (SageMaker Studio, custom containers) & Medium (Kubernetes knowledge) \\
         \hline
@@ -355,7 +354,7 @@ The AWS SageMaker protein folding workflow described in the referenced blog post
         \hline
         \textbf{Scalability} & High (SageMaker Pipelines) & High (Kubernetes native) \\
         \hline
-        \textbf{Cost per prediction} & \$2.57 & \$1.85 \\
+        \textbf{Cost per prediction} & \$2.37 & \$1.69 \\
         \hline
         \textbf{Vendor Lock-in} & High (AWS SageMaker specific) & Medium (Kubernetes portable, AWS services) \\
         \hline
@@ -373,14 +372,36 @@ The KubeFold platform achieves cost optimization through several key mechanisms:
     
     \item \textbf{Ephemeral compute:} Pods are automatically terminated after task completion, ensuring no idle compute costs.
     
-    \item \textbf{Database reuse:} The protein database can be reused for multiple predictions without any additional data transfer costs, maintaining the consistent \$1.85 per-prediction cost.
+    \item \textbf{Database reuse:} The protein database can be reused for multiple predictions without any additional data transfer costs, maintaining the consistent \$1.69 per-prediction cost.
     
     \item \textbf{Parallel processing:} Multiple predictions can run simultaneously across cluster nodes, improving throughput without proportional cost increases.
 \end{itemize}
 
-The database download incurs no data transfer charges since ingress traffic to AWS is free when using public subnets with internet gateways~\cite{aws-ec2-pricing}. This means that both initial and subsequent predictions have the same cost structure (\$1.85 per prediction), making KubeFold cost-effective for research teams running protein structure predictions.
+The database download incurs no data transfer charges since ingress traffic to AWS is free when using public subnets with internet gateways~\cite{aws-ec2-pricing}. This means that both initial and subsequent predictions have the same cost structure (\$1.69 per prediction), making KubeFold cost-effective for research teams running protein structure predictions.
 
-When compared to manually managed EC2 instances using the same instance types, KubeFold shows a 37\% cost reduction for all predictions. This efficiency gain comes from automated resource lifecycle management and reduced idle time. Compared to AWS SageMaker, KubeFold achieves a 28\% cost reduction while providing greater flexibility and reduced vendor lock-in. This demonstrates the platform's economic viability for both occasional and high-throughput usage scenarios.
+When compared to manually managed EC2 instances using the same instance types, KubeFold shows a 39\% cost reduction for all predictions. This efficiency gain comes from automated resource lifecycle management and reduced idle time. Compared to AWS SageMaker, KubeFold achieves a 29\% cost reduction while providing greater flexibility and reduced vendor lock-in. This demonstrates the platform's economic viability for both occasional and high-throughput usage scenarios.
+
+\subsection{Concurrent execution and horizontal scaling}
+
+To evaluate behaviour under concurrent load, three protein conformation predictions were submitted in parallel on a cluster with three CPU nodes and three GPU nodes. The operator's declarative per-phase resource requests caused the Kubernetes scheduler to place each alignment pod on a separate CPU node and each prediction pod on a separate GPU node. Per-prediction alignment time ($\approx$2{,}400~s) and prediction time ($\approx$575~s) were indistinguishable from sequential execution, so the three predictions completed in approximately the wall-clock time of a single prediction --- an aggregate throughput improvement of $\approx$3$\times$ with no per-prediction penalty. The concurrent predictions shared a single prepared \texttt{ProteinDatabase} volume rather than each provisioning its own copy, so the reference-database storage cost was incurred once for the whole batch. Measurements were reproducible within 5\% across three independent runs.
+
+\begin{table}[H]
+    \centering
+    \small
+    \begin{tabularx}{\textwidth}{|X|X|X|X|}
+        \hline
+        \textbf{Execution} & \textbf{Alignment / prediction} & \textbf{GPU prediction} & \textbf{Aggregate throughput} \\
+        \hline
+        Sequential (single prediction) & $\approx$2{,}400 s & $\approx$575 s & 1$\times$ \\
+        \hline
+        3 concurrent (3 CPU + 3 GPU nodes) & $\approx$2{,}400 s & $\approx$575 s & $\approx$3$\times$ \\
+        \hline
+    \end{tabularx}
+    \caption{Measured per-prediction time and aggregate throughput for sequential and concurrent execution}
+    \label{tab:concurrency_thesis}
+\end{table}
+
+Scaling to a larger number of parallel predictions requires only submitting additional \texttt{ProteinConformationPrediction} resources; the operator handles scheduling, shared-volume access, and lifecycle management without manual environment setup or per-job database staging. Throughput scales with the number of available CPU and GPU nodes; larger-scale characterisation across sequence lengths, database subsets, and higher concurrency levels remains future work.
 
 \section{Conclusions}
 

@@ -704,9 +704,10 @@ Table~\ref{tab:foldy-kubefold-comparison} presents a comparison between Foldy an
 \centering
 \caption{Comparison of Foldy and KubeFold platforms}
 \label{tab:foldy-kubefold-comparison}
+\small
 \begin{tabular}{|l|p{5.5cm}|p{5.5cm}|}
 \hline
-\textbf{Aspect} & \textbf{Foldy} & \textbf{KubeFold} \\
+\multicolumn{1}{|c|}{\textbf{Aspect}} & \multicolumn{1}{>{\centering\arraybackslash}p{5.5cm}|}{\textbf{Foldy}} & \multicolumn{1}{>{\centering\arraybackslash}p{5.5cm}|}{\textbf{KubeFold}} \\
 \hline
 \textbf{Installation} & 
 Requires manual infrastructure provisioning (DNS, cluster, databases), then single \texttt{helm install} command & 
@@ -881,9 +882,10 @@ A concise overview of the tools and their primary focus is provided in Table~\re
     \centering
     \caption{Tools and their primary focus}
     \label{tab:tools-focus}
+    \small
     \begin{tabular}{|l|p{10cm}|}
         \hline
-        \textbf{Tool} & \textbf{Primary focus}                                                                                                                                                 \\
+        \multicolumn{1}{|c|}{\textbf{Tool}} & \multicolumn{1}{>{\centering\arraybackslash}p{10cm}|}{\textbf{Primary focus}}                                                                                                                                                 \\
         \hline
         Nextflow      & Dataflow-based workflow orchestration; implicit parallelism; cloud and HPC executors; nf-core curated pipelines                                                        \\
         \hline

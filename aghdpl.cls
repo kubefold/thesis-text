@@ -169,18 +169,12 @@
     \vspace*{9mm}
 
     {\sffamily\Large\itshape
-    \IfStrEqCase{\ThesisLanguage}{%
-            {pl}{\@titlePL}
-            {en}{\@titleEN}
-    }
+    \@titleEN
     }
     \vspace*{1mm}
 
     {\sffamily\Large\itshape
-    \IfStrEqCase{\ThesisLanguage}{%
-            {pl}{\@titleEN}
-            {en}{\@titlePL}
-    }
+    \@titlePL
     }
     \vspace{\fill}
     \end{center}

@@ -29,7 +29,6 @@ In the example code, the class named \texttt{fsx-sc} is specified, which connect
 From the user's perspective, this resource can be managed using \texttt{kubectl} as shown in figure~\ref{fig:proteindatabase_terminal}.
 
 \begin{lstlisting}[language=yaml,caption={Example \texttt{ProteinDatabase} resource definition},label={lst:protein_database}]
-#file: noinspection KubernetesUnknownResourcesInspection
 apiVersion: data.kubefold.io/v1
 kind: ProteinDatabase
 metadata:
@@ -81,7 +80,6 @@ Management can be done using \texttt{kubectl} as shown in figure~\ref{fig:protei
 \end{figure}
 
 \begin{lstlisting}[language=yaml,caption={Example \texttt{ProteinConformationPrediction} resource definition},label={lst:protein_conformation_prediction}]
-#file: noinspection KubernetesUnknownResourcesInspection
 apiVersion: data.kubefold.io/v1
 kind: ProteinConformationPrediction
 metadata:
@@ -269,7 +267,7 @@ These operations are shown in figure~\ref{fig:proteindatabase_controller}.
 
 \begin{figure}[htbp]
     \centering
-    \includegraphics[width=0.9\textwidth]{images/proteinconformationprediction_controller}
+    \includegraphics[width=0.85\textwidth]{images/proteinconformationprediction_controller}
     \caption{ProteinConformationPrediction Controller behaviour}
     \label{fig:proteinconformationprediction_controller}
 \end{figure}
